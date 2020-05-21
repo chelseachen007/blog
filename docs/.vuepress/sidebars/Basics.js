@@ -5,14 +5,18 @@
  * @LastEditors: your name
  * @Description: In User Settings Edit
  * @FilePath: \Blog\docs\.vuepress\sidebars\Basics.js
- */ 
+ */
+
 module.exports = [
-    '/Basics/',
-    {
-      title: 'HTTP',
-      children: [
-       '/Basics/HTTP_message.md',
-       '/Basics/HTTP_question.md',
-      ]
-    },
-]
+  "/Basics/",
+  {
+    title: "HTTP",
+    children: [
+      "/Basics/HTTP_history.md",
+      "/Basics/HTTP_message.md",
+      "/Basics/HTTP_cache.md",
+      "/Basics/HTTP_https.md",
+      "/Basics/HTTP_question.md",
+    ],
+  },
+];

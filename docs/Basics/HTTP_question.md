@@ -117,4 +117,7 @@ TCP 本身是一个“可靠”的传输协议，所以 HTTP 自 然也就继承
 
 ---
 
-参考资料 [《（建议精读）HTTP 灵魂之问，巩固你的 HTTP 知识体系》](https://juejin.im/post/5e76bd516fb9a07cce750746) [《那些年与面试官交手过的 HTTP 问题》](https://mp.weixin.qq.com/s?__biz=MzA4ODUzNTE2Nw==&mid=2451047001&idx=1&sn=834dd557bfd7a17474160e1b9dabaa61&chksm=87c41b49b0b3925f0c070805081b4d31e67102494ef13a67fa90703fe90163f4a30863740ad1&scene=126&sessionid=1589504806&key=4e333be95d49052e1f11ee9da220b52b57490eb00100cd8d5045b490e6d4d5ddf15eb3db707cf3dad4d44f78a81d8938a9f2beb4a939c843d411c3105e3bb2ef27df06d03efd749011cd090b6689aa5e&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=62090070&lang=zh_CN&exportkey=AR9z47HYlG2H7%2FupvVk7mdg%3D&pass_ticket=nIUSlRULH3TFN2mDV2SSBaQYKIyaMrOCbtMrC6lM%2B0qUQIdAeKleY5ZXCAWStcTE) [《透视 HTTP 协议》](https://time.geekbang.org/column/intro/100029001) 
+参考资料 
+[《（建议精读）HTTP 灵魂之问，巩固你的 HTTP 知识体系》](https://juejin.im/post/5e76bd516fb9a07cce750746)
+ [《那些年与面试官交手过的 HTTP 问题》](https://mp.weixin.qq.com/s?__biz=MzA4ODUzNTE2Nw==&mid=2451047001&idx=1&sn=834dd557bfd7a17474160e1b9dabaa61&chksm=87c41b49b0b3925f0c070805081b4d31e67102494ef13a67fa90703fe90163f4a30863740ad1&scene=126&sessionid=1589504806&key=4e333be95d49052e1f11ee9da220b52b57490eb00100cd8d5045b490e6d4d5ddf15eb3db707cf3dad4d44f78a81d8938a9f2beb4a939c843d411c3105e3bb2ef27df06d03efd749011cd090b6689aa5e&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=62090070&lang=zh_CN&exportkey=AR9z47HYlG2H7%2FupvVk7mdg%3D&pass_ticket=nIUSlRULH3TFN2mDV2SSBaQYKIyaMrOCbtMrC6lM%2B0qUQIdAeKleY5ZXCAWStcTE)
+  [《透视 HTTP 协议》](https://time.geekbang.org/column/intro/100029001) 

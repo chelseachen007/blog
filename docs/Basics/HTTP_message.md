@@ -2,10 +2,6 @@
 
 <img :src="$withBase('/HTTP/message.png')" alt="请求报文">
 
-
-
-![](D:\study\Blog\docs\.vuepress\public\HTTP\the_bag.png)
-
 ## 其他请求头
 
 ### Upgrade ：
