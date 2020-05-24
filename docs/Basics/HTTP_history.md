@@ -1,7 +1,9 @@
 # HTTP 发展史
 
 HTTP 协议在我们的生活中随处可见，打开手机或者电脑，只要你上网，不论是用 iPhone、Android、 Windows 还是 Mac，不论是用浏览器还是 App，不论是看新闻、短视频还是听音乐、玩游戏，后面总会有 HTTP 在默默为你服务。
-!
+
+<img :src="$withBase('/HTTP/Hierarchy.png')" alt="HTTP分层">
+
 
 ## 史前时期
 
@@ -82,4 +84,5 @@ HTTP/2 只解决了应用层的队头堵塞问题，但 TCP 协议仍然会有�
 ---
 
 [《透视 HTTP 协议》](https://time.geekbang.org/column/intro/100029001)
+
 [《HTTP 世界观》](https://mp.weixin.qq.com/s?__biz=MzAxOTAzNjUwMg==&mid=2448541703&idx=1&sn=164f1fb3e503f2e50ca6f5a97a7f119c&chksm=8fc8483eb8bfc1288b14aed0739425c2b31ce8e679a81ab0ffd8f1690c35c3032e0ecea73ab6&scene=126&sessionid=1589430279&key=ad1327b1c72241bf0ec91b57b52b52d6ead79c4dec3bb5ea1b9cf66dca50c9c27f5ddbfa2322fa04e2d68709954e2bb3e18c1af617ff2ac527a5ef9ebd9cac0d5ef977ef159d3959fa5954a561640d1c&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=62090070&lang=zh_CN&exportkey=ATCMwpFbvaf56KD%2BcqI7xHA%3D&pass_ticket=DXKQiIl5eK%2BQt%2FmJHshlzwb8%2FTplkfJw6KRjxgfWB401dxQScVrscRWHXWr5DgV2)
