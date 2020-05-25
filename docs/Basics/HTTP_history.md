@@ -1,7 +1,7 @@
 # HTTP 发展史
 
 HTTP 协议在我们的生活中随处可见，打开手机或者电脑，只要你上网，不论是用 iPhone、Android、 Windows 还是 Mac，不论是用浏览器还是 App，不论是看新闻、短视频还是听音乐、玩游戏，后面总会有 HTTP 在默默为你服务。
-
+ 
 <img :src="$withBase('/HTTP/Hierarchy.png')" alt="HTTP分层">
 
 
