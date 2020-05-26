@@ -171,3 +171,5 @@ ECDHE 算法利用了椭圆曲线和离散对数等思想，按照当下的计�
 [《硬核！30 张图解 HTTP 常见的面试题》](https://mp.weixin.qq.com/s?__biz=MzU2MzM2NzU0NA==&mid=2247485331&idx=1&sn=3290686db857491af5bf1afc4ff5e516&chksm=fc5a1c84cb2d959275f6e6358905f712abe2c7564e08d7b8458c10586541242660f347afa915&mpshare=1&scene=1&srcid=&sharer_sharetime=1590368862394&sharer_shareid=156d5dbafdee46be3487cf570e2c5b5f&key=86794a6e80bbe8028320b404246a03249c7490bf30f4b3e5fd60624c6f17619e7b289ce5a28d714e92b9575e3019f287116f947faa9ac01a1391b39679887386068bda0d8c93413f97fedb135ee843ad&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=6209007b&lang=zh_CN&exportkey=AZVguo6IOZ4Lo9Jnqu%2BZh%2F4%3D&pass_ticket=MJmGQMNd0o3fOqvJiPVouOXMm4%2FEWRnv7HGmY%2FVXMFPp9YPPHNWzl7zIBwMwJkKj)
 
 [《深入揭秘 HTTPS》](https://zhuanlan.zhihu.com/p/22142170)
+
+[《完全图解 HTTPS》](https://juejin.im/post/5c441073e51d455226654d60#heading-8)
