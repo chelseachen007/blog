@@ -3,21 +3,25 @@
 把 HTTPS,HTTP 缓存，以及 HTTP 发展历史抽出来，剩余的将会用灵魂之问的方式复习和深入。
 
 ## TCP/IP 网络分层模型是怎样分层的？
+
 ---
+
 <img :src="$withBase('/HTTP/Hierarchy.png')" alt="分层信息">
 
 TCP/IP  四层网络分层，自下往上分别是**链路层，网络互联层，传输层，应用层**br />
-另外值得一提的是，七层网络分层，**物理层**，数据链路层，网络互联层，传输层，**会话层**，**表示层**和应用层 
-IP 在网络互联层 
-TCP 在传输层，另一个比较有名的是 UDP 
+另外值得一提的是，七层网络分层，**物理层**，数据链路层，网络互联层，传输层，**会话层**，**表示层**和应用层
+IP 在网络互联层
+TCP 在传输层，另一个比较有名的是 UDP
 HTTP 协议就是应用层的一个协议，其他常见的还有 FTP,SMTP 等等
 
 ## TCP 的三次握手和四次挥手简单说一下
+
 ---
+
 <img :src="$withBase('/HTTP/the_bag.png')" alt="抓包信息">
 
-这是一次请求的抓包信息，可以清晰的看出流程 三次握手流程：  Client -> SYN -> Server Server -> SYN/ACK -> Client Client -> ACK -> Server  后确认建立连接 数据传输完毕开始 4 次挥手： 
- Client -> FIN -> Server Server -> ACK -> Client Server -> FIN -> Client Client -> ACK -> Server -> CLOSED Client -> 2MSL 的时间 -> CLOSED  关闭连接
+这是一次请求的抓包信息，可以清晰的看出流程 三次握手流程：  Client -> SYN -> Server Server -> SYN/ACK -> Client Client -> ACK -> Server  后确认建立连接 数据传输完毕开始 4 次挥手：
+Client -> FIN -> Server Server -> ACK -> Client Server -> FIN -> Client Client -> ACK -> Server -> CLOSED Client -> 2MSL 的时间 -> CLOSED  关闭连接
 
 ### 为什么连接的时候是三次握手，关闭的时候却是四次握手？
 
@@ -29,15 +33,13 @@ HTTP 协议就是应用层的一个协议，其他常见的还有 FTP,SMTP 等�
 
 ### 为什么不能用两次握手进行连接？
 
-三次握手是为什么确认两方都已经做好发送数据的准备，并开始协商初始序列号。如果只有两次握手，可能会导致死锁的发生 
+三次握手是为什么确认两方都已经做好发送数据的准备，并开始协商初始序列号。如果只有两次握手，可能会导致死锁的发生
 
 ## 什么是 HTTP 协议？
-
 
 HTTP 中文名 超文本传输协议，HTTP 是一个在计算机世界里专门在两点之间传输文字、图片、音频、视频等超文本数据的约定和规范。是一个建立在 TCP/IP 之上的协议。
 
 ## HTTP 的特点？HTTP 有哪些缺点？
-
 
 ### 特点
 
@@ -69,37 +71,40 @@ TCP 本身是一个“可靠”的传输协议，所以 HTTP 自 然也就继承
 
 #### 性能  
 
-
 “请求-应答”模式则加剧了 HTTP 的性能问题，这就是著名的“队头阻塞”， 当顺序发送的请求序列中的一个请求因为某种原因被阻塞时，在后面排队的所有请求也一并被阻塞，会导致客户端迟迟收不到数据。
 
-
-
 ## HTTP 如何处理大文件的传输？
+
 ---
+
 ### 数据压缩  
 
-客户端带着`Accept-Encoding` 头字段，里面是浏览器支持的压缩格式列表，例如 gzip、deflate、br 等 
-但是 gzip 等压缩算法通常**只对文本文件**有较好的压缩率，而图片、音频视频等多媒体数据本身就已经是高度压缩的。 
+客户端带着`Accept-Encoding` 头字段，里面是浏览器支持的压缩格式列表，例如 gzip、deflate、br 等
+但是 gzip 等压缩算法通常**只对文本文件**有较好的压缩率，而图片、音频视频等多媒体数据本身就已经是高度压缩的。
 
 ### 分块传输  
 
-当响应头里出现  “**Transfer-Encoding: chunked**”时，就是告诉你这不是一个完整的文件，分成了很多块（和 content-length 相斥） 
+当响应头里出现  “**Transfer-Encoding: chunked**”时，就是告诉你这不是一个完整的文件，分成了很多块（和 content-length 相斥）
 
 ### 范围请求  
 
 相当于客户端的‘化整为零’ ，需要服务端在响应头放入 ‘**Accept-Ranges: bytes **’ 请求头**Range**是 HTTP 范围请求的专用字段，格式是“**bytes=x-y **”，其中的 x 和 y 是以字节为单位的数据范围（偏移量）。
 
 ## GET 和 POST 有什么区别？
+
 ---
-从**语义**的角度，GET 去取数据，POST 是操作数据 从**缓存**的角度，GET 请求**会被浏览器主动缓存**下来，留下历史记录，而 POST 默认不会。 从**编码**的角度，GET 只能进行 URL 编码，**只能接收 ASCII **字符，而 POST 没有限制。 从**参数**的角度，GET 一般**放在 URL** 中，因此不安全，POST **放在请求体**中，更适合传输敏感信息。 从**幂等性**的角度，**GET 是幂等的**，而 POST 不是。(幂等表示执行相同的操作，结果也是相同的) 从**TCP**的角度，GET 请求会把请求报文一次性发出去，而 POST 会分为两个 TCP 数据包，首先发 header 部分，如果服务器响应 100(continue)， 然后发 body 部分。(火狐浏览器除外，它的 POST 请求只发一个 TCP 包) 
+
+从**语义**的角度，GET 去取数据，POST 是操作数据 从**缓存**的角度，GET 请求**会被浏览器主动缓存**下来，留下历史记录，而 POST 默认不会。 从**编码**的角度，GET 只能进行 URL 编码，**只能接收 ASCII **字符，而 POST 没有限制。 从**参数**的角度，GET 一般**放在 URL** 中，因此不安全，POST **放在请求体**中，更适合传输敏感信息。 从**幂等性**的角度，**GET 是幂等的**，而 POST 不是。(幂等表示执行相同的操作，结果也是相同的) 从**TCP**的角度，GET 请求会把请求报文一次性发出去，而 POST 会分为两个 TCP 数据包，首先发 header 部分，如果服务器响应 100(continue)， 然后发 body 部分。(火狐浏览器除外，它的 POST 请求只发一个 TCP 包)
 
 ## 说一说你对 CDN 的理解？
+
 ---
+
 **CDN（Content Delivery Network）就是内容分发网络。**
 
 #### 概念
 
-在我们传输过程中是无法突破光速和距离等限制的，而 CDN 就是为了解决这个问题而诞生的。CDN 投⼊了⼤笔资⾦，在全国、乃⾄全球的各个⼤枢纽城市都建⽴了机房，部署了⼤量拥有⾼存储⾼带宽的节点，构建了⼀个专⽤⽹络。 CDN 各站点作为源站的‘**缓存代理**’，对内容进行分发，采取了‘就近原则’，省去了长途跋涉时间，实现网络加速。 
+在我们传输过程中是无法突破光速和距离等限制的，而 CDN 就是为了解决这个问题而诞生的。CDN 投⼊了⼤笔资⾦，在全国、乃⾄全球的各个⼤枢纽城市都建⽴了机房，部署了⼤量拥有⾼存储⾼带宽的节点，构建了⼀个专⽤⽹络。 CDN 各站点作为源站的‘**缓存代理**’，对内容进行分发，采取了‘就近原则’，省去了长途跋涉时间，实现网络加速。
 
 #### DNS 负载均衡  
 
@@ -112,12 +117,14 @@ TCP 本身是一个“可靠”的传输协议，所以 HTTP 自 然也就继承
 
 #### CDN 的缓存代理  
 
-这⾥就有两个 CDN 的关键概念：“**命中**”和“**回源**”。 “命中”就是指⽤⼾访问的资源恰好在缓存系统⾥，可以直接返回给⽤⼾； “回源”则正相反，缓存⾥没有，必须⽤代理的⽅式回源站取。 
- 
+这⾥就有两个 CDN 的关键概念：“**命中**”和“**回源**”。 “命中”就是指⽤⼾访问的资源恰好在缓存系统⾥，可以直接返回给⽤⼾； “回源”则正相反，缓存⾥没有，必须⽤代理的⽅式回源站取。
 
 ---
 
-参考资料 
+参考资料
+
 [《（建议精读）HTTP 灵魂之问，巩固你的 HTTP 知识体系》](https://juejin.im/post/5e76bd516fb9a07cce750746)
- [《那些年与面试官交手过的 HTTP 问题》](https://mp.weixin.qq.com/s?__biz=MzA4ODUzNTE2Nw==&mid=2451047001&idx=1&sn=834dd557bfd7a17474160e1b9dabaa61&chksm=87c41b49b0b3925f0c070805081b4d31e67102494ef13a67fa90703fe90163f4a30863740ad1&scene=126&sessionid=1589504806&key=4e333be95d49052e1f11ee9da220b52b57490eb00100cd8d5045b490e6d4d5ddf15eb3db707cf3dad4d44f78a81d8938a9f2beb4a939c843d411c3105e3bb2ef27df06d03efd749011cd090b6689aa5e&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=62090070&lang=zh_CN&exportkey=AR9z47HYlG2H7%2FupvVk7mdg%3D&pass_ticket=nIUSlRULH3TFN2mDV2SSBaQYKIyaMrOCbtMrC6lM%2B0qUQIdAeKleY5ZXCAWStcTE)
-  [《透视 HTTP 协议》](https://time.geekbang.org/column/intro/100029001) 
+
+[《那些年与面试官交手过的 HTTP 问题》](https://mp.weixin.qq.com/s?__biz=MzA4ODUzNTE2Nw==&mid=2451047001&idx=1&sn=834dd557bfd7a17474160e1b9dabaa61&chksm=87c41b49b0b3925f0c070805081b4d31e67102494ef13a67fa90703fe90163f4a30863740ad1&scene=126&sessionid=1589504806&key=4e333be95d49052e1f11ee9da220b52b57490eb00100cd8d5045b490e6d4d5ddf15eb3db707cf3dad4d44f78a81d8938a9f2beb4a939c843d411c3105e3bb2ef27df06d03efd749011cd090b6689aa5e&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=62090070&lang=zh_CN&exportkey=AR9z47HYlG2H7%2FupvVk7mdg%3D&pass_ticket=nIUSlRULH3TFN2mDV2SSBaQYKIyaMrOCbtMrC6lM%2B0qUQIdAeKleY5ZXCAWStcTE)
+
+[《透视 HTTP 协议》](https://time.geekbang.org/column/intro/100029001)
