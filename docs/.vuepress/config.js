@@ -1,5 +1,6 @@
 const BasicsSidebar = require("./sidebars/Basics");
 const AnimationSidebar = require("./sidebars/Animation");
+const leetcodeSidebar = require("./sidebars/leetcode");
 
 module.exports = {
   base: "/Blog/",
@@ -15,16 +16,22 @@ module.exports = {
       {
         text: "前端基础巩固",
         link: "/Basics/",
-      },     {
-        text: "可视化相关",
-        link: "/Animation/",
       },
+      {
+        text: "算法",
+        link: "/leetcode/",
+      },
+      // {
+      //   text: "可视化相关",
+      //   link: "/Animation/",
+      // },
     ],
     sidebarDepth: 3,
     lastUpdated: "Last Updated", // string | boolean
     sidebar: {
       "/Basics/": BasicsSidebar,
       "/Animation/": AnimationSidebar,
+      "/leetcode/": leetcodeSidebar,
     },
   },
 };
