@@ -20,12 +20,16 @@ HTTP 协议就是应用层的一个协议，其他常见的还有 FTP,SMTP 等�
 
 <img :src="$withBase('/HTTP/the_bag.png')" alt="抓包信息">
 
-这是一次请求的抓包信息，可以清晰的看出流程 三次握手流程：  Client -> SYN -> Server Server -> SYN/ACK -> Client Client -> ACK -> Server  后确认建立连接 数据传输完毕开始 4 次挥手：
+这是一次请求的抓包信息，可以清晰的看出流程 
+三次握手流程：  Client -> SYN -> Server Server -> SYN/ACK -> Client Client -> ACK -> Server  后确认建立连接 数据传输完毕开始
+
+4 次挥手：
 Client -> FIN -> Server Server -> ACK -> Client Server -> FIN -> Client Client -> ACK -> Server -> CLOSED Client -> 2MSL 的时间 -> CLOSED  关闭连接
 
 #### 为什么连接的时候是三次握手，关闭的时候却是四次握手？
 
-因为当 Server 端收到 Client 端的 SYN 连接请求报文后，可以直接发送 SYN+ACK 报文。其中 ACK 报文是用来应答的，SYN 报文是用来同步的。但是关闭连接时，当 Server 端收到 FIN 报文时，很可能并不会立即关闭 SOCKET，所以只能先回复一个 ACK 报文，告诉 Client 端，"你发的 FIN 报文我收到了"。只有等到我 Server 端所有的报文都发送完了，我才能发送 FIN 报文，因此不能一起发送。故需要四步握手。
+因为当 Server 端收到 Client 端的 SYN 连接请求报文后，可以直接发送 SYN+ACK 报文。其中 ACK 报文是用来应答的，SYN 报文是用来同步的。
+但是关闭连接时，当 Server 端收到 FIN 报文时，很可能并不会立即关闭 SOCKET，所以只能先回复一个 ACK 报文，告诉 Client 端，"你发的 FIN 报文我收到了"。只有等到我 Server 端所有的报文都发送完了，我才能发送 FIN 报文，因此不能一起发送。故需要四步握手。
 
 #### 为什么 TIME_WAIT 状态需要经过 2MSL(最大报文段生存时间)才能返回到 CLOSE 状态？
 
@@ -94,7 +98,10 @@ TCP 本身是一个“可靠”的传输协议，所以 HTTP 自 然也就继承
 
 ---
 
-从**语义**的角度，GET 去取数据，POST 是操作数据 从**缓存**的角度，GET 请求**会被浏览器主动缓存**下来，留下历史记录，而 POST 默认不会。 从**编码**的角度，GET 只能进行 URL 编码，**只能接收 ASCII **字符，而 POST 没有限制。 从**参数**的角度，GET 一般**放在 URL** 中，因此不安全，POST **放在请求体**中，更适合传输敏感信息。 从**幂等性**的角度，**GET 是幂等的**，而 POST 不是。(幂等表示执行相同的操作，结果也是相同的) 从**TCP**的角度，GET 请求会把请求报文一次性发出去，而 POST 会分为两个 TCP 数据包，首先发 header 部分，如果服务器响应 100(continue)， 然后发 body 部分。(火狐浏览器除外，它的 POST 请求只发一个 TCP 包)
+从**语义**的角度，GET 去取数据，POST 是操作数据 从**缓存**的角度，GET 请求**会被浏览器主动缓存**下来，留下历史记录，而 POST 默认不会。
+从**编码**的角度，GET 只能进行 URL 编码，**只能接收 ASCII **字符，而 POST 没有限制。
+从**参数**的角度，GET 一般**放在 URL** 中，因此不安全，POST **放在请求体**中，更适合传输敏感信息。
+从**幂等性**的角度，**GET 是幂等的**，而 POST 不是。(幂等表示执行相同的操作，结果也是相同的) 从**TCP**的角度，GET 请求会把请求报文一次性发出去，而 POST 会分为两个 TCP 数据包，首先发 header 部分，如果服务器响应 100(continue)， 然后发 body 部分。(火狐浏览器除外，它的 POST 请求只发一个 TCP 包)
 
 ## 说一说你对 CDN 的理解？
 
