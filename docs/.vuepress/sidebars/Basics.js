@@ -19,4 +19,8 @@ module.exports = [
       "/Basics/HTTP_question.md",
     ],
   },
+  {
+    title: "JavaScript",
+    children: ["/Basics/JS_typeof.md"],
+  },
 ];

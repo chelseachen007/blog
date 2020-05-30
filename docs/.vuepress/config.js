@@ -1,6 +1,7 @@
 const BasicsSidebar = require("./sidebars/Basics");
 const AnimationSidebar = require("./sidebars/Animation");
 const leetcodeSidebar = require("./sidebars/leetcode");
+const FontEndArtSidebar = require("./sidebars/FontEndArt");
 
 module.exports = {
   base: "/Blog/",
@@ -21,6 +22,10 @@ module.exports = {
         text: "算法",
         link: "/leetcode/",
       },
+      {
+        text: "做题咯",
+        link: "/FontEndArt/",
+      },
       // {
       //   text: "可视化相关",
       //   link: "/Animation/",
@@ -32,6 +37,7 @@ module.exports = {
       "/Basics/": BasicsSidebar,
       "/Animation/": AnimationSidebar,
       "/leetcode/": leetcodeSidebar,
+      "/FontEndArt/": FontEndArtSidebar,
     },
   },
 };
