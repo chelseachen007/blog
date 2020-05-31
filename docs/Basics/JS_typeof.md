@@ -68,6 +68,23 @@ null instanceof null
 // Uncaught TypeError: Right-hand side of 'instanceof' is not an object
 ```
 
+#### 原理
+
+instanceof 检测一个对象 A 是不是另一个对象 B 的实例的原理是：
+查看 对象 B 的 `prototype` 指向的对象是否在 对象 A 的 [[prototype]] 链上。
+如果在，则返回 `true`, 如果不在则返回 `false`。
+
+```
+let myinstanceof = function(left,right){
+  let target = left.prototype
+  while(target){
+    if(target.__proto__===right.prototype) return true
+    target = target.__proto__
+  }
+  return false
+}
+```
+
 ### constructor
 
 **constructor** 是每个构造函数都会有的属性，但可想而知 `Null` 和 `undefined` 没有构造函数 所以无法判断，另外在类的原型在重写过程中容易把 `constructor` 覆盖掉，所以这种检测结果是不稳定的
@@ -103,13 +120,13 @@ Object.prototype.toString.call(new WeakMap())   // '[object WeakMap]'
 1.  如果 this 未定义时，返回“[object Undefined]”
 2.  如果 this 为 null 时，返回“[object Null]”
 3.  定义 O，并且让 O=ToObject(this)
-4.  获取 this 对象的[[Class]]属性的值.
+4.  获取 this 对象的 [[Class]] 属性的值.
 5.  计算出三个字符串"[object ", 第一步的操作结果 Result(1), 以及 "]"连接后的新字符串.
 6.  返回第二步的操作结果 Result(2).
 
-[[Class]]是一个内部属性,所有的对象(原生对象和宿主对象)都拥有该属性.在规范中,[[Class]]是这么定义的：**一个字符串值,表明了该对象的类型.**
+[[Class]] 是一个内部属性,所有的对象(原生对象和宿主对象)都拥有该属性.在规范中, [[Class]] 是这么定义的：**一个字符串值,表明了该对象的类型.**
 
-可以清晰的得出 toString()是在以特殊的字符串形式输出 this 的类型，不管你传入什么参数，该方法都是执行了 **window.toString()**方法，this 一直指向了 `window` **对象**，所以输出了上述结果。
+可以清晰的得出 `toString()`是在以特殊的字符串形式输出 `this` 的类型，不管你传入什么参数，该方法都是执行了 **window.toString()** 方法，`this` 一直指向了 `window` **对象**，
 所以在判断类型时也可以直接使用 **toString.call(arr)**
 
 #### isArray
