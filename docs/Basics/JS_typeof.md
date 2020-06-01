@@ -47,14 +47,14 @@ Array 属于 Object 我可以理解，为什么 null 也是呢？
 
 1. 对于基本数据类型来说，字面量方式创建出来的结果和实例方式创建出来的是有区别的
 
-```
+```JavaScript
 1 instanceof Number //false
 new Number(1) instanceof Number //true
 ```
 
 2. 只要在当前实例的原型链上，我们用其检测出来的结果都是 true。在类的原型继承中，我们最后检测出来的结果未必准确。
 
-```
+```JavaScript
 let fn= function(){}
 fn instanceof Function //false
 fn instanceof Object //true
@@ -62,7 +62,7 @@ fn instanceof Object //true
 
 3. 对于特殊的数据类型 `null` 和 `undefined`，他们的所属类是 Null 和 Undefined，但是浏览器把这两个类保护起来了，不允许我们在外面访问使用
 
-```
+```JavaScript
 undefined instanceof undefined
 null instanceof null
 // Uncaught TypeError: Right-hand side of 'instanceof' is not an object
@@ -74,15 +74,15 @@ instanceof 检测一个对象 A 是不是另一个对象 B 的实例的原理是
 查看 对象 B 的 `prototype` 指向的对象是否在 对象 A 的 [[prototype]] 链上。
 如果在，则返回 `true`, 如果不在则返回 `false`。
 
-```
-let myinstanceof = function(left,right){
-  let target = left.prototype
-  while(target){
-    if(target.__proto__===right.prototype) return true
-    target = target.__proto__
+```Js
+let myinstanceof = function(left, right) {
+  let target = left.prototype;
+  while (target) {
+    if (target.__proto__ === right.prototype) return true;
+    target = target.__proto__;
   }
-  return false
-}
+  return false;
+};
 ```
 
 ### constructor
@@ -91,7 +91,7 @@ let myinstanceof = function(left,right){
 
 ### Object.prototype.toString.call()
 
-```
+```JavaScript
 Object.prototype.toString.call({})              // '[object Object]'
 Object.prototype.toString.call([])              // '[object Array]'
 Object.prototype.toString.call(() => {})        // '[object Function]'
@@ -133,7 +133,7 @@ Object.prototype.toString.call(new WeakMap())   // '[object WeakMap]'
 
 ES6 的 isArray 也是通过 toString 实现的
 
-```
+```JavaScript
 if (!Array.isArray) {
   Array.isArray = function(arg) {
     return Object.prototype.toString.call(arg) === '[object Array]';
@@ -143,7 +143,7 @@ if (!Array.isArray) {
 
 #### 封装函数
 
-```
+```JavaScript
     var type = function(data) {
       var toString = Object.prototype.toString;
       var dataType = toString

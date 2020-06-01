@@ -4,7 +4,7 @@
 
 ### CSS 大法
 
-```
+```CSS
      .Triangle {
         width: 0;
         height: 0;
@@ -16,15 +16,15 @@
 
 ### SVG 大法
 
-````
+```HTML
     <svg>
       <polygon points="1,10 250,190 160,210" style="fill: red;" />
     </svg>
-````
+```
 
 ### canvas
 
-````
+```JavaScript
       let can = document.getElementById("canvas");
       let ctx = can.getContext("2d");
       let draw = function (x1, y1, x2, y2, x3, y3, color, type) {
@@ -37,4 +37,4 @@
         ctx[type]();
       };
       draw(50, 50, 75, 75, 50, 100, "red", "fill");
-````
+```

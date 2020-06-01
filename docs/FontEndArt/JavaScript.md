@@ -2,7 +2,7 @@
 
 ## 判断数组的方法？
 
-```
+```JavaScript
 const arr = []
 
 Array.isArray(arr)
@@ -28,7 +28,7 @@ arr.constructor===Array
 
 #### isArray 是怎么实现的
 
-```
+```JavaScript
 if (!Array.isArray) {
   Array.isArray = function(arg) {
     return Object.prototype.toString.call(arg) === '[object Array]';
@@ -39,6 +39,5 @@ if (!Array.isArray) {
 其实就是**方法二**的一种封装，所以总结下 通过 **原型链**、**构造函数**和 **Object 副属性**三种方法判断
 
 说到这里，我去写下如何判断各种类型。
-
 
 ## 下一道幸运题目
