@@ -9,4 +9,14 @@ module.exports = [
       "/leetcode/Grokking_four.md",
     ],
   },
+  {
+    title: "91day训练营",
+    children: [
+      "/leetcode/91day_readme.md",
+      "/leetcode/91day_one.md",
+      "/leetcode/91day_two.md",
+      // "/leetcode/91day_three.md",
+      // "/leetcode/91day_four.md",
+    ],
+  },
 ];
