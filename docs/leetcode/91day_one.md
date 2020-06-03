@@ -29,7 +29,6 @@
 
 ## 我的回答
 
-https://github.com/leetcode-pp/91alg-1/issues/1#issuecomment-636568948
 
 ### 思路
 
