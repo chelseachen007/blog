@@ -103,15 +103,15 @@ CustomStack.prototype.increment = function (k, val) {
 
 
 
-```
+```js
 //使用另外一个数组来记录increment，Lazy increment，只有在数被pop的时候才去increment 数组里找到该数所需要加上的数，实现O(1)
-CustomStack.prototype.increment = function (k, val) {
-let i = Math.min(k,this.s.length) -1;
-        if(i >= 0)
-            inc[i] += val;
-    }
-
+CustomStack.prototype.increment = function(k, val) {
+  let i = Math.min(k, this.s.length) - 1;
+  for (let j = 0; j < i; j++) {
+    inc[j] = inc[j] ? inc[j] + val : val;
+  }
 };
+
 ```
 
 
