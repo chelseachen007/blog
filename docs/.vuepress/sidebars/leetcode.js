@@ -15,8 +15,8 @@ module.exports = [
       "/leetcode/91day_readme.md",
       "/leetcode/91day_one.md",
       "/leetcode/91day_two.md",
-      // "/leetcode/91day_three.md",
-      // "/leetcode/91day_four.md",
+      "/leetcode/91day_three.md",
+      "/leetcode/91day_four.md",
     ],
   },
 ];
