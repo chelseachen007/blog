@@ -2,6 +2,7 @@ const BasicsSidebar = require("./sidebars/Basics");
 const AnimationSidebar = require("./sidebars/Animation");
 const leetcodeSidebar = require("./sidebars/leetcode");
 const FontEndArtSidebar = require("./sidebars/FontEndArt");
+const nodeSidebar = require("./sidebars/node");
 
 module.exports = {
   base: "/Blog/",
@@ -15,8 +16,11 @@ module.exports = {
     nav: [
       { text: "Home", link: "/" },
       {
-        text: "前端基础巩固",
-        link: "/Basics/",
+        text: "基础知识",
+        items: [
+          { text: "前端基础", link: "/Basics/" },
+          { text: "node", link: "/node/" },
+        ],
       },
       {
         text: "算法",
@@ -37,6 +41,7 @@ module.exports = {
       "/Basics/": BasicsSidebar,
       "/Animation/": AnimationSidebar,
       "/leetcode/": leetcodeSidebar,
+      "/node/": nodeSidebar,
       "/FontEndArt/": FontEndArtSidebar,
     },
   },
