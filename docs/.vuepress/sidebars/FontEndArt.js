@@ -6,6 +6,8 @@ module.exports = [
       "/FontEndArt/html_css.md",
       "/FontEndArt/JavaScript.md",
       "/FontEndArt/vue.md",
+      "/FontEndArt/soft_skill.md",
+      "/FontEndArt/leetcode.md",
     ],
   },
 ];

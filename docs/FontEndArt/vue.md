@@ -36,4 +36,4 @@ computed 可以依赖其它 computed，甚至是其它组件的 data。
 
 ## 自定义组件的 v-model 是怎样实现的
 
-组件的 v-model 是 Vue 为我们写的一种语法糖，
+组件的 v-model 是 Vue 为我们写的一种语法糖，他为我们传入一个值为`value`的`props`和绑定了一个`input`的`emit`事件，将值传递上来赋值。在制作一些特殊组件值需要重新命名时，可以使用``model``进行`value`和`input` 的改名。另外Vue在2.+的时候推出了一个修饰.sync支持多个v-model值绑定，只需要将事件变成`‘updata：value’`
