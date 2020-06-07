@@ -40,6 +40,7 @@ randomSet.getRandom();
 ```
 
 ## 我的回答
+https://github.com/leetcode-pp/91alg-1/issues/23#issuecomment-639949391
 
 ### 解法一
 
