@@ -1,4 +1,4 @@
-# 算法题
+# 编程题
 
 ## 实现交通灯的逻辑：红灯亮5s,绿灯亮10s,黄灯亮3s,红灯亮5s...不停循环执行，亮的动作可以用一个伪函数来表示。
 
@@ -26,9 +26,91 @@
 
 
 
-## 在开发中，我们经常会碰到将abc-xyz这类格式的字符串转为AbcXyz形式的驼峰字符串进行处理，例如：hello-world我们希望能够变成驼峰风格的HelloWorld,请编写代码实现这个camelize(str)方法
+## 要求设计LazyMan类，实现以下功能
 
 ```js
-toUpperCase()
+
+LazyMan('Tony');
+// Hi I am Tony
+
+LazyMan('Tony').sleep(10).eat('lunch');
+// Hi I am Tony
+// 等待了10秒...
+// I am eating lunch
+
+LazyMan('Tony').eat('lunch').sleep(10).eat('dinner');
+// Hi I am Tony
+// I am eating lunch
+// 等待了10秒...
+// I am eating diner
+
+LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk food');
+// Hi I am Tony
+// 等待了5秒...
+// I am eating lunch
+// I am eating dinner
+// 等待了10秒...
+// I am eating junk food
+```
+
+代码
+
+```js
+      class LazyMans {
+        constructor(name) {
+          this.name = name;
+          this.queen = [];
+          setTimeout(() => {
+            this._next();
+          }, 0);
+        }
+        sleep(wait, isFiset = false) {
+          const _sleep = () => {
+            setTimeout(() => {
+              console.log(`等待了${wait}秒`);
+              this._next();
+            }, wait * 1000);
+          };
+          isFiset ? this.queen.unshift(_sleep) : this.queen.push(_sleep);
+          return this;
+        }
+        _next() {
+          if (!this.queen.length) return;
+          let shift = this.queen.shift();
+          shift.call(this);
+        }
+        eat(food) {
+          const _eat = () => {
+            console.log(`I am eating ${food}`);
+            this._next();
+          };
+          this.queen.push(_eat);
+          return this;
+        }
+        sleepFirst(wait) {
+          return this.sleep(wait, true);
+        }
+      }
+      function LazyMan(name) {
+        return new LazyMans(name);
+      }
+```
+
+
+
+
+
+## 实现一个批量请求函数
+
+要求：
+
+1. 批量请求函数，最大并发数maxNum
+2. 每当有一个请求返回，就留下一个空位，可以增加新的请求
+3. 所有请求完成后，结果按照urls里面的顺序依次发出。
+
+```js
+const mulitRequert= function(url,max,callback)=>{
+    
+}
 ```
 
