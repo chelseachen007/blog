@@ -4,7 +4,7 @@
 
 以下按时间线了解这几种规范
 
-## ComminJS
+## CommonJS
 
 commonJs**规范**通过简单的API声明服务器的模块，目标是让JavaScript可以运行在**浏览器之外**的所有地方。Node.js就是借鉴ComminJs实现了一套非常易用的模块系统，以及NPM对模块规范的完美支持是的Node.js应用开发事半功倍。
 

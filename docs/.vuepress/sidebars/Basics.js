@@ -23,8 +23,11 @@ module.exports = [
     title: "JavaScript",
     children: [
       "/Basics/JS_typeof.md",
-    "/Basics/JS_module.md",
-  ]
-    ,
+      "/Basics/JS_module.md",
+      "/Basics/write_throttle.md",
+      // "/Basics/JS_module.md",
+      // "/Basics/JS_module.md",
+      // "/Basics/JS_module.md",
+    ],
   },
 ];
