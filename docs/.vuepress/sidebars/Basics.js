@@ -21,6 +21,10 @@ module.exports = [
   },
   {
     title: "JavaScript",
-    children: ["/Basics/JS_typeof.md"],
+    children: [
+      "/Basics/JS_typeof.md",
+    "/Basics/JS_module.md",
+  ]
+    ,
   },
 ];

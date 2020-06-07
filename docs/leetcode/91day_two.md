@@ -1,4 +1,4 @@
-# 【day-02】75. 颜色分类
+# 【day 2】颜色分类
 
 [75.颜色分类](https://leetcode-cn.com/problems/sort-colors)
 

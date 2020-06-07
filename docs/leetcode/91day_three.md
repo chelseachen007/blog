@@ -1,4 +1,4 @@
-# 【Day 3】 1381. 设计一个支持增量操作的栈
+# 【Day 3】 设计一个支持增量操作的栈
 
 ## 题目描述
 
@@ -11,7 +11,7 @@ CustomStack(int maxSize)：用 maxSize 初始化对象，maxSize 是栈中最多
 void push(int x)：如果栈还未增长到 maxSize ，就将 x 添加到栈顶。
 int pop()：弹出栈顶元素，并返回栈顶的值，或栈为空时返回 -1 。
 void inc(int k, int val)：栈底的 k 个元素的值都增加 val 。如果栈中元素总数小于 k ，则栈中的所有元素都增加 val 。
- 
+
 
 示例：
 
@@ -34,7 +34,7 @@ customStack.pop(); // 返回 103 --> 返回栈顶值 103，栈变为 [201, 202]
 customStack.pop(); // 返回 202 --> 返回栈顶值 202，栈变为 [201]
 customStack.pop(); // 返回 201 --> 返回栈顶值 201，栈变为 []
 customStack.pop(); // 返回 -1 --> 栈为空，返回 -1
- 
+
 
 提示：
 
@@ -63,45 +63,43 @@ O(n)
 /**
  * @param {number} maxSize
  */
-var CustomStack = function (maxSize) {
-    this.max_size = maxSize
-    this.s = []
+var CustomStack = function(maxSize) {
+  this.max_size = maxSize;
+  this.s = [];
 };
 
-/** 
+/**
  * @param {number} x
  * @return {void}
  */
-CustomStack.prototype.push = function (x) {
-    if (this.s.length < this.max_size) this.s.push(x)
-    return this.s
+CustomStack.prototype.push = function(x) {
+  if (this.s.length < this.max_size) this.s.push(x);
+  return this.s;
 };
 
 /**
  * @return {number}
  */
-CustomStack.prototype.pop = function () {
-    if (this.s.length == 0) return -1
-    return this.s.pop()
+CustomStack.prototype.pop = function() {
+  if (this.s.length == 0) return -1;
+  return this.s.pop();
 };
 
-/** 
- * @param {number} k 
+/**
+ * @param {number} k
  * @param {number} val
  * @return {void}
  */
-CustomStack.prototype.increment = function (k, val) {
-    let min = Math.min(k, this.s.length)
-    for (i = 0; i < min; i++) {
-       this.s[i] += val;
-    }
-    return this.s;
+CustomStack.prototype.increment = function(k, val) {
+  let min = Math.min(k, this.s.length);
+  for (i = 0; i < min; i++) {
+    this.s[i] += val;
+  }
+  return this.s;
 };
 ```
 
 #### 优化
-
-
 
 ```js
 //使用另外一个数组来记录increment，Lazy increment，只有在数被pop的时候才去increment 数组里找到该数所需要加上的数，实现O(1)
@@ -111,45 +109,45 @@ CustomStack.prototype.increment = function(k, val) {
     inc[j] = inc[j] ? inc[j] + val : val;
   }
 };
-
 ```
-
-
 
 ## 参考回答
 
 > ## increment 时间复杂度为 $O(k)$ 的方法
+>
 > ### 思路
-> 首先我们来看一种非常符合直觉的方法，然而这种方法并不好，increment操作需要的时间复杂度为 $O(k)$。
+>
+> 首先我们来看一种非常符合直觉的方法，然而这种方法并不好，increment 操作需要的时间复杂度为 $O(k)$。
 >
 > `push`和 `pop` 就是普通的栈操作。 唯一要注意的是边界条件，这个已经在题目中指明了，具体来说就是：
 >
-> * push 的时候要判断是否满了
-> * pop 的时候要判断是否空了
+> - push 的时候要判断是否满了
+> - pop 的时候要判断是否空了
 >
-> 而做到上面两点，只需要一个 cnt 变量记录栈的当前长度，一个 size 变量记录最大容量，并在pop和push的时候更新cnt即可。
+> 而做到上面两点，只需要一个 cnt 变量记录栈的当前长度，一个 size 变量记录最大容量，并在 pop 和 push 的时候更新 cnt 即可。
 >
 > ### 代码
+>
 > ```python
 > class CustomStack:
-> 
+>
 >     def __init__(self, size: int):
 >         self.st = []
 >         self.cnt = 0
 >         self.size = size
-> 
+>
 >     def push(self, x: int) -> None:
 >         if self.cnt < self.size:
 >             self.st.append(x)
 >             self.cnt += 1
-> 
-> 
+>
+>
 >     def pop(self) -> int:
 >         if self.cnt == 0: return -1
 >         self.cnt -= 1
 >         return self.st.pop()
-> 
-> 
+>
+>
 >     def increment(self, k: int, val: int) -> None:
 >         for i in range(0, min(self.cnt, k)):
 >             self.st[i] += val
@@ -157,18 +155,20 @@ CustomStack.prototype.increment = function(k, val) {
 >
 > _**复杂度分析**_
 >
-> * 时间复杂度：push 和 pop 操作的时间复杂度为 $O(1)$（讲义有提到），而increment操作的时间复杂度为 $O(min(k, cnt))$
-> * 空间复杂度：$O(1)$
+> - 时间复杂度：push 和 pop 操作的时间复杂度为 $O(1)$（讲义有提到），而 increment 操作的时间复杂度为 $O(min(k, cnt))$
+> - 空间复杂度：$O(1)$
 >
 > ## increment 时间复杂度为 $O(1)$ 的方法
+>
 > ### 思路
+>
 > 和上面的思路类似，不过我们采用空间换时间的方式。采用一个额外的数组 incrementals 来记录每次 incremental 操作。
 >
 > 具体算法如下：
 >
-> * 初始化一个大小为 maxSize 的数组， 并全部填充0
-> * push 操作不变，和上面一样
-> * increment 的时候，我们将incremental 信息，如何记录呢？我这里画了一个图
+> - 初始化一个大小为 maxSize 的数组， 并全部填充 0
+> - push 操作不变，和上面一样
+> - increment 的时候，我们将 incremental 信息，如何记录呢？我这里画了一个图
 >
 > ![image](https://user-images.githubusercontent.com/12479470/83656933-c096d300-a5f2-11ea-8f50-64ced5aa62f2.png)
 >
@@ -176,34 +176,35 @@ CustomStack.prototype.increment = function(k, val) {
 >
 > 比如：
 >
-> * 调用了 increment(3, 2)，就把 increment[3] 增加 2。
-> * 继续调用 increment(2, 5)，就把 increment[2] 增加 5。
+> - 调用了 increment(3, 2)，就把 increment[3] 增加 2。
+> - 继续调用 increment(2, 5)，就把 increment[2] 增加 5。
 >
 > ![image](https://user-images.githubusercontent.com/12479470/83640207-6855d600-a5de-11ea-809e-bba303927707.png)
 >
 > 而当我们 pop 的时候：
 >
-> * 只需要将栈顶元素**加上 increment[cnt - 1]** 即可， 其中 cnt 为栈当前的大小。
-> * 另外，我们需要将 increment[cnt - 1] 更新到 increment[cnt - 2]，并将 increment[cnt - 1] 重置为 0。
+> - 只需要将栈顶元素**加上 increment[cnt - 1]** 即可， 其中 cnt 为栈当前的大小。
+> - 另外，我们需要将 increment[cnt - 1] 更新到 increment[cnt - 2]，并将 increment[cnt - 1] 重置为 0。
 >
 > ![image](https://user-images.githubusercontent.com/12479470/83640238-7146a780-a5de-11ea-8b81-81439353068f.png)
 >
 > ### 代码
+>
 > ```python
 > class CustomStack:
-> 
+>
 >     def __init__(self, size: int):
 >         self.st = []
 >         self.cnt = 0
 >         self.size = size
 >         self.incrementals = [0] * size
-> 
+>
 >     def push(self, x: int) -> None:
 >         if self.cnt < self.size:
 >             self.st.append(x)
 >             self.cnt += 1
-> 
-> 
+>
+>
 >     def pop(self) -> int:
 >         if self.cnt == 0: return -1
 >         if self.cnt >= 2:
@@ -212,8 +213,8 @@ CustomStack.prototype.increment = function(k, val) {
 >         self.incrementals[self.cnt - 1] = 0
 >         self.cnt -= 1
 >         return ans
-> 
-> 
+>
+>
 >     def increment(self, k: int, val: int) -> None:
 >             if self.cnt:
 >                 self.incrementals[min(self.cnt, k) - 1] += val
@@ -221,38 +222,41 @@ CustomStack.prototype.increment = function(k, val) {
 >
 > _**复杂度分析**_
 >
-> * 时间复杂度：全部都是 $O(1)$
-> * 空间复杂度：我们维护了一个大小为 maxSize 的数组，因此平均到每次的空间复杂度为 $O(maxSize / N)$，其中 N 为操作数。
+> - 时间复杂度：全部都是 $O(1)$
+> - 空间复杂度：我们维护了一个大小为 maxSize 的数组，因此平均到每次的空间复杂度为 $O(maxSize / N)$，其中 N 为操作数。
 >
 > ## 优化的 increment 时间复杂度为 $O(1)$ 的方法
+>
 > ### 思路
+>
 > 上面的思路无论如何，我们都需要维护一个大小为 $O(maxSize)$ 的数组 incremental 。而这实际上可以稍微优化一点。
 >
 > ### 代码
+>
 > ```python
 > class CustomStack:
-> 
+>
 >     def __init__(self, size: int):
 >         self.st = []
 >         self.cnt = 0
 >         self.size = size
 >         self.incrementals = []
-> 
+>
 >     def push(self, x: int) -> None:
 >         if self.cnt < self.size:
 >             self.st.append(x)
 >             self.incrementals.append(0)
 >             self.cnt += 1
-> 
-> 
+>
+>
 >     def pop(self) -> int:
 >         if self.cnt == 0: return -1
 >         self.cnt -= 1
 >         if self.cnt >= 1:
 >             self.incrementals[-2] += self.incrementals[-1]
 >         return self.st.pop() + self.incrementals.pop()
-> 
-> 
+>
+>
 >     def increment(self, k: int, val: int) -> None:
 >         if self.incrementals:
 >             self.incrementals[min(self.cnt, k) - 1] += val
@@ -260,12 +264,11 @@ CustomStack.prototype.increment = function(k, val) {
 >
 > _**复杂度分析**_
 >
-> * 时间复杂度：全部都是O(1)
-> * 空间复杂度：我们维护了一个大小为 cnt 的数组，因此平均到每次的空间复杂度为 $O(cnt / N)$，其中 N 为操作数，cnt 为操作过程中的栈的最大长度（小于等于maxSize）。
+> - 时间复杂度：全部都是 O(1)
+> - 空间复杂度：我们维护了一个大小为 cnt 的数组，因此平均到每次的空间复杂度为 $O(cnt / N)$，其中 N 为操作数，cnt 为操作过程中的栈的最大长度（小于等于 maxSize）。
 >
 > 可以看出优化的解法在 maxSize 非常大的时候是很有意义的。
 >
 > ## 相关题目
-> * [155. 最小栈](https://leetcode-cn.com/problems/min-stack/solution/chai-zhi-fa-155-zui-xiao-zhan-by-fe-lucifer/)
 >
-> 
+> - [155. 最小栈](https://leetcode-cn.com/problems/min-stack/solution/chai-zhi-fa-155-zui-xiao-zhan-by-fe-lucifer/)
