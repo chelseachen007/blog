@@ -1,27 +1,23 @@
-# 【Day 3】 1381. 设计一个支持增量操作的栈
+# 【Day 7】  反转链表
+
+[206. 反转链表]()(https://leetcode-cn.com/problems/reverse-linked-list)
+
+
 
 ## 题目描述
 
 ```markdown
-给定一个包含红色、白色和蓝色，一共 n 个元素的数组，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
-
-此题中，我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
-
-注意:
-不能使用代码库中的排序函数来解决这道题。
+反转一个单链表。
 
 示例:
 
-输入: [2,0,2,1,1,0]
-输出: [0,0,1,1,2,2]
-进阶：
-
-一个直观的解决方案是使用计数排序的两趟扫描算法。
-首先，迭代计算出0、1 和 2 元素的个数，然后按照0、1、2的排序，重写当前数组。
-你能想出一个仅使用常数空间的一趟扫描算法吗？
+输入: 1->2->3->4->5->NULL
+输出: 5->4->3->2->1->NULL
+进阶:
+你可以迭代或递归地反转链表。你能否用两种方法解决这道题？
 
 来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/sort-colors
+链接：https://leetcode-cn.com/problems/reverse-linked-list
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 ```
 
@@ -29,12 +25,247 @@
 
 ### 解法一
 
-#### 时空复杂度
+#### 自迭代
 
 ```js
-
+      var reverseList = function (head) {
+        let [prev, curr] = [null, head];
+        while (curr) {
+          let tmp = curr.next; // 1. 临时存储当前指针后续内容
+          curr.next = prev; // 2. 反转链表
+          prev = curr; // 3. 接收反转结果
+          curr = tmp; // 4. 接回临时存储的后续内容
+        }
+        return prev;
+      };
 ```
 
 
 
 ## 参考回答
+
+###  题目地址
+https://leetcode.com/problems/reverse-linked-list/description/
+
+###  题目描述
+Reverse a singly linked list.
+
+Example:
+
+Input: 1->2->3->4->5->NULL
+Output: 5->4->3->2->1->NULL
+Follow up:
+
+A linked list can be reversed either iteratively or recursively. Could you implement both?
+
+###  思路
+这个就是常规操作了，使用一个变量记录前驱 pre，一个变量记录后继 next.
+
+不断更新`current.next = pre` 就好了
+###  关键点解析
+
+- 链表的基本操作（交换）
+- 虚拟节点 dummy 简化操作
+- 注意更新 current 和 pre 的位置， 否则有可能出现溢出
+
+###  代码
+
+语言支持：JS, C++, Python,Java
+
+JavaScript Code：
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var reverseList = function(head) {
+    if (!head || !head.next) return head;
+
+    let cur = head;
+    let pre = null;
+
+    while(cur) {
+        const next = cur.next;
+        cur.next = pre;
+        pre = cur;
+        cur = next;
+    }
+
+    return pre;
+};
+
+```
+
+C++ Code：
+
+```c++
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* prev = NULL;
+        ListNode* cur = head;
+        ListNode* next = NULL;
+        while (cur != NULL) {
+            next = cur->next;
+            cur->next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return prev;
+    }
+};
+```
+
+Python Code:
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        if not head: return None
+        prev = None
+        cur = head
+        while cur:
+            cur.next, prev, cur = prev, cur, cur.next
+        return prev
+```
+
+Java Code:
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode pre = null, cur = head;
+
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+
+        return pre;
+    }
+}
+```
+
+## 拓展
+
+通过单链表的定义可以得知，单链表也是递归结构，因此，也可以使用递归的方式来进行 reverse 操作。
+> 由于单链表是线性的，使用递归方式将导致栈的使用也是线性的，当链表长度达到一定程度时，递归会导致爆栈，因此，现实中并不推荐使用递归方式来操作链表。
+
+####  描述
+
+1. 除第一个节点外，递归将链表 reverse
+2. 将第一个节点添加到已 reverse 的链表之后
+
+> 这里需要注意的是，每次需要保存已经 reverse 的链表的头节点和尾节点
+
+####   C++实现
+```c++
+// 普通递归
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* tail = nullptr;
+        return reverseRecursive(head, tail);
+    }
+
+    ListNode* reverseRecursive(ListNode *head, ListNode *&tail) {
+        if (head == nullptr) {
+            tail = nullptr;
+            return head;
+        }
+        if (head->next == nullptr) {
+            tail = head;
+            return head;
+        }
+        auto h = reverseRecursive(head->next, tail);
+        if (tail != nullptr) {
+            tail->next = head;
+            tail = head;
+            head->next = nullptr;
+        }
+        return h;
+    }
+};
+
+// （类似）尾递归
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (head == nullptr) return head;
+        return reverseRecursive(nullptr, head, head->next);
+    }
+
+    ListNode* reverseRecursive(ListNode *prev, ListNode *head, ListNode *next)
+    {
+        if (next == nullptr) return head;
+        auto n = next->next;
+        next->next = head;
+        head->next = prev;
+        return reverseRecursive(head, next, n);
+    }
+};
+```
+
+####  JavaScript 实现
+```javascript
+var reverseList = function(head) {
+  // 递归结束条件
+  if (head === null || head.next === null) {
+    return head
+  }
+
+  // 递归反转 子链表
+  let newReverseList = reverseList(head.next)
+  // 获取原来链表的第 2 个节点 newReverseListTail
+  let newReverseListTail = head.next
+  // 调整原来头结点和第 2 个节点的指向
+  newReverseListTail.next = head
+  head.next = null
+
+  // 将调整后的链表返回
+  return newReverseList
+}
+```
+
+####  Python 实现
+```python
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        if not head or not head.next: return head
+        ans = self.reverseList(head.next)
+        head.next.next = head
+        head.next = None
+        return ans
+```
