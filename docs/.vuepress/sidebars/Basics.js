@@ -30,4 +30,15 @@ module.exports = [
       // "/Basics/JS_module.md",
     ],
   },
+  {
+    title: "Chorme",
+    children: [
+      "/Basics/Chorme_question.md",
+      // "/Basics/Chorme_question.md",
+      // "/Basics/Chorme_question.md",
+      // "/Basics/Chorme_question.md",
+      // "/Basics/Chorme_question.md",
+      // "/Basics/Chorme_question.md",
+    ],
+  },
 ];
