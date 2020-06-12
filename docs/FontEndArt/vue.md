@@ -37,3 +37,18 @@ computed 可以依赖其它 computed，甚至是其它组件的 data。
 ## 自定义组件的 v-model 是怎样实现的
 
 组件的 v-model 是 Vue 为我们写的一种语法糖，他为我们传入一个值为`value`的`props`和绑定了一个`input`的`emit`事件，将值传递上来赋值。在制作一些特殊组件值需要重新命名时，可以使用``model``进行`value`和`input` 的改名。另外Vue在2.+的时候推出了一个修饰.sync支持多个v-model值绑定，只需要将事件变成`‘updata：value’`
+
+## mixins原理知道吗？
+
+`mixins`在Vue内部是将mixins和组件的`options`传入一个`margeOptions`函数，这个函数我觉得`assign`有点像，前者是一个默认属性，当组件有同名属性时，会使用后者覆盖前者，数据对象`data`会进行递归合并，`computed`等会进行键值对比较，优先组件Key值。
+
+优点：逻辑相同的代码都可以抽离出来，放入mixins实现复用
+
+缺点：因为是根据Key进行覆盖，容易出现命名空间混乱导致不想要发生的覆盖
+
+## **vue3和wue2双向绑定的区别,优化点在哪,用 proxy为什么是一种优化**
+
+Vue3采用了proxy进行数据拦截，这是一个ES6自带的一个API，支持拦截整个对象几乎所有操作，不需要像Vue2一样对每个Key进行循环递归生成Watcher。
+
+Vue2在收集依赖的时候每个Key都有一个依赖收集器，Vue使用weakMap来收集依赖，减少依赖收集的开销
+
