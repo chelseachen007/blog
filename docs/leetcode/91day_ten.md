@@ -37,6 +37,8 @@
 
 ## 我的回答
 
+https://github.com/leetcode-pp/91alg-1/issues/28#issuecomment-641730514
+
 ### 解法一
 
 理解了好久 链表的next指向的是引用地址，只需要向每个地址中添加一个标记位，B链表访问到的第一个有标记位的地址就是公共交点
@@ -59,6 +61,73 @@ var getIntersectionNode = function(headA, headB) {
 
 ### 解法二
 
-这个解法看题解理解的，把两个链表连接起来，会得到两条数量相同，但是连接地址不同的链表，
+时空复杂度O(n)
+
+这个解法看题解理解的，把两个链表连接起来，会得到两条数量相同，但是连接地址不同的链表，如果有相交节点就最后几位就会完全相同。
+
+```js
+var getIntersectionNode = function (headA, headB) {
+    let A = headA; B = headB;
+    if (A === null || B === null) return null
+    while (A !== B) {
+        A = A ==null ? headB : A.next
+        B = B ==null ? headA : B.next
+    }
+    return A
+}
+```
+
+
 
 ## 参考回答
+
+> 哈希法：
+> 有A, B这两条链表, 先遍历其中一个，比如A链表,
+> 将A中的所有节点存入哈希表。
+> 遍历B链表,检查节点是否在哈希表中,
+> 第一个存在的就是相交节点
+> 时间复杂度O(N), 空间复杂度O(N)
+>
+> let data = new Set()
+> while(A !== null){
+>   data.add(A)
+>   A = A.next
+> }
+> while(B !== null){
+>   if(data.has(B)) return B
+>   B = B.next
+> }
+> return null
+> 双指针:
+> 使用a, b两个指针分别指向A, B这两条链表, 两个指针相同的速度向后移动,
+> 当 a 到达链表的尾部时,重定位到链表 B 的头结点
+> 当 b到达链表的尾部时,重定位到链表 A 的头结点。
+> a, b 指针相遇的点为相交的起始节点，否则没有相交点
+> PS: 为什么a, b指针相遇的点一定是相交的起始节点? 我们证明一下：
+>
+> 
+>
+> 如果我们将两条链表按相交的起始节点继续截断，
+>
+> A链表为: a + c，
+> B链表为: b + c，
+> 当 a 指针将 A 链表遍历完后,重定位到链表 B 的头结点,然后继续遍历至相交点，
+> a指针遍历的距离为 a + c + b，
+> 同理b指针遍历的距离为 b + c + a。
+> 时间复杂度O(N), 空间复杂度O(1)
+>
+>
+> let a = headA, b = headB
+> while(a != b){
+>     a = a ? a.next : null
+>     b = b ? b.next : null
+>     if(a == null && b == null) return null
+>     if(a == null) a = headB 
+>     if(b == null) b = headA         
+> }
+> return a
+>
+> 作者：ZStar01
+> 链接：https://leetcode-cn.com/problems/intersection-of-two-linked-lists/solution/shuang-zhi-zhen-ha-xi-by-zstar01/
+> 来源：力扣（LeetCode）
+> 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
