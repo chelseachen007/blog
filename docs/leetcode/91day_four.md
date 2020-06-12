@@ -191,7 +191,7 @@ var decodeString = function(s) {
 };
 ```
 
-![image-20200604140314416](../.vuepress/public/leetcode/91day_four.png)
+![image-20200604140314416](./leetcode/91day_four.png)
 
 很迷 我优化的不是空间吗
 
