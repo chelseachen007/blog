@@ -9,3 +9,7 @@
 - [【basic-03】03.树](https://github.com/leetcode-pp/91alg-1/blob/master/basic-03.md)
 - [【basic-04】04.哈希表](https://github.com/leetcode-pp/91alg-1/blob/master/basic-04.md)
 - [【basic-05】05.双指针](https://lucifer.ren/blog/2020/05/26/91algo-basic-05.two-pointer/)
+
+### 进阶篇
+
+- [【进阶篇】01.并查集](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-01.md)
