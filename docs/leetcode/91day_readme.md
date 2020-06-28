@@ -13,3 +13,4 @@
 ### 进阶篇
 
 - [【进阶篇】01.并查集](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-01.md)
+- [【进阶篇】0X.剪枝](https://github.com/leetcode-pp/91alg-1/blob/master/advanced_prune.md)
