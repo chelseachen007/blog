@@ -86,7 +86,7 @@ var getIntersectionNode = function (headA, headB) {
 > 遍历 B 链表,检查节点是否在哈希表中,
 > 第一个存在的就是相交节点
 > 时间复杂度 O(N), 空间复杂度 O(N)
->
+> ``` js
 > let data = new Set()
 > while(A !== null){
 > data.add(A)
@@ -97,6 +97,7 @@ var getIntersectionNode = function (headA, headB) {
 > B = B.next
 > }
 > return null
+> ```
 > 双指针:
 > 使用 a, b 两个指针分别指向 A, B 这两条链表, 两个指针相同的速度向后移动,
 > 当 a 到达链表的尾部时,重定位到链表 B 的头结点
@@ -112,7 +113,7 @@ var getIntersectionNode = function (headA, headB) {
 > a 指针遍历的距离为 a + c + b，
 > 同理 b 指针遍历的距离为 b + c + a。
 > 时间复杂度 O(N), 空间复杂度 O(1)
->
+>```js
 > let a = headA, b = headB
 > while(a != b){
 > a = a ? a.next : null
@@ -122,7 +123,7 @@ var getIntersectionNode = function (headA, headB) {
 > if(b == null) b = headA  
 > }
 > return a
->
+>```
 > 作者：ZStar01
 > 链接：https://leetcode-cn.com/problems/intersection-of-two-linked-lists/solution/shuang-zhi-zhen-ha-xi-by-zstar01/
 > 来源：力扣（LeetCode）

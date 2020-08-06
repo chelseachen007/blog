@@ -14,6 +14,21 @@
 
 - [【进阶篇】01.并查集](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-01.md)
 - [【进阶篇】0X.剪枝](https://github.com/leetcode-pp/91alg-1/blob/master/advanced_prune.md)
+- [【进阶篇】01.并查集](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-01.md)
+- [【进阶篇】02.Trie](https://github.com/leetcode-pp/91alg-1/blob/master/Trie.pdf) [md版本](https://github.com/leetcode-pp/91alg-1/blob/master/Trie.md)
+- [【进阶篇】03.KMP & RK](https://github.com/leetcode-pp/91alg-1/blob/master)
+- [【进阶篇】04.跳表](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-skiplist.md)
+- [【进阶篇】05.剪枝](https://github.com/leetcode-pp/91alg-1/blob/master/advanced_prune.md)
+- [【进阶篇】07.高频面试题](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-07.md)
+- [【进阶篇】08.堆](https://github.com/leetcode-pp/91alg-1/blob/master/heap.md)
+
+
+
+### 专题
+
+- [【91 算法-专题篇】01.二分法](https://github.com/leetcode-pp/91alg-1/blob/master/topic-01.md)
+
+
 
 ## 题目
 

@@ -83,7 +83,7 @@ var isValid = function(s) {
 
 解法一的判断明显过多
 
-```
+```js
 var isValid = function (s) {
     let length = s.length;
     if (length % 2) return false;

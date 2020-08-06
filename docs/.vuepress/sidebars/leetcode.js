@@ -10,6 +10,15 @@ module.exports = [
     ],
   },
   {
+    title: "基础算法",
+    children: [
+      "/leetcode/alg_one.md",
+      // "/leetcode/Grokking_two.md",
+      // "/leetcode/Grokking_three.md",
+      // "/leetcode/Grokking_four.md",
+    ],
+  },
+  {
     title: "91day训练营",
     children: [
       "/leetcode/91day_readme.md",

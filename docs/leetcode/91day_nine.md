@@ -50,7 +50,7 @@
 > 因为链表访问中点的时间复杂度为O(n),
 > 所以可以使用数组将链表的值存储,以空间换时间
 >
->
+>```js
 > var sortedListToBST = function(head) {
 >     let res = []
 >     while(head){
@@ -69,7 +69,7 @@
 >     root.right = mid >= res.length - 1 ? null : run(res.slice(mid + 1))
 >     return root
 > }
->
+>```
 > 作者：ZStar01
 > 链接：https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree/solution/di-gui-yi-ba-suo-by-zstar01/
 > 来源：力扣（LeetCode）
