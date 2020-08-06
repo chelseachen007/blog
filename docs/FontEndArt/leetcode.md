@@ -109,9 +109,43 @@ LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk foo
 3. 所有请求完成后，结果按照urls里面的顺序依次发出。
 
 ```js
-const mulitRequert= function(url,max,callback)=>{
-    
+function handleFetchQueue(func, urls, max, callback) {
+  const urlCount = urls.length;
+  const requestsQueue = [];
+  const results = [];
+  const errList = [];
+  let i = 0;
+  const isCallBack = () => {
+    const allLen = results.length + errList.length;
+    if (allLen === urlCount) {
+      "function" === typeof callback && callback(results, errList);
+    }
+  };
+  const handleRequest = (url) => {
+    const req = func(url)
+      .then((res) => {
+        console.log("当前并发： " + requestsQueue);
+        results.push(res);
+        const allLen = results.length + errList.length;
+        if (allLen < urlCount && i + 1 < urlCount) {
+          requestsQueue.shift();
+          handleRequest(urls[++i]);
+        } else {
+          isCallBack();
+        }
+      })
+      .catch((e) => {
+        errList.push(e);
+        isCallBack();
+      });
+    if (requestsQueue.push(req) < max) {
+      handleRequest(urls[++i]);
+    }
+  };
+  handleRequest(urls[i]);
 }
 ```
+
+
 
 ### 
