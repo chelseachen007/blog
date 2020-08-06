@@ -19,7 +19,7 @@ module.exports = {
         text: "基础知识",
         items: [
           { text: "前端基础", link: "/Basics/" },
-          { text: "node", link: "/node/" },
+          // { text: "node", link: "/node/" },
         ],
       },
       {

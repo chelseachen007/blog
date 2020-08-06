@@ -25,7 +25,23 @@ module.exports = [
       "/Basics/JS_typeof.md",
       "/Basics/JS_module.md",
       "/Basics/write_throttle.md",
+      "/Basics/TypeScript.md",
       // "/Basics/JS_module.md",
+      // "/Basics/JS_module.md",
+    ],
+  },
+  {
+    title: "React",
+    children: [
+      "/Basics/Redux.md",
+      // "/Basics/JS_module.md",
+      // "/Basics/JS_module.md",
+    ],
+  },
+  {
+    title: "Vue",
+    children: [
+      // "/Basics/Redux.md",
       // "/Basics/JS_module.md",
       // "/Basics/JS_module.md",
     ],
