@@ -27,6 +27,8 @@
 ### 专题
 
 - [【91 算法-专题篇】01.二分法](https://github.com/leetcode-pp/91alg-1/blob/master/topic-01.md)
+- [【91 算法-专题篇】02.滑动窗口](https://github.com/leetcode-pp/91alg-1/blob/master/slidingwindow.md)
+- [【91 算法-专题篇】03.搜索](https://github.com/leetcode-pp/91alg-1/blob/master/topic-03.md)
 
 
 

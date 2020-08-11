@@ -148,4 +148,29 @@ function handleFetchQueue(func, urls, max, callback) {
 
 
 
-### 
+
+
+
+
+### 实现36进制加法，不得直接使用parselnt转化十进制进行计算，如‘1b'+'0a'=57
+
+
+
+
+
+### 实现sortByDept()函数，被依赖最深的元素，输出到最前
+
+```js
+sortByDept([
+    {name:'a',requires:['b','c']},
+    {name:'b',requires:['c']},
+    {name:'b',requires:['']},
+])
+// 输出：
+[
+  {name:'c',requires:['']},
+  {name:'b',requires:['c']},
+  {name:'a',requires:['b','c']},
+]
+```
+
