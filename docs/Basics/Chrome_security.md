@@ -143,6 +143,17 @@ webSocket本身不存在跨域问题，所以我们可以利用webSocket来进�
 
 下面的那几种跨域看看就好了,平时主要使用的还是**CORS**、**JSONP**和**代理**
 
+
+
+### **Cookie 遵守同源策略吗？**
+
+也有，不过跟 AJAX 的同源策略稍微有些不同：
+
+- 当请求 [qq.com](https://link.zhihu.com/?target=http%3A//qq.com/) 下的资源时，浏览器会默认带上 [qq.com](https://link.zhihu.com/?target=http%3A//qq.com/) 对应的 Cookie，不会带上[baidu.com](https://link.zhihu.com/?target=http%3A//baidu.com/) 对应的 Cookie
+- 当请求 [v.qq.com](https://link.zhihu.com/?target=http%3A//v.qq.com/) 下的资源时，浏览器不仅会带上 [v.qq.com](https://link.zhihu.com/?target=http%3A//v.qq.com/) 的Cookie，还会带上 [qq.com](https://link.zhihu.com/?target=http%3A//qq.com/) 的 Cookie
+
+
+
 ## XSS 攻击
 
 XSS 全称是 Cross Site Scripting，为了与“CSS”区分开来，故简称 XSS，翻译过来就是“跨站脚本”。XSS 攻击是指黑客往 HTML 文件中或者 DOM 中注入恶意脚本，从而在用户浏览页面时利用注入的恶意脚本对用户实施攻击的一种手段。
