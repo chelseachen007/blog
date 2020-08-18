@@ -12,23 +12,24 @@
 
 ### 进阶篇
 
-- [【进阶篇】01.并查集](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-01.md)
-- [【进阶篇】0X.剪枝](https://github.com/leetcode-pp/91alg-1/blob/master/advanced_prune.md)
-- [【进阶篇】01.并查集](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-01.md)
-- [【进阶篇】02.Trie](https://github.com/leetcode-pp/91alg-1/blob/master/Trie.pdf) [md版本](https://github.com/leetcode-pp/91alg-1/blob/master/Trie.md)
-- [【进阶篇】03.KMP & RK](https://github.com/leetcode-pp/91alg-1/blob/master)
-- [【进阶篇】04.跳表](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-skiplist.md)
-- [【进阶篇】05.剪枝](https://github.com/leetcode-pp/91alg-1/blob/master/advanced_prune.md)
-- [【进阶篇】07.高频面试题](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-07.md)
-- [【进阶篇】08.堆](https://github.com/leetcode-pp/91alg-1/blob/master/heap.md)
+- [【91 算法-进阶篇】01.并查集](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-01.md)
+- [【91 算法-进阶篇】02.Trie（PDF）](https://github.com/leetcode-pp/91alg-1/blob/master/Trie.pdf) [【91 算法-进阶篇】02.Trie（Markdown）](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-trie.md)
+- [【91 算法-进阶篇】03.KMP & RK](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-kmp.md)
+- [【91 算法-进阶篇】04.跳表](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-skiplist.md)
+- [【91 算法-进阶篇】05.剪枝](https://github.com/leetcode-pp/91alg-1/blob/master/advanced_prune.md)
+- [【91 算法-进阶篇】07.高频面试题](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-07.md)
+- [【91 算法-进阶篇】08.堆](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-heap.md)
 
 
 
 ### 专题
 
-- [【91 算法-专题篇】01.二分法](https://github.com/leetcode-pp/91alg-1/blob/master/topic-01.md)
-- [【91 算法-专题篇】02.滑动窗口](https://github.com/leetcode-pp/91alg-1/blob/master/slidingwindow.md)
-- [【91 算法-专题篇】03.搜索](https://github.com/leetcode-pp/91alg-1/blob/master/topic-03.md)
+- [【91 算法-专题篇】01.二分法](https://github.com/leetcode-pp/91alg-1/blob/master/topic-binary-search.md)
+- [【91 算法-专题篇】02.滑动窗口](https://github.com/leetcode-pp/91alg-1/blob/master/topic-slidingwindow.md)
+- [【91 算法-专题篇】03.位运算](https://github.com/leetcode-pp/91alg-1/blob/master/topic-bit.md)
+- [【91 算法-专题篇】04.搜索](https://github.com/leetcode-pp/91alg-1/blob/master/topic-search.md)
+
+
 
 
 
@@ -63,3 +64,31 @@
 - [x] [【day-27】26.删除排序数组中的重复项](./91day_27.md)
 - [x] [【Day 28】两数之和 II - 输入有序数组](./91day_28.md)
 - [x] [【day-29】接雨水](./91day_29.md)
+
+
+
+
+
+### 二分法
+
+- [x]  [【Day65 - 278. 第一个错误的版本】](./91day_65.md)
+
+- [x] [【Day66 - 162. 寻找峰值】](./91day_66.md)
+
+- [x] [【Day67 - 34. 在排序数组中查找元素的第一个和最后一个位置】](./91day_67.md)
+
+- [x] [【Day68 - 4. 寻找两个正序数组的中位数】](./91day_68.md)
+
+- [ ] [【Day69 - 222. 完全二叉树的节点个数】](./91day_69.md)
+
+
+
+### 位运算
+
+- [x] [【Day74 - 268. 缺失数字】](./91day_74.md)
+- [ ] [【Day75 - 78. 子集】](./91day_75.md)
+- [ ] [【Day76 1254. 统计封闭岛屿的数目】](./91day_76.md)
+- [ ] [【Day77 51. N皇后】](./91day_77.md)
+- [ ] [【Day78 - 130. 被围绕的区域】](./91day_78.md)
+- [ ] [【Day79 - 827. 最大人工岛】](./91day_79.md)
+

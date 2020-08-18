@@ -134,6 +134,8 @@ selectSort: 6.682ms
 
 快速排序是对冒泡排序的一种改进，第一趟排序时将数据分成两部分，一部分比另一部分的所有数据都要小。然后递归调用，在两边都实行快速排序。
 
+##### 时间复杂度为 O(nlogn)
+
 ```js
 function partition(arr, low, high) {
   let i = low - 1;
