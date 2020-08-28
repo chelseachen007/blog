@@ -137,5 +137,126 @@ priorityLevel则来自用户的UI操作，不同的事件，带来三种不同�
 
 
 
+### workLoop
 
+不断检查主线程是否有空闲，并开始下个任务的构建执行，然后进行提交 更新DOM
+
+```js
+function workLoop(deadline) {
+  // deadline.timeRemaining() > 1 是暂时写死的，详细的空闲情况参照上面的 ExpirationTime 分析
+  // !shouldYield()
+  while (nextUnitOfWork && deadline.timeRemaining() > 1) {
+    // 执行下一个任务
+    nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
+  }
+
+  if (!nextUnitOfWork && wipRoot) {
+    commitRoot();
+  }
+  requestIdleCallback(workLoop);
+}
+```
+
+
+
+进行递归fiber协调，更新fiber结构
+
+```js
+function performUnitOfWork(fiber) {
+  // 1.执行当前任务
+  const {type} = fiber;
+  if (typeof type === "function") {
+    // todo
+    type.isReactComponent
+      ? updateClassComponent(fiber)
+      : updateFunctionComponent(fiber);
+  } else {
+    // h5标签
+    updateHostComponent(fiber);
+  }
+
+  // 2. 返回下一个任务
+  // 返回下一个任务原则： 1). 有子元素返回子元素
+  if (fiber.child) {
+    return fiber.child;
+  }
+  // 2) 如果没有子元素，找兄弟元素
+  let nextFiber = fiber;
+  while (nextFiber) {
+    if (nextFiber.sibling) {
+      return nextFiber.sibling;
+    }
+    nextFiber = nextFiber.return;
+  }
+}
+```
+
+对不同形式的组件分别处理，以下是类组件协调代码，核心是 **reconcileChildren**
+
+```js
+function updateClassComponent(fiber) {
+  const {type, props} = fiber;
+  let cmp = new type(props);
+  let vvnode = cmp.render();
+  const children = [vvnode];
+  reconcileChildren(fiber, children);
+}
+```
+
+
+
+协调Fiber，首先要明白Fiber是一个React自己创造的数据结构
+
+#### Fiber
+
+```js
+/**
+ * fiber架构
+ * type: 标记类型
+ * key: 标记当前层级下的唯一性
+ * child : 第一个子元素 fiber
+ * sibling ： 下一个兄弟元素 fiber
+ * return： 父fiber
+ * node： 真实dom节点
+ * props：属性值
+ * base: 上次的节点 fiber
+ * effectTag: 标记要执行的操作类型（删除、插入、更新）
+ */
+```
+
+除了一些继承下来的属性，讲几个关键点
+
+sibling ： 下一个兄弟元素 fiber，类似于链表结构，按同级元素一个链接一个，实现同级元素的快速插入、删除
+
+child :第一个子元素的fiber，支持向下递归
+
+return： 父fiber，
+
+![20180428113734143](React/20180428113734143.png)
+
+
+
+类似于这也一个个小的Fiber，相互链接构成了一棵完整的fiber Tree
+
+
+
+#### **reconcileChildren**
+
+// TODO:
+
+**reconcileChildren** 也叫协调，对比每个层级fiber内容，为fiber打上effectTag记号：
+
+- UPDATE
+- DELETION
+- PLACEMENT
+
+然后等待提交后，进行对应的DOM操作
+
+#### UPDATE
+
+
+
+### 总结
+
+Fiber 在我眼里是一种协调diff比对的一个调度算法，他通过 requestIdleCallback 来获取主线程的空闲时间来进行 diif比对整个fiber Tree，因为他是链表结构，所以可以在线程无空闲时间，将节点暂停等待下次空闲时间继续进行，直到更新到rootWip，再commitRoot进行更新DOM节点。另外 他在空闲时间计算上引入了 优先级策略，使得高优先级的任务可以插队进行，一些异步任务可以延迟或者被打断，实现高效的页面更新。
 

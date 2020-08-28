@@ -21,6 +21,41 @@ commonJs**规范**通过简单的 API 声明服务器的模块，目标是让 Ja
 (function (exports, require, module, __filename, __dirname) {});
 ```
 
+#### JSON 文件
+
+- 通过  `fs.readFileSync()` 加载
+- 通过 `JSON.parse()` 解析
+
+#### 加载大文件
+
+- require 成功后会缓存文件
+- 大量使用会导致大量数据驻留在内存中，导致 GC 频分和内存泄露
+
+#### exports
+
+- exports 是 module 的属性，默认情况是空对象
+- require 一个模块实际得到的是该模块的 exports 属性
+- `exports.xxx` 导出具有多个属性的对象
+- `module.exports = xxx` 导出一个对象
+
+```js
+// module-2.js
+exports.method = function() {
+  return 'Hello';
+};
+
+exports.method2 = function() {
+  return 'Hello again';
+};
+
+// module-1.js
+const module2 = require('./module-2');
+console.log(module2.method()); // Hello
+console.log(module2.method2()); // Hello again
+```
+
+
+
 ## AMD 和 require.js
 
 AMD 是为了弥补 commonjs 规范在浏览器中目前无法支持 ES6 的一种**异步解决方案**。异步模块定义规范（AMD）制定了定义模块的规则，这样模块和模块的依赖可以被异步加载。这和浏览器的异步加载模块的环境刚好适应（浏览器同步加载模块会导致性能、可用性、调试和跨域访问等问题）。

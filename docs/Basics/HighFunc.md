@@ -4,6 +4,8 @@
 
 ### compose
 
+##### redux版本(同步函数)
+
 ```js
 function f1(arg) {
   console.log("f1", arg);
@@ -40,6 +42,73 @@ compose(f1, f2, f3)("omg");
 // f3 omg
 // f2 omg
 // f1 omg
+```
+
+
+
+##### koa版本(异步中间件)
+
+例子
+
+```js
+function compose(middlewares){
+     return () = >{
+         
+     }
+}
+
+async function fn1(next) {
+    console.log("fn1");
+    await next();
+    console.log("end fn1");
+}
+
+async function fn2(next) {
+    console.log("fn2");
+    await delay();
+    await next();
+    console.log("end fn2");
+}
+
+function fn3(next) {
+    console.log("fn3");
+}
+
+function delay() {
+    return new Promise((reslove, reject) => {
+        setTimeout(() => {
+            reslove();
+        }, 2000);
+    });
+}
+
+
+const middlewares = [fn1, fn2, fn3];
+const finalFn = compose(middlewares);
+finalFn();
+```
+
+
+
+###### compose实现
+
+- compose 接受一个 函数数组
+- 返回一个 具有一个 next函数参数的 函数
+- 用Promise包装，
+- 考虑边界条件 
+
+```js
+function compose(middlewares){
+     return () = >{
+         dispatch(0)
+     }
+     function  dispatch(i){
+         let fn = middlewares[i]
+         if(!fn) return Promise.resolve()
+         return fn(()=> Promise.resolve(dispatch(i +1 )))
+     }
+
+}
 ```
 
 
