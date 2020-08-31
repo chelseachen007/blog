@@ -20,33 +20,6 @@ module.exports = [
     ],
   },
   {
-    title: "JavaScript",
-    children: [
-      "/Basics/JS_typeof.md",
-      "/Basics/JS_module.md",
-      "/Basics/write_throttle.md",
-      "/Basics/TypeScript.md",
-      // "/Basics/JS_module.md",
-      // "/Basics/JS_module.md",
-    ],
-  },
-  {
-    title: "React",
-    children: [
-      "/Basics/Redux.md",
-      // "/Basics/JS_module.md",
-      // "/Basics/JS_module.md",
-    ],
-  },
-  {
-    title: "Vue",
-    children: [
-      // "/Basics/Redux.md",
-      // "/Basics/JS_module.md",
-      // "/Basics/JS_module.md",
-    ],
-  },
-  {
     title: "Chorme",
     children: [
       "/Basics/Chorme_question.md",
@@ -54,7 +27,35 @@ module.exports = [
       "/Basics/Chorme_Render.md",
       "/Basics/Chrome_security.md",
       "/Basics/Chrome_V8.md",
-      // "/Basics/Chorme_question.md",
+      "/Basics/Chrome_session.md.md",
     ],
   },
+  {
+    title: "JavaScript",
+    children: [
+      "/Basics/JS_typeof.md",
+      "/Basics/JS_module.md",
+      "/Basics/write_throttle.md",
+      "/Basics/TypeScript.md",
+      "/Basics/JS_HighFunc.md.md",
+      "/Basics/Reg.md",
+    ],
+  },
+  {
+    title: "React",
+    children: [
+      "/Basics/React_Redux.md",
+      "/Basics/React_fiber.md",
+      "/Basics/React_hooks.md",
+    ],
+  },
+  {
+    title: "Vue",
+    children: [
+      "/Basics/Vue_vue3.md",
+      // "/Basics/JS_module.md",
+      // "/Basics/JS_module.md",
+    ],
+  },
+
 ];
