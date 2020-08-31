@@ -27,7 +27,7 @@ module.exports = [
       "/Basics/Chorme_Render.md",
       "/Basics/Chrome_security.md",
       "/Basics/Chrome_V8.md",
-      "/Basics/Chrome_session.md.md",
+      "/Basics/Chrome_session.md",
     ],
   },
   {
@@ -37,7 +37,7 @@ module.exports = [
       "/Basics/JS_module.md",
       "/Basics/write_throttle.md",
       "/Basics/TypeScript.md",
-      "/Basics/JS_HighFunc.md.md",
+      "/Basics/JS_HighFunc.md",
       "/Basics/Reg.md",
     ],
   },
