@@ -13,7 +13,7 @@ HTTP 缓存可以分为：
 
 强缓存是利用 HTTP 头中的 `Expires` 和 `Cache-Control` 两个字段来控制的。强缓存中，当请求再次发出时，浏览器会根据其中的 `expires` 和 `cache-control` 判断目标资源是否“命中”强缓存，若命中则直接从缓存中获取资源，**不会再与服务端发生通信**。
 
-#### Expires
+### Expires
 
 ```javascript
  //Expires
@@ -23,7 +23,7 @@ HTTP 缓存可以分为：
 `expires` 是一个时间戳 通过对比时间戳来决定是否命中强缓存
 但 `expires` 是有问题的，它最大的问题在于对“**本地时间**”的依赖。如果服务端和客户端的时间设置可能不同，或者我直接手动去把客户端的时间改掉，那么 `expires` 将无法达到我们的预期。
 
-#### Cache-Control
+### Cache-Control
 
 ```javascript
  // Cache-Control
@@ -43,7 +43,7 @@ HTTP1.1 新增了 **Cache-Control**
 - **s-maxage** :限定在代理上能够存多久
 - **no-transform**：代理有时候会对缓存下来的数据做一些优化，比如把图片生成 png、webp 等几种格式，方便今后的请求处理。 `no-transform` 就会禁止这样做
 
-#### Pragma
+### Pragma
 
 Pragma 只有一个属性值，就是 no-cache ，效果和 Cache-Control 中的 no-cache 一致，不使用强缓存，需要与服务器验证缓存是否新鲜，在 3 个头部属性中的优先级最高。
 
@@ -51,7 +51,7 @@ Pragma 只有一个属性值，就是 no-cache ，效果和 Cache-Control 中的
 
 当浏览器的强缓存失效的时候或者请求头中设置了不走强缓存，并且在请求头中设置了 `If-Modified-Since` 或者 `If-None-Match` 的时候，会将这两个属性值到服务端去验证是否命中协商缓存，如果命中了协商缓存，会返回 304 状态，加载浏览器缓存，并且响应头会设置 `Last-Modified` 或者 `ETag` 属性。
 
-#### Last-Modified/If-Modified-Since
+### Last-Modified/If-Modified-Since
 
 ```javascript
 //client
@@ -69,7 +69,7 @@ Last-Modified: Fri, 27 Oct 2017 06:35:57 GMT
 - 由于 Last-Modified 修改时间是 GMT 时间，只能精确到秒，如果文件在 1 秒内有多次改动，服务器并不知道文件有改动，浏览器拿不到最新的文件
 - 如果服务器上文件被多次修改了但是内容却没有发生改变，服务器需要再次重新返回文件。
 
-#### ETag
+### ETag
 
 `ETag` 就是为了解决 `Last-Modified` 无法解决高频修改文件缓存问题，可以称他为 **文件指纹**。
 
@@ -114,13 +114,13 @@ ETag: W/"2a3b-1602480f459"
 - Disk Cache
 - Push Cache
 
-##### Service Worker
+### Service Worker
 
 Service Worker 是一种独立于主线程之外的 Javascript 线程。它脱离于浏览器窗体，因此无法直接访问 DOM。这样独立的个性使得 Service Worker 的“个人行为”无法干扰页面的性能，这个“幕后工作者”可以帮我们实现`离线缓存`、`消息推送`和`网络代理`等功能。其中的离线缓存就是 `Service Worker Cache`。`Service Worker` 同时也是 `PWA` 的重要实现机制
 
 PS：大家注意 Server Worker 对协议是有要求的，必须以 **https** 协议为前提。
 
-##### Memory Cache 和 Disk Cache
+### Memory Cache 和 Disk Cache
 
 `Memory Cache` 顾名思义，就是将资源缓存到内存中，等待下次访问时不需要重新下载资源，而直接从内存中获取。读取内存中的数据肯定比磁盘快,内存缓存虽然读取高效，可是缓存持续性很短，会随着进程的释放而释放。 一旦我们关闭 Tab 页面，内存中的缓存也就被释放了。
 `Disk Cache` 也就是存储在硬盘中的缓存，读取速度慢点，但是什么都能存储到磁盘中，比之 `Memory Cache` 胜在容量和存储时效性上。
@@ -134,21 +134,21 @@ PS：大家注意 Server Worker 对协议是有要求的，必须以 **https** �
 - 比较大的 JS、CSS 文件会直接被丢进磁盘，反之丢进内存
 - 内存使用率比较高的时候，文件优先进入磁盘
 
-##### Push Cache
+### Push Cache
 
 `推送缓存` 是 HTTP/2 中的内容，当以上三种缓存都没有命中时，它才会被使用。它只在会话（Session）中存在，一旦会话结束就被释放，并且缓存时间也很短暂，在 Chrome 浏览器中只有 5 分钟左右，同时它也并非严格执行 HTTP 头中的缓存指令。
 
 ## 用户操作对缓存的影响
 
-#### 地址栏输入地址
+### 地址栏输入地址
 
 优先查找`Disk Cache`看是否有匹配，没有则发送网络请求
 
-#### F5 刷新
+### F5 刷新
 
 优先查找 `Memory Cache` 然后再去匹配 `Disk Cache`。不走强缓存但是
 
-#### CTRL+F5 刷新
+### CTRL+F5 刷新
 
 不使用缓存
 

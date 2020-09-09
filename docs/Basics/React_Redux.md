@@ -46,8 +46,6 @@ export const addTodo = text => ({
 1. 如果**函数**的调用参数相同，则永远返回相同的结果。它不依赖于程序执行期间 **函数** 外部任何状态或数据的变化，必须只依赖于其输入参数。
 2. 该 **函数** 不会产生任何可观察的副作用，例如网络请求，输入和输出设备或数据突变（mutation）
 
-
-
 所以 **永远不要**在 reducer里做这些操作：
 
 1. 修改传入参数；
@@ -143,8 +141,6 @@ export default class ReduxPage extends Component {
 ```
 
 ## API分解实现
-
-
 
 ### createStore
 
@@ -295,7 +291,6 @@ compose(f1, f2, f3)("omg");
 export default function applyMiddleware(...middlewares) {
   return (createStore) => (reducer) => {
     .....
-    
     const API = {
       state: store.getState(),
       dispatch: (actions, ...args) => store.dispatch(actions, ...args),

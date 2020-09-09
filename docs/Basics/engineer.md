@@ -43,8 +43,6 @@ npm install cz-customizable --save-dev
 
 ```
 
-
-
 ### .cz-config.js
 
 ```js
@@ -107,8 +105,6 @@ module.exports = {
 
 ```
 
-
-
 ### Commitizen校验
 
 ```js
@@ -134,8 +130,6 @@ npm install husky --save-dev
 
 ## ESLint
 
-
-
 ```js
 npm i --save-dev eslint
 
@@ -143,27 +137,27 @@ npm i --save-dev eslint
 
 ? How would you like to configure ESLint? Answer questions about your style
 // 是否校验 Es6 语法
-? Are you using ECMAScript 6 features? Yes      
+? Are you using ECMAScript 6 features? Yes
 // 是否校验 Es6 模块语法
-? Are you using ES6 modules? Yes       
-// 代码运行环境，Browser 指浏览器         
-? Where will your code run? Browser   
-// 是否校验 CommonJs 语法          
-? Do you use CommonJS? Yes                      
+? Are you using ES6 modules? Yes
+// 代码运行环境，Browser 指浏览器
+? Where will your code run? Browser
+// 是否校验 CommonJs 语法
+? Do you use CommonJS? Yes
 // 是否校验 JSX 语法
-? Do you use JSX? Yes                           
+? Do you use JSX? Yes
 // 是否校验 React 语法
-? Do you use React? Yes                         
+? Do you use React? Yes
 // 首行空白选择 Tab 键还是 Space
-? What style of indentation do you use? Tabs    
+? What style of indentation do you use? Tabs
 // 字符串使用单引号 'string' 还是双引号 "string"
-? What quotes do you use for strings? Double    
+? What quotes do you use for strings? Double
 // 操作系统
-? What line endings do you use? Windows         
-// 每行代码结尾是否校验加分号 ;
-? Do you require semicolons? Yes                
+? What line endings do you use? Windows
+// 每行代码结尾是否校验加分号 
+? Do you require semicolons? Yes
 // 以 .js 格式生成配置文件
-? What format do you want your config file to be in? JavaScript   
+? What format do you want your config file to be in? JavaScript
 // 因为要校验 Reac 语法，所以这里需要下载一个 React 语法规则的包  
 Installing eslint-plugin-react@latest  
 ```
@@ -176,13 +170,9 @@ off" 或 0 - 关闭规则
 
 "error" 或 2 - 开启规则，使用错误级别的错误：error (当被触发的时候，程序会退出)
 
-
-
 ## Prettier
 
 VS Code 的 [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) 
-
-
 
 ## lint-staged
 
@@ -196,6 +186,3 @@ npx mrm lint-staged
   }
 },
 ```
-
-
-

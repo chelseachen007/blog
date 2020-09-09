@@ -2,8 +2,6 @@
 
 因为最近想参与到elementui3的升级中，所以复习下vue3的API。
 
-
-
 ## composition API
 
 ```js
@@ -22,13 +20,9 @@ const {
         } = Vue
 ```
 
-
-
 ### setup
 
-**setup函数会在 beforeCreate之后 created之前执行**
-
-
+ **setup函数会在 beforeCreate之后 created之前执行**
 
 ### reactive
 
@@ -52,15 +46,13 @@ reactive() 函数接受一个普通对象 返回一个响应式数据对象
 
 ```
 
-###  ref
+### ref
 
 创建一个响应式变量，传入默认值
 
 ```js
  const closed = ref(false)
 ```
-
-
 
 ### toRefs
 
@@ -85,14 +77,10 @@ reactive() 函数接受一个普通对象 返回一个响应式数据对象
     </div>
 ```
 
-
-
 ### ref 与 isRef
 
 - ref 将给定的值(确切的说是基本数据类型 ini 或 string)创建一个响应式的数据对象
 - isRef 其实就是判断一下是不是ref生成的响应式数据对象
-
-
 
 ```js
     // 定义创建响应式数据
@@ -104,7 +92,7 @@ reactive() 函数接受一个普通对象 返回一个响应式数据对象
     console.log('time is ref:', isRef(time))
     console.log('time', time)
     console.log('time.value', time.value)
-    
+
     // 我们看看模板里面我们这样展示
     template: `
         <div>
@@ -126,8 +114,6 @@ reactive() 函数接受一个普通对象 返回一个响应式数据对象
     })
 ```
 
-
-
 `watch  `和 `computed` 没有什么新东西
 
 ### computed 计算属性
@@ -147,8 +133,6 @@ const state = reactive({
     })
 ```
 
-
-
 ### 生命周期钩子Hooks
 
 | Vue3          | Vue3            |
@@ -162,5 +146,3 @@ const state = reactive({
 | beforeDestroy | onBeforeUnmount |
 | destroyed     | onUnmounted     |
 | errorCaptured | onErrorCaptured |
-
-

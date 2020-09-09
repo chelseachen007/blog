@@ -4,8 +4,6 @@
 
 ![image-20200817143402217](./React/image-20200817143402217.png)
 
-
-
 ### window.requestIdleCallback()
 
 首先，React 通过使用了 window一个新的API 使任务队列可以在空闲时间进行视图更新，所以我们先来了解下一这个API。
@@ -18,11 +16,7 @@
 var handle = window.requestIdleCallback(callback[, options])
 ```
 
-
-
 react主要把到期时间分为两种：**异步任务到期时间**与**交互动作的到期时间**。在这之前需要了解一下一些重要的函数，react的到期时间与系统的时间ms不是1：1的关系，低优先级异步任务的两个时间间隔相差不到250ms（相当于25个单位的` 到期时间`）的任务会被设置为同一个到期时间，交互 异步任务间隔为100ms（10个单位到期时间），因此减少了一些不必要的组件渲染，并且保证交互可以及时的响应。
-
-
 
 这里涉及一个时间计算公式
 
@@ -58,8 +52,6 @@ function computeExpirationBucket(
 }
 ```
 
-
-
 #### 低优先级
 
 ```js
@@ -74,11 +66,7 @@ export const HIGH_PRIORITY_EXPIRATION = __DEV__ ? 500 : 150;
 export const HIGH_PRIORITY_BATCH_SIZE = 100;
 ```
 
-
-
 react低优先级update的expirationTime间隔是**25ms**，(同理高优先级的间隔为**10ms**) react让两个相近（25ms内）的update得到相同的expirationTime，目的就是让这两个update自动合并成一个Update，从而达到批量更新的目的，就像LOW_PRIORITY_BATCH_SIZE的名字一样，自动合并批量更新。
-
-
 
 #### 优先级怎么来
 
@@ -117,8 +105,6 @@ export function computeExpirationForFiber(
 }
 ```
 
-
-
 fiber的expirationTime又来自priorityLevel，
 
 priorityLevel则来自用户的UI操作，不同的事件，带来三种不同的priorityLevel。
@@ -131,11 +117,7 @@ priorityLevel则来自用户的UI操作，不同的事件，带来三种不同�
 
 用户代码出现问题，被catch住时，出现第五种priorityLevel——**IdlePriority。*
 
-
-
 注：箭头后面是推测 还没有找到根据
-
-
 
 ### workLoop
 
@@ -156,8 +138,6 @@ function workLoop(deadline) {
   requestIdleCallback(workLoop);
 }
 ```
-
-
 
 进行递归fiber协调，更新fiber结构
 
@@ -203,8 +183,6 @@ function updateClassComponent(fiber) {
 }
 ```
 
-
-
 协调Fiber，首先要明白Fiber是一个React自己创造的数据结构
 
 #### Fiber
@@ -234,11 +212,7 @@ return： 父fiber，
 
 ![20180428113734143](./React/20180428113734143.png)
 
-
-
 类似于这也一个个小的Fiber，相互链接构成了一棵完整的fiber Tree
-
-
 
 #### **reconcileChildren**
 
@@ -261,4 +235,3 @@ return： 父fiber，
 ### 总结
 
 Fiber 在我眼里是一种协调diff比对的一个调度算法，他通过 requestIdleCallback 来获取主线程的空闲时间来进行 diif比对整个fiber Tree，因为他是链表结构，所以可以在线程无空闲时间，将节点暂停等待下次空闲时间继续进行，直到更新到rootWip，再commitRoot进行更新DOM节点。另外 他在空闲时间计算上引入了 优先级策略，使得高优先级的任务可以插队进行，一些异步任务可以延迟或者被打断，实现高效的页面更新。
-
