@@ -12,6 +12,14 @@
 - DOM 和 JS 对象无法获取
 - Ajax请求发送不出去
 
+| URL                                               | 结果 | 原因                               |
+| :------------------------------------------------ | :--- | :--------------------------------- |
+| `http://store.company.com/dir2/other.html`        | 同源 | 只有路径不同                       |
+| `http://store.company.com/dir/inner/another.html` | 同源 | 只有路径不同                       |
+| `https://store.company.com/secure.html`           | 失败 | 协议不同                           |
+| `http://store.company.com:81/dir/etc.html`        | 失败 | 端口不同 ( `http://` 默认端口是80) |
+| `http://news.company.com/dir/other.html`          | 失败 | 主机不同                           |
+
 ### **CORS**标准
 
 **CORS是一个W3C标准，全称是"跨域资源共享"（Cross-origin resource sharing）。**
@@ -284,3 +292,7 @@ Origin 属性只包含了域名信息，并没有包含具体的 URL 路径，�
 
 因此Chrome几年前就开始重构代码，将标签级的渲染进程重构为iframe级的渲染进程，然后严格按照同一站点的策略来分配渲染进程，这就是Chrome中的站点隔离。
 实现了站点隔离，就可以将恶意的iframe隔离在恶意进程内部，使得它无法继续访问其他iframe进程的内容，因此也就无法攻击其他站点了。
+
+为什么要让他们跑在一个进程里面呢？
+
+因为在一个渲染进程里面，他们就会共享JS的执行环境，也就是说A页面可以直接在B页面中执行脚本。因为是同一家的站点，所以是有这个需求的。
