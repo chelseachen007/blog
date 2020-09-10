@@ -17,6 +17,7 @@ module.exports = [
       "/Basics/HTTP_cache.md",
       "/Basics/HTTP_https.md",
       "/Basics/HTTP_question.md",
+      "/Basics/HTTP_JWT.md",
     ],
   },
   {
@@ -35,10 +36,10 @@ module.exports = [
     children: [
       "/Basics/JS_typeof.md",
       "/Basics/JS_module.md",
-      "/Basics/write_throttle.md",
-      "/Basics/TypeScript.md",
+      "/Basics/JS_throttle.md",
+      "/Basics/JS_TypeScript.md",
       "/Basics/JS_HighFunc.md",
-      "/Basics/Reg.md",
+      "/Basics/JS_Reg.md",
     ],
   },
   {
@@ -57,5 +58,12 @@ module.exports = [
       // "/Basics/JS_module.md",
     ],
   },
-
+  {
+    title: "前端工程化",
+    children: [
+      "/Basics/Engineer_Lint.md",
+      "/Basics/Engineer_Docker.md",
+      "/Basics/Engineer_Jest.md",
+    ],
+  },
 ];

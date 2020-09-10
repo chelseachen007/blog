@@ -8,8 +8,6 @@
 
 服务端执行session机制时候会生成session的id值，这个id值会发送给客户端，客户端每次请求都会把这个id值放到http请求的头部发送给服务端，而这个id值在客户端会保存下来，保存的容器就是cookie，因此当我们完全禁掉浏览器的cookie的时候，服务端的session也会不能正常使用。
 
-
-
 ## Token
 
 - session要求服务端存储信息，并且根据id能够检索，而token不需要（因为信息就在token
@@ -43,8 +41,6 @@ oxNTY3NjkyNTM0fQ.OzDruSCbXFokv1zFpkv22Z_9AJGCHG5fT_WnEaf72EA
 
 ey开头表示 使用 base64加密，可以反向解密得出临牌头和payload
 
-
-
 第三个  . 是使用 前两个 base64加密算法加密得出的签名
 
 ```js
@@ -54,8 +50,6 @@ verify: key => {
             return hmac === ary[2] + '='
 }
 ```
-
-
 
 ## 加密算法
 
@@ -118,8 +112,6 @@ dec += decipher.final("utf8");
 console.log("AES对称解密结果：" + dec);
 ```
 
-
-
 #### **RSA非对称加密**
 
 先使用openSSl生成 `公钥` 和 `私钥`
@@ -167,8 +159,6 @@ console.log("RSA非对称解密结果:%s", decrypted.toString());
 
 - 使用RSA私钥进行签名（对信息报文生成的摘要进行私钥签名）生成签名串，一般是16进制字符串
 - 使用RSA公钥进行签名校验（验明正身）
-
-
 
 JWT中的第三段签名就是内容签名的概念，将令牌头和参数信息进行摘要后生成一个全新的签名。
 

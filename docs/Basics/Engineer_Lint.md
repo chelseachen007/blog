@@ -1,15 +1,10 @@
 # 前端工程化
 
-
-
 ## commitlint
 
 ```js
 npm install -g commitizen
-
 ```
-
-
 
 ### cz-conventional-changelog
 
@@ -161,8 +156,6 @@ npm i --save-dev eslint
 // 因为要校验 Reac 语法，所以这里需要下载一个 React 语法规则的包  
 Installing eslint-plugin-react@latest  
 ```
-
-
 
 off" 或 0 - 关闭规则
 
