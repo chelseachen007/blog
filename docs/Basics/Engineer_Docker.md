@@ -1,5 +1,177 @@
 # Docker
 
+## Docker简介
+
+### **Docker 镜像**
+
+是一种UnionFS（联合文件系统），是一种分层、轻量级并且高性能的文件系统，它支持对文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系统下.
+
+镜像同时也很小，因为我们pull的镜像剔除了无用的东西，只是一个精简功能版的镜像
+
+下载是一层一层下载，这样便于共享资源。
+
+### **Docker 容器数据卷**
+
+卷就是目录或文件，存在于一个或多个容器中，由docker挂载到容器，但不属于联合文件系统，因此能够绕过Union File System提供一些用于持续存储或共享数据的特性，卷的设计目的就是数据的持久化，完全独立于容器的生存周期，因此Docker不会在容器删除时删除其挂载的数据卷。
+
+dockerfile也就是添加 容器数据卷的一种方式
+
+### dockerfile
+
+```dockerfile
+FROM        #基础镜像，当前新镜像是基于哪个镜像的
+MAINTAINER    #镜像维护者的姓名和邮箱地址
+RUN        #容器构建时需要运行的命令
+EXPOSE        #当前容器对外暴露出的端口
+WORKDIR        #指定在创建容器后，终端默认登陆的进来工作目录
+ENV        #用来在构建镜像过程中设置环境变量
+ADD        #将宿主机目录下的文件拷贝进镜像且ADD命令会自动处理URL和解压tar压缩包
+COPY        #类似ADD，拷贝文件和目录到镜像中。将从构建上下文目录中 <源路径> 的文件/目录复制到新的一层的镜像内的 <目标路径> 位置
+VOLUME        #容器数据卷，用于数据保存和持久化工作
+CMD        #指定一个容器启动时要运行的命令，Dockerfile 中可以有多个 CMD 指令，但只有最后一个生效，CMD 会被 docker run 之后的参数替换
+ENTRYPOINT     #指定一个容器启动时要运行的命令，ENTRYPOINT 的目的和 CMD 一样，都是在指定容器启动程序及参数
+ONBUILD        #当构建一个被继承的Dockerfile时运行命令，父镜像在被子继承后父镜像的onbuild被触发
+```
+
+例：
+
+```dockerfile
+#Dockerfile
+#制定node镜像的版本
+FROM node:10-alpine
+#移动当前目录下面的文件到app目录下
+ADD . /app/
+#进入到app目录下面，类似cd
+WORKDIR /app
+#安装依赖
+RUN npm install
+#对外暴露的端口
+EXPOSE 3000
+#程序启动脚本
+CMD ["node", "app.js"]
+```
+
+
+
+### 优势
+
+| **特性**   | **容器**           | **虚拟机** |
+| ---------- | ------------------ | ---------- |
+| 启动       | 秒级               | 分钟级     |
+| 硬盘使用   | 一般为 MB          | 一般为 GB  |
+| 性能       | 接近原生           | 弱于       |
+| 系统支持量 | 单机支持上千个容器 | 一般几十个 |
+
+## 流程整理
+
+```cmd
+docker search tomcat
+docker pull tomcat
+docker images
+docker run -it -p 8080:8080 tomcat
+docker ps
+docker stop ff6
+```
+
+## Docker Compose
+
+Docker Compose是 docker 提供的一个命令行工具，用来定义和运行由多个容器组成的应用。
+
+使用 compose，我们可以通过 YAML 文件声明式的定义应用程序的各个服务，并由单个命令完成应用的创建和启动。
+
+```yaml
+version: '3.1'
+services:
+  nginx:
+    restart: always
+    #　image是指定服务的镜像名称或镜像ID。如果镜像在本地不存在，Compose将会尝试拉取镜像。
+    image: nginx
+    ports:
+      - 8091:80
+    #挂载一个目录或者一个已存在的数据卷容器，可以直接使用 [HOST:CONTAINER]格式，或者使用[HOST:CONTAINER:ro]格式，后者对于容器来说，数据卷是只读的，可以有效保护宿主机的文件系统。
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+      - ./frontend/dist/:/var/www/html/
+      - ./static/:/static/
+  app-pm2:
+    container_name: app-pm2
+    #构建容器
+    #服务除了可以基于指定的镜像，还可以基于一份Dockerfile，在使用up启动时执行构建任务，构建标签是build，可以指定Dockerfile所在文件夹的路径。Compose将会利用Dockerfile自动构建镜像，然后使用镜像启动服务容器。
+    build: ./backend
+    ports:
+      - '3000:3000'
+
+```
+
+### 启动
+
+```cmd
+docker-compose up
+// or
+docker-compose up -d
+```
+
+
+
+## 配置镜像
+
+```json
+{
+  "registry-mirrors": [
+"https://registry.docker-cn.com",
+"http://hub-mirror.c.163.com",
+"https://docker.mirrors.ustc.edu.cn",
+"http://dockerhub.azk8s.cn/" ],
+  "insecure-registries": [],
+  "debug": true,
+  "experimental": false
+}
+```
+
+
+
+## docker常用命令
+
+### 镜像命令
+
+```cmd
+docker images                    #查看当前Docker中的镜像
+docker search 某个镜像名字                #查询某个镜像
+docker pull 某个镜像名字                #拉取(下载)某个镜像
+docker rmi 某个镜像名字ID                 #删除某个镜像
+```
+
+### 容器基本命令(切记，有镜像才能创建容器)
+
+```cmd
+docker run [OPTIONS] image [COMMAND] [ARG...]   #新建并启动容器
+docker ps [OPTIONS]                             #列出当前所有正在运行的容器
+exit                        #容器停止退出
+ctrl+P+Q                    #容器不停止退出
+docker start 容器ID或者容器名            #启动容器
+docker restart 容器ID或者容器名            #重启容器
+docker stop 容器ID或者容器名            #停止容器
+docker kill 容器ID或者容器名            #强制停止容器
+docker rm 容器ID                    #删除已停止的容器
+docker rm -f $(docker ps -a -q)            #一次性删除多个容器
+docker ps -a -q | xargs docker rm        #一次性删除多个容器
+```
+
+### **容器重要命令**
+
+```cmd
+docker run -d 容器名                #启动守护式容器
+docker logs -f -t --tail 容器ID            #查看容器日志,-t是加入时间戳，-f是最新的日志打印,--tail数字显示最后多少条
+
+docker top 容器ID                #查看容器内运行的进程
+docker inspect 容器ID                #查看容器内部细节
+docker exec -it 容器ID bashShell            #进入正在运行的容器并以命令行交互
+docker attach 容器ID                #重新进入Docker容器
+docker cp  容器ID:容器内路径 目的主机路径        #从容器内拷贝文件到主机上
+```
+
+
+
 ## docker命令帮助
 
 ```cmd

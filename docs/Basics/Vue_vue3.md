@@ -54,6 +54,16 @@ reactive() 函数接受一个普通对象 返回一个响应式数据对象
  const closed = ref(false)
 ```
 
+### unref
+
+传入一个可能是响应式对象，也可能不是的对象
+
+```js
+// if 响应式  ref =>value
+// if(!) 取值本身
+unref(a)
+```
+
 ### toRefs
 
  toRefs 可以将reactive创建出的对象展开为基础类型
