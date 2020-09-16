@@ -166,7 +166,7 @@ var sortColors = function(nums) {
 >
 > 这种思路的时间复杂度：$O(n)$，需要遍历数组两次（Two pass）。
 >
-> ![image](../../../../Blog/docs/.vuepress/public/83542989-4ef55100-a52e-11ea-9a49-a0e9443da5f4.png)
+> ![image](../.vuepress/public/leetcode/83542989-4ef55100-a52e-11ea-9a49-a0e9443da5f4.png)
 >
 > ### 解法二 - 挡板法
 >
@@ -180,7 +180,7 @@ var sortColors = function(nums) {
 >
 > 还是以题目给的样例来说，初始化挡板位置为最左侧和最右侧：
 >
-> ![image](../../../../Blog/docs/.vuepress/public/83542548-b19a1d00-a52d-11ea-92aa-c2458d7fe178.png)
+> ![image](../.vuepress/public/leetcode/83542548-b19a1d00-a52d-11ea-92aa-c2458d7fe178.png)
 >
 > 读取第一个元素是 2，它应该在右边，那么我们移动右边地挡板。
 >
@@ -188,7 +188,7 @@ var sortColors = function(nums) {
 >
 > 并将其和移动挡板后挡板右侧地元素进行一次交换，这意味着“被移动挡板右侧地元素已就位”。
 >
-> ![image](../../../../Blog/docs/.vuepress/public/83542711-e9a16000-a52d-11ea-9226-5a385c26174c.png)
+> ![image](../.vuepress/public/leetcode/83542711-e9a16000-a52d-11ea-9226-5a385c26174c.png)
 >
 > 。。。
 >

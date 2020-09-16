@@ -243,28 +243,28 @@ s = "2[abc]3[cd]ef", 返回 "abcabccdcdcdef".
 
 拿题目给的例子`s = "3[a2[c]]"` 来说：
 
-![](../../../../Blog/docs/.vuepress/public/007S8ZIlly1gfghoy69l3j30ga03g3yq.jpg)
+![](../.vuepress/public/leetcode/007S8ZIlly1gfghoy69l3j30ga03g3yq.jpg)
 
 在遇到 ` 】` 之前，我们不断执行压栈操作：
 
-![image](../../../../Blog/docs/.vuepress/public/83752461-2a6ab780-a69b-11ea-90fa-55da20fc5c35.png)
+![image](../.vuepress/public/leetcode/83752461-2a6ab780-a69b-11ea-90fa-55da20fc5c35.png)
 
 当遇到 `】`的时候，说明我们应该出栈了，不断出栈知道对应的`【`，这中间的就是 repeatStr。
 
-![image](../../../../Blog/docs/.vuepress/public/83752523-41a9a500-a69b-11ea-83fa-39640dc4105d.png)
+![image](../.vuepress/public/leetcode/83752523-41a9a500-a69b-11ea-83fa-39640dc4105d.png)
 
 但是要重复几次呢？ 我们需要继续出栈，直到非数字为止，这个数字我们记录为 repeatCount。
 
-![image](../../../../Blog/docs/.vuepress/public/83752775-aa911d00-a69b-11ea-8217-52931ca0f646.png)
+![image](../.vuepress/public/leetcode/83752775-aa911d00-a69b-11ea-8217-52931ca0f646.png)
 
 而最终的字符串就是 repeatCount 个 repeatStr 拼接的形式。 **并将其看成一个字母压入栈中**。
 
 
-![](../../../../Blog/docs/.vuepress/public/007S8ZIlly1gfghxjk5ejj310g0dt41r.jpg)
+![](../.vuepress/public/leetcode/007S8ZIlly1gfghxjk5ejj310g0dt41r.jpg)
 
 继续，后面的逻辑是一样的：
 
-![](../../../../Blog/docs/.vuepress/public/007S8ZIlly1gfgi1jhwb3j30uv09q0vd.jpg)
+![](../.vuepress/public/leetcode/007S8ZIlly1gfgi1jhwb3j30uv09q0vd.jpg)
 
 （最终图）
 
