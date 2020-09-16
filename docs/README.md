@@ -2,7 +2,7 @@
 home: true
 heroImage: /hero.png
 heroText: 奔跑的小胖
-tagline: 在学习的过程中，我们要不断地问自己，这个技术出现的初衷是什么？是要解决什么样的问题？为什么那个问题要用这种方法解？为什么不能用别的方法解？为什么不能简单一些？……
+tagline: 在学习的过程中，我们要不断地问自己，这个技术出现的初衷是什么？是要解决什么样的问题？为什么那个问题要用这种方法解？为什么不能用别的方法解？为什么不能简单一些?
 actionText: GOGOGO →
 actionLink: /Basics/
 features:
