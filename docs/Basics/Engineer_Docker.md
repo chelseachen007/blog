@@ -73,6 +73,82 @@ docker ps
 docker stop ff6
 ```
 
+## Docker 安装
+
+```js
+# apt升级 
+sudo apt-get update 
+
+# 添加相关软件包
+apt-get install apt-transport-https
+apt-get install ca-certificates curl software-properties-common
+
+# 下载软件包的合法性，需要添加软件源的 GPG 密钥
+curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/gpg | sudo apt-key add 
+
+# source.list 中添加 Docker 软件源 
+sudo add-apt-repository 
+"deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu   
+$(lsb_release -cs)    
+stable" 
+
+# 安装 Docker CE
+sudo apt-get update 
+sudo apt-get install docker-ce
+
+# Helloworld测试 
+docker run hello-world
+
+```
+
+### 安装node
+
+```cmd
+# 安装nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+
+# 将nvm作为环境变量
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+#安装最新版 node
+nvm install node
+
+#安装pm2
+npm i pm2 -g
+```
+
+### 自动化部署CI/CD
+
+```dockerfile
+# dockerfile
+# build stage
+FROM node:lts-alpine as build-stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# production stage
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+逐行解析配置：
+
+- FROM node:lts-alpine as build-stage：基于 node  `lts-alpine` 版本镜像，并通过构建阶段命名，将有 node 环境的阶段命名为 `build-stage`（包含 alpine 的镜像版本相比于 latest 版本更加小巧，更适合作为 docker 镜像使用）
+- WORKDIR /app：将工作区设为 /app，和其他系统文件隔离
+- COPY package*.json ./：拷贝 package.json/package-lock.json 到容器的 /app 目录
+- RUN npm install：运行 `npm install` 在容器中安装依赖
+- COPY . .：拷贝其他文件到容器 /app 目录，分两次拷贝是因为保持 node_modules 一致
+- RUN npm run build：运行 `npm run build` 在容器中构建
+
+
+
 ## Docker Compose
 
 Docker Compose是 docker 提供的一个命令行工具，用来定义和运行由多个容器组成的应用。
