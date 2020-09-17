@@ -169,7 +169,7 @@ var decodeString = function(s) {
 var decodeString = function(s) {
   let Stack = [];
   let string = "";
-  let num = 0;
+      let num = 0;
   for (const i of s) {
     let isNum = !isNaN(i);
     if (isNum) {

@@ -51,8 +51,6 @@ EXPOSE 3000
 CMD ["node", "app.js"]
 ```
 
-
-
 ### 优势
 
 | **特性**   | **容器**           | **虚拟机** |
@@ -65,10 +63,10 @@ CMD ["node", "app.js"]
 ## 流程整理
 
 ```cmd
-docker search tomcat
-docker pull tomcat
+docker search nginx
+docker pull nginx
 docker images
-docker run -it -p 8080:8080 tomcat
+docker run -it -p 8080:8080 nginx
 docker ps
 docker stop ff6
 ```
@@ -146,6 +144,62 @@ CMD ["nginx", "-g", "daemon off;"]
 - RUN npm install：运行 `npm install` 在容器中安装依赖
 - COPY . .：拷贝其他文件到容器 /app 目录，分两次拷贝是因为保持 node_modules 一致
 - RUN npm run build：运行 `npm run build` 在容器中构建
+
+## docker优化
+
+### 利用镜像缓存
+
+相对于项目的源文件来讲，`package.json` 是相对稳定的。如果没有新的安装包需要下载，则再次构建镜像时，无需重新构建依赖。则可以在 npm install 上节省一半的时间。
+
+对于 `ADD` 来讲，如果需要添加的文件内容的 `checksum` 没有发生变化，则可以利用缓存。把 `package.json/package-lock.json` 与源文件分隔开写入镜像是一个很好的选择。目前，如果没有新的安装包更新的话，可以节省一半时间
+
+```dockerfile
+...
+# 首次添加此两个文件，充分利用缓存
+ADD package.json package-lock.json /code
+RUN npm install --production
+
+...
+```
+
+### 减少 npm install 时间
+
+1. 选择时延低的 `registry`，需要企业技术基础建设支持
+
+```cmd
+npm config set registry https://registry-npm.shanyue.tech/
+```
+
+2. `NODE_ENV=production`，只安装生产环境必要的包(如果 dep 与 devDep 没有仔细分割开来，工作量很大，可以放弃)
+3. `CI=true`，npm 会在此环境变量下自动优化
+4. 结合 CI 的缓存功能，充分利用 `npm cache`
+
+```yaml
+install:
+- npm ci
+# keep the npm cache around to speed up installs
+cache:
+  directories:
+  - "$HOME/.npm"
+```
+
+5. 使用 `npm ci` 代替 `npm i`，既提升速度又保障应用安全性
+
+```bash
+npm ci
+```
+
+
+
+### 多阶段构建
+
+得益于缓存，现在镜像构建时间已经快了不少。但是，此时镜像的体积依旧过于庞大，这也将会导致部署时间的加长。原因如下
+
+考虑下每次 CI/CD 部署的流程
+
+1. 在构建服务器 (Runer) 构建镜像
+2. 把镜像推至镜像仓库服务器
+3. 在生产服务器拉取镜像，启动容器
 
 
 

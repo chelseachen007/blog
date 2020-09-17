@@ -228,7 +228,9 @@ return： 父fiber，
 
 #### UPDATE
 
+### 生命周期
 
+![img](React_fiber.assets/5287253-315eac1c26082f08.png)
 
 ### V17.0 的启发式算法
 

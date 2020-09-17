@@ -221,3 +221,66 @@ timer1 end
 timer2
 ```
 
+## 简单说一下 MVC/MVVM/Flux 的区别。用 JS 实现一个 MVC
+
+```js
+/* 
+
+1. App 出始化时渲染出如下的用户列表 2. 并实现点击每个用户他对应的 priority 就自增
+<ul id="userlist">
+  <li>User Name: Peter, User Number: 123， User Priority: 1</li>
+  <li>User Name: Glenn, User Number: 456, User Priority: 1</li>
+  <li>User Name: Lucy, User Number: 789，User Priority: 1</li>
+<ul>
+*/
+
+const users = [    
+    {name: 'Peter', num: 123, priority: 1},    
+    {name: 'Glenn', num: 456, priority: 1},    
+    {name: 'Lucy', num: 789, priority: 1}  
+];
+
+class UserModel {
+   constructor() {
+       this._data =  users;
+   }
+   // todo
+}
+
+class UserView {
+    constructor() {
+        this.container = document.querySelector('#userlist');
+    }
+    render(users) {
+        // todo
+    }
+}
+
+class UserController {
+    constructor(model, view) {
+        this.model = model;
+        this.view = view;
+    }
+    init() {
+        // todo
+    }
+
+    bindEvent() {
+        // todo
+    }
+}
+
+class App() {
+    const userComponent = new UserController(new UserModel(), new UserView());
+    userComponent.init();
+}
+```
+
+## 字符串的规则解析：
+
+例子：a(b)<2>c 输出：abbc，a(b(c)<3>de)<2>f 输出abcccdebcccdef；()代表重复内容，<>代表重复的次数
+
+```js
+
+```
+

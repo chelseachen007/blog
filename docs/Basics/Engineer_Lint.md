@@ -179,3 +179,45 @@ npx mrm lint-staged
   }
 },
 ```
+
+## workflow
+
+在.git/workflows文件夹创建一个xx.yml 文件
+
+以我的博客自动部署为例
+
+```yml
+name: GitHub Actions Build and Deploy Demo
+on:
+  push:  // 可以使用数组
+    branches:
+      - master // 这部分代表监听每一次到 master 分支的 push ，有一次 push 就会执行一次 actions 。 
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest //一个名为 build-and-deploy 的工作需要在 ubuntu-latest 环境中运行，这是因为后文 actions 脚本是在 ubuntu 编写的，所以要求环境使用 ubuntu 。
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Build and Deploy
+      uses: JamesIves/github-pages-deploy-action@master
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}  // 配置的秘钥
+        BRANCH: gh-pages  // 发布的分支
+        FOLDER: docs/.vuepress/dist // 上传的文件地址
+        BUILD_SCRIPT: npm install && npm run docs:build  // 需要执行的脚本
+```
+
+代码查看：https://github.com/chelseachen007/Blog
+
+## webhooks
+
+这是一种自己全量操作的服务器部署方法，在私有服务器上接收 github 传输过来的请求，并做出对应的docker 部署操作
+
+具体操作看 [docker](./Engineer__Docker.md)
+
+
+
+## 代码
+
+详细代码都在git文件，并且附有详细的webpack配置，为后续实现一个完整的脚手架做好准备 https://github.com/chelseachen007/engineer
