@@ -2,7 +2,7 @@
 
 ![image-20200908170237110](./Chrome/image-20200908170237110.png)
 
-关键渲染路径就是将HTML,CSS,JavaScript文件转化成漂亮页面的过程
+关键渲染路径就是将HTML, CSS, JavaScript文件转化成漂亮页面的过程
 
 ## DOM 生成
 
@@ -16,21 +16,29 @@
 
 浏览器从磁盘或网络读取HTML的原始字节，并根据文件的指定编码（例如 UTF-8）将它们转换成字符，
 
-```HTML
-3C 62 6F 64 79 3E 48 65 6C 6C  => <html><head>... </head><body>
+``` HTML
+3C 62 6F 64 79 3E 48 65 6C 6C => <html>
+
+<head>... </head>
+
+<body>
 ```
 
-### 第二步:Token化
+### 第二步: Token化
 
-将字符串转换成Token，例如：“`<html>`”、“`<body>`”等。Token中会标识出当前Token是“开始标签”或是“结束标签”亦或是“文本”等信息。
+将字符串转换成Token，例如：“ `<html>` ”、“ `<body>` ”等。Token中会标识出当前Token是“开始标签”或是“结束标签”亦或是“文本”等信息。
 
-```HTML
-<html><head>... </head><body>
+``` HTML
+<html>
+
+<head>... </head>
+
+<body>
 ```
+
 ​     ↓
 
- `StartTag: html` 、 `StartTag: head` 、``..`` 、`EndTag: head`、`StartTag: body`
-
+`StartTag: html` 、 `StartTag: head` 、 ` ` .. `  ` 、 ` EndTag: head ` 、 ` StartTag: body`
 其内部实现是通过维护一个栈，遇到start压入栈，遇到end弹出，节点与节点之间的关系通过标签的闭合辨别，比如两个相同标签的start和end内的元素都是其子元素。
 
 ### 第三步：生成节点对象并构建DOM
@@ -49,9 +57,9 @@
 
 CSS 样式来源主要有三种：
 
-- 通过 link 引用的外部 CSS 文件
-- `<style>`标记内的 CSS
-- 元素的 style 属性内嵌的 CSS
+* 通过 link 引用的外部 CSS 文件
+* `<style>` 标记内的 CSS
+* 元素的 style 属性内嵌的 CSS
 
 和 HTML 文件一样，浏览器也是无法直接理解这些纯文本的 CSS 样式，所以**当渲染引擎接收到 CSS 文本时，会执行一个转换操作，将 CSS 文本转换为浏览器可以理解的结构——styleSheets**。
 
@@ -66,8 +74,6 @@ CSS 样式来源主要有三种：
 **需要将所有值转换为渲染引擎容易理解的、标准化的计算值**，这	个过程就是属性值标准化。
 
 ![image-20200908170841875](./Chrome/image-20200908170841875.png)
-
-
 
 ### 3. 计算出 DOM 树中每个节点的具体样式
 
@@ -95,8 +101,8 @@ CSS 样式来源主要有三种：
 
 为了构建渲染树，浏览器大体上完成了下面这些工作：
 
-- 遍历 DOM 树中的所有可见节点，并把这些节点加到布局中；
-- 而不可见的节点会被布局树忽略掉，如 head 标签下面的全部内容，再比如 body.p.span 这个元素，因为它的属性包含 dispaly:none，所以这个元素也没有被包进布局树。
+* 遍历 DOM 树中的所有可见节点，并把这些节点加到布局中；
+* 而不可见的节点会被布局树忽略掉，如 head 标签下面的全部内容，再比如 body.p.span 这个元素，因为它的属性包含 dispaly:none，所以这个元素也没有被包进布局树。
 
 ### 2. 布局计算
 
@@ -108,33 +114,33 @@ CSS 样式来源主要有三种：
 
 ###### **第一点，拥有层叠上下文属性的元素会被提升为单独的一层。**
 
-- 档根元素（`<html>`）；
-- [`position`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/position) 值为 `absolute`（绝对定位）或 `relative`（相对定位）且 [`z-index`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index) 值不为 `auto` 的元素；
-- [`position`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/position) 值为 `fixed`（固定定位）或 `sticky`（粘滞定位）的元素（沾滞定位适配所有移动设备上的浏览器，但老的桌面浏览器不支持）；
-- flex ([`flexbox`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/flexbox)) 容器的子元素，且 [`z-index`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index) 值不为 `auto`；
-- grid ([`grid`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid)) 容器的子元素，且 [`z-index`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index) 值不为 `auto`；
-- [`opacity`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/opacity) 属性值小于 `1` 的元素（参见 [the specification for opacity](http://www.w3.org/TR/css3-color/#transparency)）；
-- [`mix-blend-mode`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mix-blend-mode) 属性值不为 `normal` 的元素；
-- 以下任意属性值不为 `none` 的元素：
-  - [`transform`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform)
-  - [`filter`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter)
-  - [`perspective`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective)
-  - [`clip-path`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/clip-path)
-  - [`mask`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask) / [`mask-image`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-image) / [`mask-border`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-border)
-- [`isolation`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/isolation) 属性值为 `isolate` 的元素；
-- [`-webkit-overflow-scrolling`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/-webkit-overflow-scrolling) 属性值为 `touch` 的元素；
-- [`will-change`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/will-change) 值设定了任一属性而该属性在 non-initial 值时会创建层叠上下文的元素（参考[这篇文章](http://dev.opera.com/articles/css-will-change-property/)）；
-- [`contain`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain) 属性值为 `layout`、`paint` 或包含它们其中之一的合成值（比如 `contain: strict`、`contain: content`）的元素。
+* 档根元素（ `<html>` ）；
+* [ `position` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/position) 值为 `absolute` （绝对定位）或 `relative` （相对定位）且 [ `z-index` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index) 值不为 `auto` 的元素；
+* [ `position` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/position) 值为 `fixed` （固定定位）或 `sticky` （粘滞定位）的元素（沾滞定位适配所有移动设备上的浏览器，但老的桌面浏览器不支持）；
+* flex ([ `flexbox` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/flexbox)) 容器的子元素，且 [ `z-index` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index) 值不为 `auto` ；
+* grid ([ `grid` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid)) 容器的子元素，且 [ `z-index` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index) 值不为 `auto` ；
+* [ `opacity` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/opacity) 属性值小于 `1` 的元素（参见 [the specification for opacity](http://www.w3.org/TR/css3-color/#transparency)）；
+* [ `mix-blend-mode` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mix-blend-mode) 属性值不为 `normal` 的元素；
+* 以下任意属性值不为 `none` 的元素：
+  + [ `transform` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform)
+  + [ `filter` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter)
+  + [ `perspective` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective)
+  + [ `clip-path` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/clip-path)
+  + [ `mask` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask) / [ `mask-image` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-image) / [ `mask-border` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-border)
+* [ `isolation` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/isolation) 属性值为 `isolate` 的元素；
+* [ `-webkit-overflow-scrolling` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/-webkit-overflow-scrolling) 属性值为 `touch` 的元素；
+* [ `will-change` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/will-change) 值设定了任一属性而该属性在 non-initial 值时会创建层叠上下文的元素（参考[这篇文章](http://dev.opera.com/articles/css-will-change-property/)）；
+* [ `contain` ](https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain) 属性值为 `layout` 、 `paint` 或包含它们其中之一的合成值（比如 `contain: strict` 、 `contain: content` ）的元素。
 
 ###### **第二点，需要剪裁（clip）的地方也会被创建为图层。**
 
-```js
+``` js
       div {
-            width: 200;
-            height: 200;
-            overflow:auto;
-            background: gray;
-        }
+          width: 200;
+          height: 200;
+          overflow: auto;
+          background: gray;
+      }
 ```
 
 出现这种裁剪情况的时候，渲染引擎会为文字部分单独创建一个层，如果出现滚动条，滚动条也会被提升为单独的层
@@ -202,9 +208,9 @@ GPU 操作是运行在 GPU 进程中，如果栅格化操作使用了 GPU，那�
 
  使用will-change，这段代码就是提前告诉渲染引擎 box 元素将要做几何变换和透明度变换操作，这时候渲染引擎会将该元素单独实现一帧，等这些变换发生时，渲染引擎会通过合成线程直接去处理变换，这些变换并没有涉及到主线程，这样就大大提升了渲染的效率。**这也是 CSS 动画比 JavaScript 动画高效的原因**。
 
-```css
+``` css
 .box {
-will-change: transform, opacity;
+    will-change: transform, opacity;
 }
 ```
 
@@ -216,9 +222,9 @@ will-change: transform, opacity;
 
 但总结下来，只有三种因素会影响到关键渲染路径：
 
-- 关键资源的数量
-- 关键路径的长度
-- 关键字节的数量
+* 关键资源的数量
+* 关键路径的长度
+* 关键字节的数量
 
 关键资源指的是那些可以阻塞页面首次渲染的资源。例如JavaScript、CSS都是可以阻塞关键渲染路径的资源，这些资源就属于“关键资源”。关键资源的数量越少，浏览器处理渲染的工作量就越少，同时CPU及其他资源的占用也越少。
 
@@ -242,16 +248,16 @@ will-change: transform, opacity;
 
 CSS资源的处理有几个特点：
 
-- CSS下载时异步，不会阻塞浏览器构建DOM树
-- 但是会阻塞渲染，也就是在构建render时，会等到css下载解析完毕后才进行（这点与浏览器优化有关，防止css规则不断改变，避免了重复的构建）
-- 有例外，`media query`声明的CSS是不会阻塞渲染的
+* CSS下载时异步，不会阻塞浏览器构建DOM树
+* 但是会阻塞渲染，也就是在构建render时，会等到css下载解析完毕后才进行（这点与浏览器优化有关，防止css规则不断改变，避免了重复的构建）
+* 有例外， `media query` 声明的CSS是不会阻塞渲染的
 
 #### 媒体查询
 
 通过改变媒体查询，让css不阻塞首屏渲染，当仍在当前页面生效
 
-```css
-<link href="style.css" rel="stylesheet" media="print" onload="this.media='all'">
+``` css
+<link href="style.css"rel="stylesheet"media="print"onload="this.media='all'">
 ```
 
 关于CSS的加载最佳实践：**[Critical CSS](https://github.com/addyosmani/critical)**。
@@ -267,24 +273,24 @@ CSS资源的处理有几个特点：
 
 使用link标签 css标签是**并行下载**，
 
-而使用`@import` ，两个CSS变成了**串行加载**，前一个CSS加载完后再去下载使用`@import`导入的CSS资源。
+而使用 `@import` ，两个CSS变成了**串行加载**，前一个CSS加载完后再去下载使用 `@import` 导入的CSS资源。
 
-**所以避免使用`@import`是为了降低关键路径的长度。**
+**所以避免使用 `@import` 是为了降低关键路径的长度。**
 
 ### 遇到JS脚本资源
 
 JS脚本资源的处理有几个特点：
 
-- 阻塞浏览器的解析，也就是说发现一个外链脚本时，需等待脚本下载完成并执行后才会继续解析HTML
-- 浏览器的优化，一般现代浏览器有优化，在脚本阻塞时，也会继续下载其它资源（当然有并发上限），但是虽然脚本可以并行下载，解析过程仍然是阻塞的，也就是说必须这个脚本执行完毕后才会接下来的解析，并行下载只是一种优化而已
-- defer与async，普通的脚本是会阻塞浏览器解析的，但是可以加上defer或async属性，这样脚本就变成异步了，可以等到浏览器解析完毕后再执行
+* 阻塞浏览器的解析，也就是说发现一个外链脚本时，需等待脚本下载完成并执行后才会继续解析HTML
+* 浏览器的优化，一般现代浏览器有优化，在脚本阻塞时，也会继续下载其它资源（当然有并发上限），但是虽然脚本可以并行下载，解析过程仍然是阻塞的，也就是说必须这个脚本执行完毕后才会接下来的解析，并行下载只是一种优化而已
+* defer与async，普通的脚本是会阻塞浏览器解析的，但是可以加上defer或async属性，这样脚本就变成异步了，可以等到浏览器解析完毕后再执行
 
 注意，defer和async是有区别的： **defer是延迟执行，而async是异步执行。**
 
 简单的说（不展开）：
 
-- `async`是异步执行，异步下载完毕后就会执行，不确保执行顺序，一定在`onload`前，但不确定在`DOMContentLoaded`事件的前或后
-- `defer`是延迟执行，在浏览器看起来的效果像是将脚本放在了`body`后面一样（虽然按规范应该是在`DOMContentLoaded`事件前，但实际上不同浏览器的优化效果不一样，也有可能在它后面）
+* `async` 是异步执行，异步下载完毕后就会执行，不确保执行顺序，一定在 `onload` 前，但不确定在 `DOMContentLoaded` 事件的前或后
+* `defer` 是延迟执行，在浏览器看起来的效果像是将脚本放在了 `body` 后面一样（虽然按规范应该是在 `DOMContentLoaded` 事件前，但实际上不同浏览器的优化效果不一样，也有可能在它后面）
 
 ### 遇到img图片类资源
 
@@ -294,18 +300,23 @@ JS脚本资源的处理有几个特点：
 
 可以通过Performance 进行堵塞时间的检测
 
-```html
+``` html
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>Test</title>
     <link rel="stylesheet" href="https://static.xx.fbcdn.net/rsrc.php/v3/y6/l/1,cross/9Ia-Y9BtgQu.css" />
-  </head>
-  <body>
+</head>
+
+<body>
     aa
-    <script> console.log(1) </script>
-  </body>
+    <script>
+        console.log(1)
+    </script>
+</body>
+
 </html>
 ```
 
@@ -317,7 +328,7 @@ JS脚本资源的处理有几个特点：
 
 CSSOM会阻塞渲染，只有当CSSOM构建完毕后才会进入下一个阶段构建渲染树。
 
-通常情况下DOM和CSSOM是并行构建的，但是当浏览器遇到一个`script`标签时，DOM构建将暂停，直至脚本完成执行。但由于JavaScript可以修改CSSOM，所以需要等CSSOM构建完毕后再执行JS。
+通常情况下DOM和CSSOM是并行构建的，但是当浏览器遇到一个 `script` 标签时，DOM构建将暂停，直至脚本完成执行。但由于JavaScript可以修改CSSOM，所以需要等CSSOM构建完毕后再执行JS。
 
 ## Performance 
 
@@ -329,24 +340,22 @@ CSSOM会阻塞渲染，只有当CSSOM构建完毕后才会进入下一个阶段�
 
 还要认识几个时间节点
 
-- **FP (First Paint) 首次绘制**: 标记浏览器渲染任何在视觉上不同于导航前屏幕内容之内容的时间点.
-- **FCP (First Contentful Paint) 首次内容绘制** 标记浏览器渲染来自 DOM 第一位内容的时间点，该内容可能是文本、图像、SVG 甚至 元素.
-- **LCP (Largest Contentful Paint) 最大内容渲染**: 代表在viewport中最大的页面元素加载的时间. LCP的数据会通过PerformanceEntry对象记录, 每次出现更大的内容渲染, 则会产生一个新的PerformanceEntry对象.(2019年11月新增)
-- **DCL (DomContentloaded)**: 当 HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，无需等待样式表、图像和子框架的完成加载.
-- **FMP(First Meaningful Paint) 首次有效绘制**: 例如，在 YouTube 观看页面上，主视频就是主角元素. 看这个csdn的网站不是很明显, 这几个都成一个时间线了, 截个weibo的看下. 下面的示例图可以看到, 微博的博文是主要元素.
-- **L (onLoad)**, 当依赖的资源, 全部加载完毕之后才会触发.
+* **FP (First Paint) 首次绘制**: 标记浏览器渲染任何在视觉上不同于导航前屏幕内容之内容的时间点.
+* **FCP (First Contentful Paint) 首次内容绘制** 标记浏览器渲染来自 DOM 第一位内容的时间点，该内容可能是文本、图像、SVG 甚至 元素.
+* **LCP (Largest Contentful Paint) 最大内容渲染**: 代表在viewport中最大的页面元素加载的时间. LCP的数据会通过PerformanceEntry对象记录, 每次出现更大的内容渲染, 则会产生一个新的PerformanceEntry对象.(2019年11月新增)
+* **DCL (DomContentloaded)**: 当 HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，无需等待样式表、图像和子框架的完成加载.
+* **FMP(First Meaningful Paint) 首次有效绘制**: 例如，在 YouTube 观看页面上，主视频就是主角元素. 看这个csdn的网站不是很明显, 这几个都成一个时间线了, 截个weibo的看下. 下面的示例图可以看到, 微博的博文是主要元素.
+* **L (onLoad)**, 当依赖的资源, 全部加载完毕之后才会触发.
 
 ### performance对象
 
-![image-20200910155220279](./Chorme_Render.assets/image-20200910155220279.png)
+![image-20200910155220279](./Chrome/image-20200910155220279.png)
 
-![img](./Chorme_Render.assets/640.png)
+![img](./Chrome/640.png)
 
 然后剩下的就要具体分析了。
 
 我们常说的首屏绘制时间也就是**FP**，关键路径的优化主要也是在优化FP之前的加载 所以，学会看Performance 尤为重要！
-
-
 
 ### lighthouse
 
@@ -354,9 +363,9 @@ CSSOM会阻塞渲染，只有当CSSOM构建完毕后才会进入下一个阶段�
 
 使用
 
-```cmd
+``` cmd
 npm install -g lighthouse
 lighthouse --locale=zh https://google.comgoogle.com
 ```
 
-![image-20200910162000360](./Chorme_Render.assets/image-20200910162000360.png)
+![image-20200910162000360](./Chrome/image-20200910162000360.png)
