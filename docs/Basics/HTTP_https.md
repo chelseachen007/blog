@@ -96,6 +96,13 @@ CA 对公钥的签名认证也是有格式的，不是简单地把公钥绑定�
 
 小一点的 CA 可以让大 CA 签名认证，但链条的最后，也就是 **Root CA** ，就只能自己证明 自己了，这个就叫“**自签名证书** ”（Self-Signed Certificate）或者“**根证书** ”（Root Certificate）。你必须相信，否则整个证书信任链就走不下去了。
 
+总结为以下三点：
+
+1. 申请数字证书是**不需要提供私钥**的，要确保私钥永远只能由服务器掌握；	
+
+2. 数字证书最核心的是 CA 使用它的私钥生成的数字签名；
+3. 内置 CA 对应的证书称为根证书，根证书是最权威的机构，它们自己为自己签名，我们把这称为自签名证书。
+
 ##### 证书体系的弱点
 
 如果 CA 失误或者被欺骗，签发了错误的证书，虽然证书是真的，可它代表的网站却是假的。
@@ -110,6 +117,8 @@ server suite 意思是：“握手时使用 `ECDHE 算法`进行密钥交换，�
 
 ## 连接过程解析
 
+![image-20200918173057621](HTTP_https.assets/image-20200918173057621.png)
+
 ### TSL1.2
 
 1. TCP3 次握手
@@ -123,27 +132,41 @@ server suite 意思是：“握手时使用 `ECDHE 算法`进行密钥交换，�
 
 7. "**Client Key Exchange**" 发送 `公钥（Client Params）`
 
-- Change Cipher Spec
+- **Change Cipher Spec**
 
 客户端和服务器将 `公钥（Server Params）` 和 `公钥（Client Params）`使用 **ECDHE 算法**一阵算，算出一个新的随机数 “**Pre-Master**，
 
 再使用`Client Random`、`Server Random` 和`Pre-Master`生成用于加密会话的主密钥“**Master Secret**”
 
 8. Client “**Change Cipher Spec**”，计算出主秘钥
-9. Client “**Finished Finished**” 把之前所有发送的数据做个摘要，再加密一下，等待服务器验证
+9. Client “**Finished **” 把之前所有发送的数据做个摘要，再加密一下，等待服务器验证
 10. Server “**Change Cipher Spec**”，计算出主秘钥
-11. Server “**Finished Finished**” 双方都验证加密解密 OK，握手正式结束
+11. Server “**Finished **” 双方都验证加密解密 OK，握手正式结束
 
 ### TSL1.3
 
 因为密码套件大幅度简化，也就没有必要再像以前那样走复杂的协商流程了。TLS1.3 压缩了以前 的“Hello”协商过程，删除了“Key Exchange”消息，把握手时间减少到了“1-RTT”，效率提高了一倍。
 
-1. "**Client Hello**" 消息里直接用“**supported_groups** ”带上支持的曲线，比如 P-256、x25519，用“**key_share** ”带上曲线对应的客户端公钥参数， 用“**signature_algorithms**”带上签名算法。
-2. "**Server Hello**" 选定一个曲线和参数，再用“**key_share**”扩展返回服务器这边的公钥参数
-3. Server “**Change Cipher Spec**”
-4. Server “**Finished Finished**”
-5. Client “**Change Cipher Spec**”，
-6. Client “**Finished Finished**”
+- 首先浏览器向服务端发送 **Client -random**、 **可使用的对称密码套件和非对称加密套件**、
+- 服务器端保存Client-random，并返回 **server-random**、**选择的密码套件**、**公钥**(这里加上CA发送的是数字证书)、**密钥交换算法的公钥**(**Server Params**)
+- 浏览器拿到数据后，也生成一个**Client Param** ,对 **Client -random** 和 **server-random** **,Server Params**,**Client Params**使用 **ECDHE 算法** 生成 **Pre-master**，并使用**公钥加密**发送给服务器
+
+pre-master 是经过公钥加密之后传输的，所以黑客无法获取到 pre-master，这样黑客就无法生成密钥，也就保证了黑客无法破解传输过程中的数据了
+
+- 服务器收到后，使用私钥解密并验证合法性，至此，两边就都可以通过 **cilent-random** 和**server-random** 、 **Pre-master** 三个共同随机数生成**对称秘钥**(**Master Secret**)进行加密传输了
+
+```js
+master_secret	=	PRF(pre_master_secret,	"master	secret",ClientHello.random	+	ServerHello.random)
+```
+
+​	这里的“PRF”就是伪随机数函数，它基于密码套件里的最后一个参数，
+
+## 双向认证
+
+上面说的是“单向认证 单向认证”握手过程，只认证了服务器的身份，而没有认证客户端的身份。这是因为通常 单向认证通过后已经建立了安全通信，用账号、密码等简单的手段就能够确认用户的真实身份。
+
+但为了防止账号、密码被盗，有的时候（比如网上银行）还会使用U盾给用户颁发客户端证书，实现“ **双向认证**”，这样会更加安全。
+双向认证的流程也没有太多变化，只是在“**Server Hello Done** ”之后，“**Client Key Exchange Client**”之前，客户 端要发送“ **Client Certificate**”消息，服务器收到后也把证书链走一遍，验证客户端的身份。
 
 ## 常见问题
 
@@ -162,6 +185,10 @@ server suite 意思是：“握手时使用 `ECDHE 算法`进行密钥交换，�
 ECDHE 算法利用了椭圆曲线和离散对数等思想，按照当下的计算机算力，很难在短时间进行破解。且每次握手时生成的都是一对临时的公钥和私钥，这样就保证每次的密钥对也不同。
 
 即使大费力气破解了一次的密钥，之前的历史消息也不会受到影响，保证了前向安全。
+
+#### 为什么要是三个随机数
+
+TLS的设计者不信任客户端或服务器伪随机数的可靠性，为了保证真正 的“完全随机”“不可预测”，把三个不可靠的随机数混合起来，那么“随机”的程度就非常高了，足够让 黑客难以猜测。
 
 ---
 

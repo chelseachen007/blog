@@ -162,4 +162,4 @@ console.log("RSA非对称解密结果:%s", decrypted.toString());
 
 JWT中的第三段签名就是内容签名的概念，将令牌头和参数信息进行摘要后生成一个全新的签名。
 
-实际 案例可以学习 [ HTTP_https ](./HTTP_https.md)
+实际案例可以学习 [ HTTP_https ](./HTTP_https.md)
