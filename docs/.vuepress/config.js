@@ -5,7 +5,7 @@ const FontEndArtSidebar = require("./sidebars/FontEndArt");
 const nodeSidebar = require("./sidebars/node");
 
 module.exports = {
-  base: "/Blog/",
+  base: "/blog/",
   title: "Blog",
   description: "Vuepress blog demo",
   themeConfig: {

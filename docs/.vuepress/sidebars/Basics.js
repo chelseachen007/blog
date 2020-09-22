@@ -34,6 +34,7 @@ module.exports = [
   {
     title: "JavaScript",
     children: [
+      "/Basics/JS_base.md",
       "/Basics/JS_typeof.md",
       "/Basics/JS_module.md",
       "/Basics/JS_throttle.md",
@@ -56,6 +57,12 @@ module.exports = [
       "/Basics/Vue_vue3.md",
       // "/Basics/JS_module.md",
       // "/Basics/JS_module.md",
+    ],
+  },
+  {
+    title: "Webpack",
+    children: [
+      "/Basics/Webpack_base.md",
     ],
   },
   {
