@@ -227,3 +227,33 @@ useBuiltIns 选项是 babel 7 的新功能，这个选项告诉 babel 如何配�
  ②usage: 不需要 import ，全⾃动检测，但是要安装 @babel/polyfill 。（试验阶段） 
 
 ③false: 如果你 import "@babel/polyfill" ，它不会排除掉没有使⽤的垫⽚，程序体积会庞⼤。(不推荐)
+
+## tree-shaking
+
+webpack4 的production 默认开启了 treeshking
+
+如果是webpack2 ，可能会不起作用，因为babel会将代码转化成commonjs 模块，而treeshaking不支持
+
+```
+options:{presets:[["es2015",{module:false}]]}
+```
+
+### 副作用side effects
+
+side effects是指那些当import 的时候会执行一些动作，但是不一定会有任何export。比如ployfill
+
+tree-shaking不能自动的识别那些代码属于side effcets 所以，有些需要手动指定
+
+```json
+## pagejson
+{
+    name:'tree-shaking',
+    "sideEffects":false,
+    // sideEffects:[
+    // './src/common/ployfill.js'
+    // ]
+}
+```
+
+
+
