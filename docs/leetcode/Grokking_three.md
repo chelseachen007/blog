@@ -141,3 +141,129 @@ function findEndThan(arr, value) {
 console.log(findEndThan(EndThanArr, 8));
 ```
 
+## 树的遍历
+
+从一题反转二叉树学模板 [翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
+
+### 前序遍历
+
+解题
+
+```js
+var invertTree = function (root) {
+  if (!root) return root
+    
+  const temp = root.left
+  root.left = root.right
+  root.right = temp
+    
+  invertTree(root.left)
+  invertTree(root.right)
+  return root
+};
+```
+
+提取模板，前中后序遍历的模板都差不多 遍历顺序有点不同
+
+```js
+function preorder(root) {
+	if (!root) return root
+	doSomething(root)
+	preOrder(root.left)
+	preOrder(root.right)
+}
+```
+
+### 后序遍历
+
+```js
+function inorder(root) {
+	if (!root) return root
+	inorder(root.left)
+	doSomething(root)
+	inorder(root.right)
+}
+```
+
+### 中序遍历
+
+```js
+function postorder(root) {
+	if (!root) return root
+	postorder(root.left)
+	postorder(root.right)
+	dosomething(root)
+}
+```
+
+### 层序遍历
+
+```js
+var invertTree = function (root) {
+  if (!root) return root
+  let queue = []
+  queue.push(root)
+  while (queue.length) {
+    let curLevel = queue.shift()
+    const temp = curLevel.left
+    curLevel.left = curLevel.right
+    curLevel.right = temp
+   //
+    if (curLevel.left) queue.push(curLevel.left)
+    if (curLevel.right) queue.push(curLevel.right)
+  }
+  return root
+};
+```
+
+#### 提取模板
+
+```js
+var invertTree = function (root) {
+  if (!root) return root
+  let queue = []
+  queue.push(root)
+  while (queue.length) {
+    let curLevel = queue.shift()
+    
+    dosomething() // 就这不一样
+    
+    if (curLevel.left) queue.push(curLevel.left)
+    if (curLevel.right) queue.push(curLevel.right)
+  }
+  return root
+};
+```
+
+### 构造一棵树
+
+前序遍历的顺序是 `root->left->right`，也就是说在前序遍历的结果中，第一个节点就是 `root`，它的后边紧跟着左子树和右子树的前序遍历结果。
+
+中序遍历的顺序是 `left->root->right`，也就是说在中序遍历的结果数组中，`root` 的左边是它左子树的中序遍历结果，它的右边是右子树的中序遍历结果。
+
+后序遍历的顺序是 `left->right->root`，也就是说在中序遍历的结果中，最后个节点就是 `root`，它的前面是左子树和右子树的后序遍历结果。
+
+## 单调栈
+
+```js
+
+var nextGreaterElement = function (nums1, nums2) {
+  let map = {}
+  let stack = []
+  let ans = []
+  
+  for (let i = 0; i < nums2.length; i++) {
+    while (stack.length && stack[stack.length - 1] <= nums2[i]) {
+      map[stack.pop()] = nums2[i]
+    }
+    stack.push(nums2[i])
+  }
+    
+  for (let index = 0; index < nums1.length; index++) {
+    const element = nums1[index];
+    ans[index] = map[element] ? map[element] : -1
+  }
+  return ans
+};
+```
+

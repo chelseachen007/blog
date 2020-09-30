@@ -10,7 +10,7 @@
 - [【basic-04】04.哈希表](https://github.com/leetcode-pp/91alg-1/blob/master/basic-04.md)
 - [【basic-05】05.双指针](https://lucifer.ren/blog/2020/05/26/91algo-basic-05.two-pointer/)
 
-### 进阶篇
+  ### 进阶篇
 
 - [【91 算法-进阶篇】01.并查集](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-01.md)
 - [【91 算法-进阶篇】02.Trie（PDF）](https://github.com/leetcode-pp/91alg-1/blob/master/Trie.pdf) [【91 算法-进阶篇】02.Trie（Markdown）](https://github.com/leetcode-pp/91alg-1/blob/master/advanced-trie.md)
@@ -28,6 +28,10 @@
 - [【91 算法-专题篇】02.滑动窗口](https://github.com/leetcode-pp/91alg-1/blob/master/topic-slidingwindow.md)
 - [【91 算法-专题篇】03.位运算](https://github.com/leetcode-pp/91alg-1/blob/master/topic-bit.md)
 - [【91 算法-专题篇】04.搜索](https://github.com/leetcode-pp/91alg-1/blob/master/topic-search.md)
+- [【91 算法-专题篇】05.背包问题](https://github.com/leetcode-pp/91alg-1/blob/master/topic-packages.md)
+- [【91 算法-专题篇】06.动态规划](https://github.com/leetcode-pp/91alg-1/blob/master/topic-dp.md)
+- [【91 算法-专题篇】07.分治](https://github.com/leetcode-pp/91alg-1/blob/master/divide.md)
+- [【91 算法-专题篇】08.贪心](https://github.com/leetcode-pp/91alg-1/blob/master/greedy.md)
 
 
 
