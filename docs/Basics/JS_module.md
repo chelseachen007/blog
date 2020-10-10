@@ -6,7 +6,7 @@
 
 ## CommonJS
 
-commonJs**规范**通过简单的 API 声明服务器的模块，目标是让 JavaScript 可以运行在**浏览器之外**的所有地方。Node.js 就是借鉴 ComminJs 实现了一套非常易用的模块系统，以及 NPM 对模块规范的完美支持是的 Node.js 应用开发事半功倍。
+commonJs**规范**通过简单的 API 声明服务器的模块，目标是让 JavaScript 可以运行在**浏览器之外**的所有地方。Node.js 就是借鉴 CommonJs 实现了一套非常易用的模块系统，以及 NPM 对模块规范的完美支持是的 Node.js 应用开发事半功倍。
 
 - require：用来引用模块
 - export:用来导出模块
