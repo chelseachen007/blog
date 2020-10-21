@@ -267,3 +267,32 @@ var nextGreaterElement = function (nums1, nums2) {
 };
 ```
 
+## 链表
+
+### 反转链表
+
+#### 基础模板
+
+https://leetcode-cn.com/problems/reverse-linked-list/
+
+```js
+var reverseList = function (head) {
+    let [prev, curr] = [null, head]
+    while (curr) {
+        let next = curr.next
+        curr.next = prev
+        prev = curr
+        curr = next
+    }
+    return prev
+}
+var reverseList = function (head) {
+    if (!head || !head.next) return head
+    let newHead = reverseList(head.next)
+    head.next.next = head
+    head.next = null
+    return newHead
+}
+```
+
+#### [两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
