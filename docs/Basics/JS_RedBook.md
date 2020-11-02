@@ -1073,5 +1073,666 @@ window.addEventListener('scroll', () => {
 
 ## JavaScript API
 
+### Streams API 
 
+-  **可读流**：可以通过某个公共接口读取数据块的流。数据在内部从底层源进入流，然后由消费者 （consumer）进行处理。
+-  **可写流**：可以通过某个公共接口写入数据块的流。生产者（producer）将数据写入流，数据在内 部传入底层数据槽（sink）。
+-  **转换流**：由两种流组成，可写流用于接收数据（可写端），可读流用于输出数据（可读端）。这 两个流之间是转换程序（transformer），可以根据需要检查和修改流内容。
+
+各大浏览器支持度不一，Chrome最新版已经支持，node 尚未支持。
+
+#### 可读流
+
+
+
+```js
+    // 每 1000 毫秒生成一个递增的整数
+    for (let i = 0; i < 5; ++i) {
+        yield await new Promise((resolve) => setTimeout(resolve, 1000, i));
+    }
+}
+const readableStream = new ReadableStream({
+    async start (controller) {
+        for await (let chunk of ints()) {
+            // 将值传入控制器
+            controller.enqueue(chunk);
+        }
+        controller.close();
+    }
+});
+console.log(readableStream.locked); // false
+const readableStreamDefaultReader = readableStream.getReader();
+console.log(readableStream.locked); // true
+// 消费者
+(async function () {
+    while (true) {
+        const { done, value } = await readableStreamDefaultReader.read();
+        if (done) {
+            break;
+        } else {
+            console.log(value);
+        }
+    }
+})(); 
+```
+
+#### 可写流
+
+```js
+async function* ints () {
+    // 每 1000 毫秒生成一个递增的整数
+    for (let i = 0; i < 5; ++i) {
+        yield await new Promise((resolve) => setTimeout(resolve, 1000, i));
+    }
+}
+const writableStream = new WritableStream({
+    write (value) {
+        console.log(value);
+    }
+});
+console.log(writableStream.locked); // false
+const writableStreamDefaultWriter = writableStream.getWriter();
+console.log(writableStream.locked); // true
+// 生产者
+(async function () {
+    for await (let chunk of ints()) {
+        await writableStreamDefaultWriter.ready;
+        writableStreamDefaultWriter.write(chunk);
+    }
+    writableStreamDefaultWriter.close();
+})(); 
+```
+
+#### 转换流
+
+转换流用于组合可读流和可写流。数据块在两个流之间的转换是通过 **transform()**方法完成的。
+
+```js
+async function* ints () {
+    // 每 1000 毫秒生成一个递增的整数
+    for (let i = 0; i < 5; ++i) {
+        yield await new Promise((resolve) => setTimeout(resolve, 1000, i));
+    }
+}
+const { writable, readable } = new TransformStream({
+    transform (chunk, controller) {
+        controller.enqueue(chunk * 2);
+    }
+});
+const readableStreamDefaultReader = readable.getReader();
+const writableStreamDefaultWriter = writable.getWriter();
+// 消费者
+(async function () {
+    while (true) {
+        const { done, value } = await readableStreamDefaultReader.read();
+        if (done) {
+            break;
+        } else {
+            console.log(value);
+        }
+    }
+})();
+// 生产者
+(async function () {
+    for await (let chunk of ints()) {
+        await writableStreamDefaultWriter.ready;
+        writableStreamDefaultWriter.write(chunk);
+    }
+    writableStreamDefaultWriter.close();
+})(); 
+```
+
+#### 通过管道连接流
+
+流可以通过管道连接成一串。最常见的用例是使用 pipeThrough()方法把 ReadableStream 接入 TransformStream。从内部看，ReadableStream 先把自己的值传给 TransformStream 内部的 WritableStream，然后执行转换，接着转换后的值又在新的 ReadableStream 上出现。
+
+```js
+async function* ints () {
+    // 每 1000 毫秒生成一个递增的整数
+    for (let i = 0; i < 5; ++i) {
+        yield await new Promise((resolve) => setTimeout(resolve, 1000, i));
+    }
+}
+const integerStream = new ReadableStream({
+    async start (controller) {
+        for await (let chunk of ints()) {
+            controller.enqueue(chunk);
+        }
+        controller.close();
+    }
+});
+const doublingStream = new TransformStream({
+    transform (chunk, controller) {
+        controller.enqueue(chunk * 2);
+    }
+});
+// 通过管道连接流
+const pipedStream = integerStream.pipeThrough(doublingStream);
+// 从连接流的输出获得读取器
+const pipedStreamDefaultReader = pipedStream.getReader();
+// 消费者
+(async function () {
+    while (true) {
+        const { done, value } = await pipedStreamDefaultReader.read();
+        if (done) {
+            break;
+        } else {
+            console.log(value);
+        }
+    }
+})(); 
+```
+
+### Performance Timeline API 
+
+Performance Timeline API 使用一套用于度量客户端延迟的工具扩展了 Performance 接口。性能度 量将会采用计算结束与开始时间差的形式。
+
+浏览器会自动记录各种 PerformanceEntry 对象，而使用 performance.mark()也可以记录自定 义的 PerformanceEntry 对象。在一个执行上下文中被记录的所有性能条目可以通过 **performance.getEntries()**获取
+
+1.  **User Timing API** 
+
+   User Timing API 用于记录和分析自定义性能条目。
+
+   ```js
+   performance.mark('foo');
+   for (let i = 0; i < 1E6; ++i) {}
+   performance.mark('bar'); 
+   // 获取最新的标记
+   const [endMark, startMark] = performance.getEntriesByType('mark'); 
+   
+   //自定义名字，和mark区间
+   performance.measure('baz', 'foo', 'bar');
+   const [differenceMark] = performance.getEntriesByType('measure');
+   ```
+
+2.  **Navigation Timing API** 
+
+   Navigation Timing API 提供了高精度时间戳，用于度量当前页面加载速度。浏览器会在导航事件发生时自动记录 PerformanceNavigationTiming 条目。这个对象会捕获大量时间戳，**用于描述页面是何时以及如何加载的。**
+
+   比如load的时间差：
+
+   ```js
+   const [performanceNavigationTimingEntry] = performance.getEntriesByType('navigation'); 
+   console.log(performanceNavigationTimingEntry.loadEventEnd -performanceNavigationTimingEntry.loadEventStart); 
+   ```
+
+3.  **Resource Timing API** 
+
+Resource Timing API 提供了高精度时间戳，用于度量当前页面加载时**请求资源的速度**。浏览器会在加载资源时自动记录 PerformanceResourceTiming。这个对象会捕获大量时间戳，**用于描述资源加载的速度**。
+
+```js
+const performanceResourceTimingEntry = performance.getEntriesByType('resource')[0];
+console.log(performanceResourceTimingEntry.responseEnd - performanceResourceTimingEntry.requestStart); 
+```
+
+### Web 组件
+
+这里所说的 Web 组件指的是一套用于增强 DOM 行为的工具，包括影子 DOM、自定义 元素和 HTML 模板。这一套浏览器 API 特别混乱。 
+
+- 并没有统一的“Web Components”规范：每个 Web 组件都在一个不同的规范中定义。  
+
+- 有些 Web 组件如影子 DOM 和自定义元素，已经出现了向后不兼容的版本问题。 
+
+- 浏览器实现极其不一致
+
+由于存在这些问题，因此使用 Web 组件通常需要引入一个 Web 组件库，比如 Polymer。这种库可以 作为腻子脚本，模拟浏览器中缺失的 Web 组件
+
+#### HTML模板
+
+#### 影子DOM
+
+#### 自定义元素
+
+### Web Cryptography API 
+
+#### 生成随机数
+
+我们平时常用的math.random() 是以**伪随机数生成器PRNG**生成的。所谓“伪”指的是生成值的过程不是真的随机。 PRNG 生成的值只是模拟了随机的特性。浏览器的 PRNG 并未使用真正的随机源，只是对一个内部状态 应用了固定的算法。每次调用 Math.random()，这个内部状态都会被一个算法修改，而结果会被转换 为一个新的随机值。例如，V8 引擎使用了一个名为 xorshift128+的算法来执行这种修改。
+
+由于算法本身是固定的，其输入只是之前的状态，因此随机数顺序也是确定的。xorshift128+使用 128 位内部状态，而算法的设计让任何初始状态在重复自身之前都会产生 2128–1 个伪随机值。这种循环 被称为**置换循环**（permutation cycle），而这个循环的长度被称为一个**周期**（period）。很明显，如果攻击 者知道 PRNG 的内部状态，就可以预测后续生成的伪随机值。如果开发者无意中使用 PRNG 生成了私有 密钥用于加密，则攻击者就可以利用 PRNG 的这个特性算出私有密钥。
+
+伪随机数生成器主要用于快速计算出看起来随机的值。不过并不适合用于加密计算。为解决这个问题，密码学安全伪随机数生成器（CSPRNG，Cryptographically Secure PseudoRandom Number Generator） 额外增加了一个熵作为输入，例如测试硬件时间或其他无法预计行为的系统特性。这样一来，计算速度 明显比常规 PRNG 慢很多，但 CSPRNG 生成的值就很难预测，可以用于加密了。
+
+#### 使用
+
+```js
+const array = new Uint8Array(1);
+for (let i=0; i<5; ++i) {
+ console.log(crypto.getRandomValues(array));
+}
+// Uint8Array [41]
+// Uint8Array [250]
+// Uint8Array [51]
+// Uint8Array [129]
+// Uint8Array [35] 
+```
+
+### 小结
+
+除了定义新标签，HTML5 还定义了一些 JavaScript API。这些 API 可以为开发者提供更便捷的 Web 接口，暴露堪比桌面应用的能力。本章主要介绍了以下 API。 
+
+- Atomics API 用于保护代码在多线程内存访问模式下不发生资源争用。 
+-  postMessage() API 支持从不同源跨文档发送消息，同时保证安全和遵循同源策略。 
+-  Encoding API 用于实现字符串与缓冲区之间的无缝转换（越来越常见的操作）。 
+-  File API 提供了发送、接收和读取大型二进制对象的可靠工具。 
+- 媒体元素`<audio>`和`<video>`拥有自己的 API，用于操作音频和视频。并不是每个浏览器都会支
+  持所有媒体格式，使用 canPlayType()方法可以检测浏览器支持情况。
+- 拖放 API 支持方便地将元素标识为可拖动，并在操作系统完成放置时给出回应。可以利用它创
+  建自定义可拖动元素和放置目标。
+-   Notifications API 提供了一种浏览器中立的方式，以此向用户展示消通知弹层。
+-   Streams API 支持以全新的方式读取、写入和处理数据。
+-   Timing API 提供了一组度量数据进出浏览器时间的可靠工具。
+-   Web Components API 为元素重用和封装技术向前迈进提供了有力支撑。
+-   Web Cryptography API 让生成随机数、加密和签名消息成为一类特性。
+
+## 错误处理和调试
+
+### try/catch
+
+如果 try 块中有代码发生错误，代码会立即退出执行，并跳到 catch 块中。catch 块此时接收到 一个对象，该对象包含发生错误的相关信息。与其他语言不同，即使在 catch 块中不使用错误对象， 也必须为它定义名称。错误对象中暴露的实际信息因浏览器而异，但至少包含保存错误消息的 message 属性。
+
+#### finally
+
+```js
+function testFinally(){
+ try {
+ return 2;
+ } catch (error){
+ return 1;
+ } finally {
+ return 0;
+ }
+} 
+```
+
+看起来该函数应该返回 2， 因为它在 try 块中，不会导致错误。但是，finally 块的存在导致 try 块中的 return 语句被忽略。
+
+#### 错误类型
+
+-  **Error**  是基类型，其他错误类型继承该类型.浏览器很少会抛出 Error 类型的错误，该类型主要用于开 发者抛出自定义错误。
+-  **InternalError**  类型的错误会在底层 JavaScript 引擎抛出异常时由浏览器抛出。例如，递归过多导 致了栈溢出。这个类型并不是代码中通常要处理的错误，如果真发生了这种错误，很可能代码哪里弄错 了或者有危险了。
+-  **EvalError** 类型的错误会在使用 eval()函数发生异常时抛出。
+-  **RangeError** 错误会在数值越界时抛出。例如，定义数组时如果设置了并不支持的长度，
+-  **ReferenceError** 会在找不到对象时发生。（这就是著名的"object expected"浏览器错误的原 因。）这种错误经常是由访问不存在的变量而导致的
+-  **SyntaxError** 经常在给 eval()传入的字符串包含 JavaScript 语法错误时发生
+-  **TypeError **在 JavaScript 中很常见，主要发生在变量不是预期类型，或者访问不存在的方法时。很 多原因可能导致这种错误，尤其是在使用类型特定的操作而变量类型不对时。
+- **URIError**  只会在使用 encodeURI()或 decodeURI()但传入了格式错误的 URI 时发生。这个错误恐怕是 JavaScript 中难得一见的错误了，因为上面这两个函数非常稳健
+
+####  try/catch 的用法
+
+**try/catch 语句最好用在自己无法控制的错误上**。如果你明确知道自己的代码会发生某种错误，那么就不适合使用 try/catch 语句。例如，如果给 函数传入字符串而不是数值时就会失败，就应该检查该函数的参数类型并采取相应的操作。这种情况下， 没有必要使用 try/catch 语句。
+
+### 抛出错误
+
+与 try/catch 语句对应的一个机制是 throw 操作符，用于在任何时候抛出自定义错误。throw 操 作符必须有一个值，但值的类型不限。
+
+使用 throw 操作符时，代码立即停止执行，除非 try/catch 语句捕获了抛出的值。
+
+可以通过内置的错误类型来模拟浏览器错误。每种错误类型的构造函数都只接收一个参数，就是错误消息。
+
+```js
+throw new Error("Something bad happened."); 
+// or 
+throw new SyntaxError("I don't like your syntax."); 
+```
+
+或者通过继承error 自定义一个错误,需要提供 name 属性和 message 属性
+
+```js
+class CustomError extends Error {
+ constructor(message) {
+ super(message);
+ this.name = "CustomError";
+ this.message = message;
+ }
+```
+
+#### 何时抛出
+
+一个常见的问题是何时抛出错误，何时使用 try/catch 捕获错误。一般来说，错误要在应用程序 架构的底层抛出，在这个层面上，人们对正在进行的流程知之甚少，因此无法真正地处理错误。
+
+至于抛出错误与捕获错误的区别，可以这样想：应该只在确切知道接下来该做什么的时候捕获错误。捕获错误的目的是阻止浏览器以其默认方式响应；抛出错误的目的是为错误提供有关其发生原因的 说明。
+
+### error事件
+
+**任何没有被 try/catch 语句处理的错误都会在 window 对象上触发 error 事件**。
+
+```js
+window.onerror = (message, url, line) => {
+// 错误消息、发生错误的 URL 和行号
+ console.log(message);
+// 可以返回 false 来阻止浏览器默认报告错误的行为，
+ return false;
+};
+```
+
+### 识别错误
+
+错误处理非常重要的部分是首先识别错误可能会在代码中的什么地方发生。因为 JavaScript 是松散 类型的，不会验证函数参数，**所以很多错误只有在代码真正运行起来时才会出现**。通常，需要注意 3 类错误： 
+
+- 类型转换错误 
+
+-  数据类型错误 
+
+-  通信错误 
+
+上面这几种错误会在特定情况下，在没有对值进行充分检测时发生。
+
+#### 静态代码分析器
+
+静态代码分析器要求使用类型、函数签名及其他指令来注解 JavaScript，以此描述程序如何在基本 可执行代码之外运行。分析器会比较注解和 JavaScript 代码的各个部分，对在实际运行时可能出现的潜 在不兼容问题给出提醒。
+
+常用：JSHint、JSLint、Google Closure 和 TypeScript.
+
+#### 类型转换错误
+
+类型转换错误的主要原因是使用了会自动改变某个值的数据类型的操作符或语言构造。使用了 == 或 ！=、以及在 if、for 或 while 等流控制语句中使用非布尔值
+
+#### 数据类型错误
+
+因为 JavaScript 是松散类型的，所以变量和函数参数都不能保证会使用正确的数据类型。开发者需 要自己检查数据类型，确保不会发生错误。
+
+一般来说，原始类型的值应该使用 typeof 检测，而对象值应该使用 instanceof 检测。根据函数 的用法，不一定要检查每个参数的数据类型，但对外的任何 API 都应该做类型检查以保证正确执行。
+
+#### 通信错误
+
+## JSON
+
+JSON 语法支持表示 3 种类型的值。
+
++ 简单值：字符串、数值、布尔值和 null 可以在 JSON 中出现，就像在 JavaScript 中一样。特殊 值 **undefined 不可以**。
++ 对象：第一种复杂数据类型，对象表示有序键/值对。每个值可以是简单值，也可以是复杂类型。 
++ 数组：第二种复杂数据类型，数组表示可以通过数值索引访问的值的有序列表。数组的值可以 是任意类型，包括简单值、对象，甚至其他数组。
+
+### JSON 对象
+
+JSON 对象有两个方法：stringify()和 parse()。在简单的情况下，这两个方法分别可以将 JavaScript 序列化为 JSON 字符串，以及将 JSON 解析为原生 JavaScript 值。
+
+实际上，**JSON.stringify()**方法除了要序列化的对象，还可以接收两个参数。这两个参数可以用 于指定其他序列化 JavaScript 对象的方式。**第一个参数是过滤器，可以是数组或函数；第二个参数是用于缩进结果 JSON 字符串的选项。单独或组合使用这些参数可以更好地控制 JSON 序列化。**
+
+有时候，对象需要在 JSON.stringify()之上自定义 JSON 序列化。此时，可以在要序列化的对象 中添加 **toJSON()**方法，序列化时会基于这个方法返回适当的 JSON 表示。
+
+**JSON.parse()**方法也可以接收一个额外的参数，这个函数会针对每个键/值对都调用一次。为区别 于传给 JSON.stringify()的起过滤作用的替代函数（replacer），这个函数被称为还原函数（reviver）。 实际上它们的格式完全一样，即还原函数也接收两个参数，属性名（key）和属性值（value），另外也 需要返回值。
+
+## 网络请求与远程资源
+
+### XHR ( XMLHttpRequest ) 对象
+
+看了下 会用就行了
+
+### 进度事件
+
+Progress Events 是 W3C 的工作草案，定义了客户端服务器端通信。这些事件最初只针对 XHR，现 在也推广到了其他类似的 API。有以下 6 个进度相关的事件。 
+
+- loadstart：在接收到响应的第一个字节时触发。 
+
+-  progress：在接收响应期间反复触发。
+
+-  error：在请求出错时触发。
+
+-  abort：在调用 abort()终止连接时触发。 
+
+-  load：在成功接收完响应时触发。
+
+-  loadend：在通信完成时，且在 error、abort 或 load 之后触发。 
+
+每次请求都会首先触发 loadstart 事件，之后是一个或多个 progress 事件，接着是 error、abort 或 load 中的一个，最后以 loadend 事件结束。
+
+#### load 事件
+
+onload 事件处理程序会收到一个 event 对象，其 target 属性设置为 XHR 实例，在这个实例上 可以访问所有 XHR 对象属性和方法。
+
+#### progress 事件
+
+Mozilla 在 XHR 对象上另一个创新是 progress 事件，在浏览器接收数据期间，这个事件会反复触 发。每次触发时，onprogress 事件处理程序都会收到 event 对象，其 target 属性是 XHR 对象，且 包含 3 个额外属性：**lengthComputable**、**position** 和 **totalSize**。其中
+
+- lengthComputable 是 一个布尔值，表示进度信息是否可用；
+- position 是接收到的字节数；
+- totalSize 是响应的 ContentLength 头部定义的总字节数
+
+### 跨源资源共享
+
+跨源资源共享（CORS，Cross-Origin Resource Sharing）定义了浏览器与服务器如何实现跨源通信。 CORS 背后的基本思路就是使用自定义的 HTTP 头部允许浏览器和服务器相互了解，以确实请求或响应 应该成功还是失败。
+
+对于简单的请求，比如 **GET 或 POST 请求，没有自定义头部，而且请求体是 text/plain 类型**， 这样的请求在发送时会有一个额外的头部叫 Origin。Origin 头部包含发送请求的页面的源（协议、 域名和端口），以便服务器确定是否为其提供响应。
+
+如果服务器决定响应请求，那么应该发送 Access-Control-Allow-Origin 头部.
+
+#### 预检请求
+
+CORS 通过一种叫预检请求（preflighted request）的服务器验证机制，允许使用自定义头部、除 GET 和 POST 之外的方法，以及不同请求体内容类型。在要发送涉及上述某种高级选项的请求时，会先向服务器发送一个“预检”请求。这个请求使用 OPTIONS 方法发送并包含以下头部。
+
+- **Origin**：与简单请求相同。
+-  **Access-Control-Request-Method**：请求希望使用的方法。 
+-  **Access-Control-Request-Headers**：（可选）要使用的逗号分隔的自定义头部列表
+
+在这个请求发送后，服务器可以确定是否允许这种类型的请求。服务器会通过在响应中发送如下头部与浏览器沟通这些信息。
+
+- Access-Control-Allow-Origin：与简单请求相同。 
+-  Access-Control-Allow-Methods：允许的方法（逗号分隔的列表）。 
+-  Access-Control-Allow-Headers：服务器允许的头部（逗号分隔的列表）。 
+-  Access-Control-Max-Age：缓存预检请求的秒数。
+
+预检请求返回后，结果会按响应指定的时间缓存一段时间。换句话说，**只有第一次发送这种类型的 请求时才会多发送一次额外的 HTTP 请求。**
+
+#### 凭据请求
+
+**默认情况下，跨源请求不提供凭据（cookie、HTTP 认证和客户端 SSL 证书）。可以通过将 withCredentials 属性设置为 true 来表明请求会发送凭据。**
+
+#### 图片探测
+
+图片探测是利用`<img>`标签实现跨域通信的最早的一种技术。任何页面都可以跨域加载图片而不 必担心限制，因此这也是在线广告跟踪的主要方式。可以动态创建图片，然后通过它们的 onload 和 onerror 事件处理程序得知何时收到响应
+
+图片探测频繁用于跟踪用户在页面上的点击操作或动态显示广告。当然，图片探测的缺点是**只能发送 GET 请求**和**无法获取服务器响应的内容**。这也是只能利用图片探测实现浏览器与服务器单向通信的 原因。
+
+#### JSONP 
+
+JSONP 调用是通过动态创建`<script>`元素并为 src 属性指定跨域 URL 实现的。此时的`<script>`与`<img>`元素类似，能够不受限制地从其他域加载资源。因为 JSONP 是有效的 JavaScript，所以 JSONP响应在被加载完成之后会立即执行。
+
+JSONP 由于其简单易用，在开发者中非常流行。相比于图片探测，使用 JSONP 可以直接访问响应， **实现浏览器与服务器的双向通信**。不过 JSONP 也有一些缺点。 
+
+首先，JSONP 是从不同的域拉取可执行代码。如果这个域并不可信，则可能在响应中加入恶意内容。 此时除了完全删除 JSONP 没有其他办法。在使用不受控的 Web 服务时，一定要保证是可以信任的。 
+
+第二个缺点是不好确定 JSONP 请求是否失败。虽然 HTML5 规定了`<script>`元素的 onerror 事件处理程序，但还没有被任何浏览器实现。为此，开发者经常使用计时器来决定是否放弃等待响应。这种
+方式并不准确，毕竟不同用户的网络连接速度和带宽是不一样的。
+
+### fetch 请求
+
+Fetch API 本身是使用 JavaScript 请求资源的优秀工具，同时这个 API 也能够应用在服务线程 （service worker）中，提供拦截、重定向和修改通过 fetch()生成的请求接口。
+
+
+
+- 发送 JSON 数据
+
+  ```js
+  fetch('/send-me-json', {
+   method: 'POST', // 发送请求体时必须使用一种 HTTP 方法
+   body: payload,
+   headers: jsonHeaders
+  })
+  ```
+
+  
+
+- 发送跨源请求
+
+- 加载Blob文件
+
+  ```js
+  fetch('my-image.png').then((response) => response.blob()) 	
+  ```
+
+- 中断请求
+
+  ```js
+  包含错误的拒绝。
+  let abortController = new AbortController();
+  fetch('wikipedia.zip', { signal: abortController.signal })
+   .catch(() => console.log('aborted!'); 
+  // 10 毫秒后中断请求
+  setTimeout(() => abortController.abort(), 10); 
+  ```
+
+#### Headers 对象
+
+Headers 与 Map 类型都有 get()、set()、has()和 delete() 等实例方法
+
+Headers 并不是与 Map 处处都一样。在初始化 Headers 对象时，也可以使用键/值对形式的对象， 而 Map 则不可以
+
+#### Request对象
+
+#### Response对象
+
+### Beacon API 
+
+为了把尽量多的页面信息传到服务器，很多分析工具需要**在页面生命周期中尽量晚的时候向服务器 发送遥测或分析数据**。因此，理想的情况下是通过浏览器的 unload 事件发送网络请求。这个事件表示 用户要离开当前页面，不会再生成别的有用信息了。
+
+ unload 事件触发时，分析工具要停止收集信息并把收集到的数据发给服务器。这时候有一个问题， 因为 unload 事件对浏览器意味着没有理由再发送任何结果未知的网络请求（因为页面都要被销毁了）。 例如，在 unload 事件处理程序中创建的任何异步请求都会被浏览器取消。为此，异步 XMLHttpRequest 或 fetch()不适合这个任务。分析工具可以使用同步 XMLHttpRequest 强制发送请求，但这样做会导 致用户体验问题。浏览器会因为要等待 unload 事件处理程序完成而延迟导航到下一个页面。
+
+为解决这个问题，W3C 引入了补充性的 Beacon API。这个 API 给 navigator 对象增加了一个 sendBeacon()方法。这个简单的方法接收一个 URL 和一个数据有效载荷参数，并会发送一个 POST 请求。可选的数据有效载荷参数有 ArrayBufferView、Blob、DOMString、FormData 实例。如果请求成功进入了最终要发送的任务队列，则这个方法返回 true，否则返回 false。
+
+```js
+// 发送 POST 请求
+// URL: 'https://example.com/analytics-reporting-url'
+// 请求负载：'{foo: "bar"}'
+navigator.sendBeacon('https://example.com/analytics-reporting-url', '{foo: "bar"}'); 
+```
+
+这个方法虽然看起来只不过是 POST 请求的一个语法糖，但它有几个重要的特性。
+
+- sendBeacon()并不是只能在页面生命周期末尾使用，而是任何时候都可以使用。 
+- 调用 sendBeacon()后，浏览器会把请求添加到一个内部的请求队列。浏览器会主动地发送队 列中的请求。 
+- 浏览器保证在原始页面已经关闭的情况下也会发送请求。 
+- 状态码、超时和其他网络原因造成的失败完全是不透明的，不能通过编程方式处理。
+- 信标（beacon）请求会携带调用 sendBeacon()时所有相关的 cookie。
+
+### Web Socket 
+
+Web Socket使用了**自定义协议**，所以 URL方案（scheme）稍有变化：不能再使用 http://或 https://， 而要使用 ws://和 wss://。前者是不安全的连接，后者是安全连接。在指定 Web Socket URL 时，必须包含 URL 方案，因为将来有可能再支持其他方案。
+
+```js
+let socket = new WebSocket("ws://www.example.com/server.php");
+let stringData = "Hello world!";
+let arrayBufferData = Uint8Array.from(['f', 'o', 'o']);
+let blobData = new Blob(['f', 'o', 'o']);
+//发送和接收数据
+socket.send(stringData);
+socket.send(arrayBufferData.buffer);
+socket.send(blobData); 
+
+socket.onmessage = function(event) {
+ let data = event.data;
+ // 对数据执行某些操作
+}; 
+//在连接成功建立时触发。
+socket.onopen = function() {
+ alert("Connection established.");
+};
+//在发生错误时触发。连接无法存续。
+socket.onerror = function() {
+ alert("Connection error.");
+};
+//在连接关闭时触发。
+//只有 close 事件的 event 对象上有额外信息。这个对象上有 3 个额外属性：
+// wasClean、code 和 reason。
+//其中，wasClean 是一个布尔值，表示连接是否干净地关闭；code 是一个来自服务器的数值状态码；reason 是一个字符串，包含服务器发来的消息。
+socket.onclose = function(event) {
+  console.log(`as clean? ${event.wasClean} Code=${event.code} Reason=${event.reason}`); 
+}; 
+```
+
+## 客户端存储
+
+### cookie 
+
+cookie 是与特定域绑定的。设置 cookie 后，它会与请求一起发送到创建它的域。这个限制能保证 cookie 中存储的信息只对被认可的接收者开放，不被其他域访问。 
+
+因为 cookie 存储在客户端机器上，所以为保证它不会被恶意利用，浏览器会施加限制。同时，cookie 也不会占用太多磁盘空间
+
+- 不超过 300 个 cookie； 
+- 每个 cookie 不超过 4096 字节； 
+- 每个域不超过 20 个 cookie； 
+- 每个域不超过 81 920 字节。
+
+#### 使用
+
+```js
+//secure :只能在ssl链接上发送
+//domain : cookie 有效的域。发送到这个域的所有请求都会包含对应的 cookie
+//path   :请求 URL 中包含这个路径才会把 cookie 发送到服务器。
+Set-Cookie: name=value; expires=Mon, 22-Jan-07 07:10:24 GMT; domain=.wrox.com; secure
+```
+
+#### JS中使用Cookie
+
+所有名和值都是 URL 编码的，因此必须使用 decodeURIComponent()解码。
+
+```js
+class CookieUtil {
+ static get(name) {
+ let cookieName = `${encodeURIComponent(name)}=`,
+ cookieStart = document.cookie.indexOf(cookieName),
+ cookieValue = null;
+ if (cookieStart > -1){
+ let cookieEnd = document.cookie.indexOf(";", cookieStart);
+ if (cookieEnd == -1){
+ cookieEnd = document.cookie.length;
+ }
+ cookieValue = decodeURIComponent(document.cookie.substring(cookieStart
+ + cookieName.length, cookieEnd));
+ }
+ return cookieValue;
+ }
+ static set(name, value, expires, path, domain, secure) {
+ let cookieText =
+ `${encodeURIComponent(name)}=${encodeURIComponent(value)}`
+ if (expires instanceof Date) {
+ cookieText += `; expires=${expires.toGMTString()}`;
+ }
+ if (path) {
+ cookieText += `; path=${path}`;
+ }
+ if (domain) {
+ cookieText += `; domain=${domain}`;
+ }
+ if (secure) {
+ cookieText += "; secure";
+ }
+ document.cookie = cookieText;
+ }
+ static unset(name, path, domain, secure) {
+ CookieUtil.set(name, "", new Date(0), path, domain, secure);
+ }
+}; 
+```
+
+#### 子Cookie
+
+子 cookie 的格式类似于查询字符串。这些值可以存储为单个 cookie，而不用单独存储为自己的名/值对。结果就是网站或 Web 应用程序能够在单域 cookie 数限制下存储更多的结构化数据。
+
+```js
+name=name1=value1&name2=value2&name3=value3&name4=value4&name5=value5
+```
+
+#### 注意事项
+
+还有一种叫作 **HTTP-only** 的 cookie。HTTP-only 可以在浏览器设置，也可以在服务器设置，但只能 在服务器上读取，这是因为 JavaScript 无法取得这种 cookie 的值
+
+### sessionStorage
+
+sessionStorage 对象只存储会话数据，这意味着数据只会存储到浏览器关闭。这跟浏览器关闭时 会消失的会话 cookie 类似。存储在 sessionStorage 中的数据不受页面刷新影响，可以在浏览器崩溃 并重启后恢复。（取决于浏览器，Firefox 和 WebKit 支持，IE 不支持。）
+
+### localStorage
+
+在修订的 HTML5 规范里，localStorage 对象取代了 globalStorage，作为在客户端持久存储 数据的机制。要访问同一个 localStorage 对象，**页面必须来自同一个域（子域不可以）、在相同的端口上使用相同的协议。**
+
+两种存储方法的区别在于，存储在 localStorage 中的数据会保留到通过 JavaScript 删除或者用户 清除浏览器缓存。localStorage 数据不受页面刷新影响，也不会因关闭窗口、标签页或重新启动浏览 器而丢失。
+
+### indexDB
+
+IndexedDB 背后的思想是创造一套 API，方便 JavaScript 对象的 存储和获取，同时也支持查询和搜索。
+
+IndexedDB 的设计几乎完全是异步的。为此，大多数操作以请求的形式执行，这些请求会异步执行， 产生成功的结果或错误。
+
+## 模块
 
