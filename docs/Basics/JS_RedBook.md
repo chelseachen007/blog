@@ -1736,3 +1736,328 @@ IndexedDB 的设计几乎完全是异步的。为此，大多数操作以请求�
 
 ## 模块
 
+将代码拆分成独立的块，然后再把这些块连接起来可以通过模块模式来实现。这种模式背后的思想 很简单：把**逻辑分块，各自封装，相互独立，每个块自行决定对外暴露什么**，同时自行决定引入执行哪些外部代码。
+
+### 凑合的模块系统-IIFE
+
+```js
+// 为了暴露公共 API，模块 IIFE 会返回一个对象，其属性就是模块命名空间中的公共成员：
+var Foo = (function() {
+ return {
+ bar: 'baz',
+ baz: function() {
+ console.log(this.bar);
+ }
+ };
+})();
+console.log(Foo.bar); // 'baz'
+Foo.baz(); // 'baz'
+```
+
+### ES6之前的模块系统
+
+在 ES6 原生支持模块之前，使用模块的 JavaScript 代码本质上是希望使用默认没有的语言特性。因 此，必须按照符合某种规范的模块语法来编写代码，另外还需要单独的模块工具把这些模块语法与 JavaScript 运行时连接起来。这里的模块语法和连接方式有不同的表现形式**，通常需要在浏览器中额外 加载库或者在构建时完成预处理。**
+
+#### CommonJS 
+
+CommonJS 规范概述了同步声明依赖的模块定义。这个规范主要用于在服务器端实现模块化代码组织，但也可用于定义在浏览器中使用的模块依赖。CommonJS 模块语法不能在浏览器中直接运行。
+
+**在 CommonJS 中，模块加载是模块系统执行的同步操作。**
+
+```js
+//定义
+var moduleB = require('./moduleB');
+module.exports = {
+ stuff: moduleB.doStuff();
+}; 
+
+//使用
+console.log('moduleA');
+require('./moduleA'); // "moduleA" 
+```
+
+**无论一个模块在 require()中被引用多少次，模块永远是单例。在下面的例子中，moduleA 只会 被打印一次。这是因为无论请求多少次，moduleA 只会被加载一次。**
+
+```js
+console.log('moduleA');
+var a1 = require('./moduleA');
+var a2 = require('./moduleA');
+console.log(a1 === a2); // true 
+```
+
+模块第一次加载后会被缓存，后续加载会取得缓存的模块
+
+
+
+module.exports 对象非常灵活，有多种使用方式。
+
+```js
+//单值
+module.exports = 'foo'; 
+// 多值
+module.exports = {
+ a: 'A',
+ b: 'B'
+}; 
+// 等同
+module.exports.a = 'A';
+module.exports.b = 'B'; 
+
+
+```
+
+
+
+#### AMD
+
+AMD 模块实现的核心是用**函数包装模块定义**。这样可以防止声明全局变量，并允许加载器库控制何时加载模块。包装函数也便于模块代码的移植，因为包装函数内部的所有模块代码使用的都是原生 JavaScript 结构。包装模块的函数是全局 define 的参数，它是由 AMD 加载器库的实现定义的
+
+```js
+// ID 为'moduleA'的模块定义。moduleA 依赖 moduleB，
+// moduleB 会异步加载
+define('moduleA', ['moduleB'], function(moduleB) {
+ return {
+ stuff: moduleB.doStuff();
+ };
+}); 	
+```
+
+#### UMD
+
+为了**统一** CommonJS 和 AMD 生态系统，通用模块定义（UMD，Universal Module Definition）规范应运而生。UMD 可用于创建这两个系统都可以使用的模块代码。本质上，UMD 定义的模块会在启动时 **检测要使用哪个模块系统**，然后进行适当配置，并把所有逻辑包装在一个立即调用的函数表达式（IIFE） 中。虽然这种组合并不完美，但在很多场景下足以实现两个生态的共存。
+
+```js
+(function (root, factory) {
+ if (typeof define === 'function' && define.amd) {
+ // AMD。注册为匿名模块
+ define(['moduleB'], factory);
+ } else if (typeof module === 'object' && module.exports) {
+ // Node。不支持严格 CommonJS
+ // 但可以在 Node 这样支持 module.exports 的
+ // 类 CommonJS 环境下使用
+ module.exports = factory(require(' moduleB '));
+ } else {
+ // 浏览器全局上下文（root 是 window）
+ root.returnExports = factory(root. moduleB);
+ }
+}(this, function (moduleB) {
+ // 以某种方式使用 moduleB
+ // 将返回值作为模块的导出
+ // 这个例子返回了一个对象
+ // 但是模块也可以返回函数作为导出值
+ return {};
+})); 
+```
+
+### ES6 模块
+
+ES6 最大的一个改进就是引入了模块规范。这个规范全方位简化了之前出现的模块加载器，原生浏览器支持意味着加载器及其他预处理都不再必要。从很多方面看，ES6 模块系统是集 AMD 和 CommonJS 之大成者。
+
+ECMAScript 6 模块是作为一整块 JavaScript 代码而存在的。带有 type="module"属性的`<script>`标签会告诉浏览器相关代码应该作为模块执行，而不是作为传统的脚本执行。
+
+与传统脚本不同，所有模块都会像`<script defer>`加载的脚本一样按顺序执行。解析到`<script type="module">`标签后会立即下载模块文件，但执行会延迟到文档解析完成。
+
+#### 模块行为
+
+ECMAScript 6 模块借用了 CommonJS 和 AMD 的很多优秀特性。下面简单列举一些。 
+
+- 模块代码只在加载后执行。 
+
+-  模块只能加载一次。 
+
+-  模块是单例。 
+
+-  模块可以定义公共接口，其他模块可以基于这个公共接口观察和交互。 
+
+-  模块可以请求加载其他模块。 
+
+- 支持循环依赖。 ES6 模块系统也增加了一些新行为。 
+
+-  ES6 模块默认在严格模式下执行。 
+
+-  ES6 模块不共享全局命名空间。 
+
+-  模块顶级 this 的值是 undefined（常规脚本中是 window）。 
+
+-  模块中的 var 声明不会添加到 window 对象。 
+
+-  ES6 模块是异步加载和执行的。
+
+    
+
+#### 导出
+
+```js
+// 默认导出 只能一个
+export default foo
+// 等同于
+export { foo as default }; 
+// 导出多个
+export { foo, bar as myBar, baz }; 
+```
+
+#### 导入
+
+import 语句被提升到模块顶部。因此，与 export 关键字类似，import 语句与使用导入值的语句 的相对位置并不重要。不过，还是**推荐**把导入语句**放在模块顶部**。
+
+导入对模块而言是只读的，实际上相当于 const 声明的变量。在使用*执行批量导入时，赋值给别名的命名导出就好像使用  `Object.freeze() `冻结过一样。直接修改导出的值是不可能的，但**可以修改导出对象的属性**。同样，也不能给导出的集合添加或删除导出的属性。要修改导出的值，必须使用有内部变量和属性访问权限的导出方法。
+
+#### 工作者模块
+
+```js
+// 下面是两种类型的 Worker 的实例化行为：
+// 第二个参数默认为{ type: 'classic' }
+const scriptWorker = new Worker('scriptWorker.js');
+const moduleWorker = new Worker('moduleWorker.js', { type: 'module' })
+```
+
+#### 兼容性
+
+```js
+// 支持模块的浏览器会执行这段脚本
+// 不支持模块的浏览器不会执行这段脚本
+<script type="module" src="module.js"></script>
+// 支持模块的浏览器不会执行这段脚本
+// 不支持模块的浏览器会执行这段脚本
+<script nomodule src="script.js"></script>
+```
+
+## Web Worker
+
+### 简介
+
+JavaScript 环境实际上是运行在托管操作系统中的虚拟环境。在浏览器中每打开一个页面，就会分 配一个它自己的环境。这样，每个页面都有自己的内存、事件循环、DOM，等等。每个页面就相当于一个**沙盒**，不会干扰其他页面。对于浏览器来说，同时管理多个环境是非常简单的，因为所有这些环境都是**并行执行**的。
+
+#### WorkerGlobalScope
+
+在网页上，window 对象可以向运行在其中的脚本暴露各种全局变量。在工作者线程内部，没有 window 的概念。这里的全局对象是 WorkerGlobalScope 的实例，通过 self 关键字暴露出来。
+
+### 使用
+
+```js
+// emptyWorker.js
+// 空的 JS 工作者线程文件
+
+// main.js
+console.log(location.href); // "https://example.com/"
+const worker = new Worker(location.href + 'emptyWorker.js');
+console.log(worker); // Worker {} 
+```
+
+#### 安全限制
+
+工作者线程的脚本文件**只能从与父页面相同的源加载**。从其他源加载工作者线程的脚本文件会导致错误!
+
+## 最佳实践
+
+说代码“可维护”就意味着它具备如下特点。 
+
+* **容易理解**：无须求助原始开发者，任何人一看代码就知道它是干什么的，以及它是怎么实现的。
+* **符合常识**：代码中的一切都显得顺理成章，无论操作有多么复杂。 
+* **容易适配**：即使数据发生变化也不用完全重写。 
+* **容易扩展**：代码架构经过认真设计，支持未来扩展核心功能。 
+* **容易调试**：出问题时，代码可以给出明确的信息，通过它能直接定位问题。
+
+### 编码规范
+
+#### 可读性
+
+-  使用合适的代码缩进
+
+- 写注释
+  - **函数和方法：**每个函数和方法都应该有注释来描述其用途，以及完成任务所用的算法。
+  - **大型代码块。**多行代码但用于完成单一任务的，应该在前面给出注释，把要完成的任务写清楚。
+  -  **复杂的算法**:  如果使用了独特的方法解决问题，要通过注释解释明白。
+  - **使用黑科技。**由于浏览器之间的差异，JavaScript 代码中通常包含一些黑科技。
+
+#### 变量和函数命名
+
+- **变量名应该是名词**，例如 car 或 person。
+- **函数名应该以动词开始**，例如 getName()。**返回布尔值的函数通常以 is 开头**，比如 isEnabled()。
+- **变量、函数和方法应该以小写字母开头，使用驼峰大小写（camelCase）形式**，如 getName()和 isPerson。**类名应该首字母大写**，如 Person、RequestFactory。**常量值应该全部大写并以 下划线相接**，比如 REQUEST_TIMEOUT
+- 名称要尽量用描述性和直观的词汇
+
+#### 使用常量
+
+关键在于把数据从使用它们的逻辑中分离出来。可以使用以下标准检查哪些数据需要提取。 
+
+- **重复出现的值**：任何使用超过一次的值都应该提取到常量中，这样可以消除一个值改了而另一 个值没改造成的错误。这里也包括 CSS 的类名。 
+-  **用户界面字符串**：任何会显示给用户的字符串都应该提取出来，以方便实现国际化。 
+-  **URL**：Web 应用程序中资源的地址经常会发生变化，因此建议把所有 URL 集中放在一个地方管理。 
+-  **任何可能变化的值**：任何时候，只要在代码中使用字面值，就问问自己这个值将来是否可能会变。如果答案是“是”，那么就应该把它提取到常量中
+
+### 性能
+
+#### 作用域意识
+
+- 避免全局查找
+
+  **只要函数中有引用超过两次的全局对象，就应该把这个对象保存为一个局部变量。**
+
+- 不使用 with 语句
+
+#### 选择正确的方法
+
+1.  避免不必要的属性查找
+
+   **使用变量和数组相比访问对象属性效率更高**，访问对象属性的算法复杂度是 O(n)。访问对象的每个属性都比访问变量或数组花费的时间长，因为查找属性名要搜索原型链。简单来说，查找的属性越多， 执行时间就越长。
+
+   ```js
+   let query = window.location.href.substring(window.location.href.indexOf("?")); 
+   //只要使用某个 object 属性超过一次，就应该将其保存在局部变量中。第一次仍然要用 O(n)的复杂度去访问这个属性，但后续每次访问就都是 O(1)，
+   let url = window.location.href;
+   let query = url.substring(url.indexOf("?")); 
+   ```
+
+2. 优化循环
+
+   - **简化终止条件。**
+   -  **简化循环体。**
+   -  **使用后测试循环。**最常见的循环就是 for 和 while 循环，这两种循环都属于先测试循环。do-while 就是后测试循环，避免了对终止条件初始评估 ，因此应该会更快。
+
+3. 展开循环
+
+   达夫设备实现，**展开循环对于大型数据集可以节省很多时间，但对于小型数据集来说，则可能不值得。因为实现同 样的任务需要多写很多代码，所以如果处理的数据量不大，那么显然没有必要。**
+
+4. 其他
+
+   - **原生方法很快**，应该尽可能使用原生方法，而不是使用 JavaScript 写的方法。
+   - **switch 语句很快。**
+   - **位操作很快。**
+
+#### DOM优化
+
+1. **实时更新最小化**
+
+   **访问 DOM 时，只要访问的部分是显示页面的一部分，就是在执行实时更新操作。**之所以称其为实时更新，是因为涉及立即（实时）更新页面的显示，让用户看到。每次这样的更新，无论是插入一个字符还是删除页面上的一节内容，都会导致性能损失。这是因为浏览器需要为此重新计算数千项指标，之后才能执行更新。实时更新的次数越多，执行代码所需的时间也越长。反之，实时更新的次数越少，代码执行就越快
+
+   - 从页面中移除列表，执行更新，然后再把列表插回页面中相同的位置。**不可取，因为每次更新时页面都会闪烁。**
+
+   - 使用文档片段构建 DOM 结构，然后一次性将它添加到 list 元素。这个办法可以减少实时更新，也可以避免页面闪烁。
+
+     ```js
+     let list = document.getElementById("myList"),
+       fragment = document.createDocumentFragment(),
+       item;
+     for (let i = 0; i < 10; i++) {
+       item = document.createElement("li");
+       fragment.appendChild(item);
+       item.appendChild(document.createTextNode("Item " + i));
+     }
+     list.appendChild(fragment);
+     ```
+
+     
+
+2. **使用 innerHTML**
+
+在页面中创建新 DOM节点的方式有两种：使用 DOM方法如 **createElement()**和 **appendChild()**， 以及使用 **innerHTML**。
+
+3.  **使用事件委托**
+
+### 部署
+
+## ES2019
+
+
+

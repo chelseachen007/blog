@@ -246,26 +246,20 @@ var invertTree = function (root) {
 ## 单调栈
 
 ```js
-
-var nextGreaterElement = function (nums1, nums2) {
-  let map = {}
-  let stack = []
-  let ans = []
-  
-  for (let i = 0; i < nums2.length; i++) {
-    while (stack.length && stack[stack.length - 1] <= nums2[i]) {
-      map[stack.pop()] = nums2[i]
+// 每日温度 适合做单调栈模板
+var dailyTemperatures = function (T) {
+    const stack = []
+    for (let i = 0; i < T.length; i++) {
+        while (stack.length && T[stack[stack.length - 1]] < T[i]) {
+            let peek = stack.pop()
+        }
+        stack.push(i)	
     }
-    stack.push(nums2[i])
-  }
-    
-  for (let index = 0; index < nums1.length; index++) {
-    const element = nums1[index];
-    ans[index] = map[element] ? map[element] : -1
-  }
-  return ans
 };
 ```
+
+- [84. 柱状图中最大的矩形](https://github.com/azl397985856/leetcode/blob/master/problems/84.largest-rectangle-in-histogram.md)
+- [739.每日温度](https://github.com/azl397985856/leetcode/blob/master/daily/2019-06-06.md)
 
 ## 链表
 
