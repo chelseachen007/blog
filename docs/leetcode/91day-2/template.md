@@ -22,5 +22,4 @@
 
 ## 参考回答
 
-- [官方题解](https://github.com/leetcode-pp/91alg-1/issues/73#issuecomment-659894442)
-
+- 

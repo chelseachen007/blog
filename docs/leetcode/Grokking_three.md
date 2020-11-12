@@ -270,6 +270,7 @@ var dailyTemperatures = function (T) {
 https://leetcode-cn.com/problems/reverse-linked-list/
 
 ```js
+// 迭代模板
 var reverseList = function (head) {
     let [prev, curr] = [null, head]
     while (curr) {
@@ -280,6 +281,7 @@ var reverseList = function (head) {
     }
     return prev
 }
+// 递归模板
 var reverseList = function (head) {
     if (!head || !head.next) return head
     let newHead = reverseList(head.next)
