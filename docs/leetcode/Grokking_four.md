@@ -12,7 +12,7 @@
 
 ### 反转整个链表
 
-https://leetcode-cn.com/problems/fan-zhuan-lian-biao-lcof/
+
 
 ```js
 var reverseList = function (head) {
@@ -50,15 +50,13 @@ function reverseN(head, n) {
     let last = reverseN(head.next, n - 1);
 
     head.next.next = head;
-    // 让反转之后的 head 节点和后面的节点连起来
+    /! 让反转之后的 head 节点和后面的节点连起来
     head.next = successor;
     return last;
 }
 ```
 
 ### 反转M-N之间的链表
-
-https://leetcode-cn.com/problems/reverse-linked-list-ii/
 
 ```js
 var reverseBetween = function (head, m, n) {
@@ -71,6 +69,12 @@ var reverseBetween = function (head, m, n) {
 };
 ```
 
+### 题目推荐
+
+- [206.反转链表](https://leetcode-cn.com/problems/reverse-linked-list/)
+- [92.反转链表-ii](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+- [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+
 ## 环形链表
 
 I 题只要相遇就是有环
@@ -79,7 +83,7 @@ I 题只要相遇就是有环
 
 ![fig1](Grokking_four.assets/142_fig1.png)
 
-任意时刻，\textit{fast}*fast* 指针走过的距离都为 \textit{slow}*slow* 指针的 22 倍。因此，我们有
+任意时刻，*fast* 指针走过的距离都为 *slow* 指针的 2 倍。因此，我们有
 
 ​                                                        ***a*+(*n*+1)*b*+*nc*=2(*a*+*b*)⟹*a*=*c*+(*n*−1)(*b*+*c*)**
 
@@ -87,3 +91,18 @@ I 题只要相遇就是有环
 
 因此，当发现slow 与fast 相遇时，我们再额外使用一个指针 ptr。起始，它指向链表头部；随后，它和slow 每次向后移动一个位置。最终，它们会在入环点相遇。
 
+### 题目推荐
+
+- [141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle/)
+- [142. 环形链表 II](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
+
+## 题目推荐
+
+- [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
+- [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
+- [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+- [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)
+- [138. 复制带随机指针的链表](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
+- [143. 重排链表](https://leetcode-cn.com/problems/reorder-list/)
+- [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
+- [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
