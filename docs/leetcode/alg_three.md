@@ -31,6 +31,23 @@ class Stack {
 
 ## 链表
 
+### 双向链表
+
+```js
+class DoubleLinkedListNode {
+    constructor(key, value) {
+        this.key = key;
+        this.value = value;
+        this.prev = null;
+        this.next = null;
+    }
+}
+```
+
+
+
+### 链表操作
+
 ```js
 class LinkedList {
     constructor() {

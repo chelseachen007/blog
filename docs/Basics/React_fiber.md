@@ -115,7 +115,7 @@ priorityLevel则来自用户的UI操作，不同的事件，带来三种不同�
 
 而悬停，则只为某个fiber带来第四种priorityLevel——**LowPriority。**
 
-用户代码出现问题，被catch住时，出现第五种priorityLevel——**IdlePriority。*
+用户代码出现问题，被catch住时，出现第五种priorityLevel——**IdlePriority。**
 
 注：箭头后面是推测 还没有找到根据
 

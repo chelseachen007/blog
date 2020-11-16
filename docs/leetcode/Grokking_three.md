@@ -204,17 +204,24 @@ var invertTree = function (root) {
   let queue = []
   queue.push(root)
   while (queue.length) {
-    let curLevel = queue.shift()
-    const temp = curLevel.left
-    curLevel.left = curLevel.right
-    curLevel.right = temp
-   //
-    if (curLevel.left) queue.push(curLevel.left)
-    if (curLevel.right) queue.push(curLevel.right)
+    // 当前层的节点个数
+    const levelSize = queue.length;          
+    // 逐个让当前层的节点出列
+    for (let i = 0; i < levelSize; i++) {    
+      // 当前出列的节点
+      const cur = queue.shift();            
+      // 左右子节点入列
+      if (cur.left) queue.push(cur.left);
+      if (cur.right) queue.push(cur.right); 
+    }
+   // dosmoething
   }
   return root
 };
+
 ```
+
+每层的数量即是queen.length
 
 #### 提取模板
 

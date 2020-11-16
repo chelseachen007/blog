@@ -37,8 +37,6 @@ middleware	验证头部header.authorization 的token
 
 文件管理 fs-extra
 
-
-
 formData.append('file',)
 
 ### 不同事件上传 + 进度条
