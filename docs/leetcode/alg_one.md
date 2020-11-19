@@ -164,3 +164,7 @@ function quickSort(arr, low, high) {
 quickSort: 0.156ms
 ```
 
+### 归并排序
+
+归并排序通过分治的思想，把长度为 n 的数列，每次简化为两个长度为 n/2 的数列。这更有利于计算机的并行处理，只需要 log2n 次归并。
+

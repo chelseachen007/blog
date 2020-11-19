@@ -244,11 +244,26 @@ var invertTree = function (root) {
 
 ### 构造一棵树
 
-前序遍历的顺序是 `root->left->right`，也就是说在前序遍历的结果中，第一个节点就是 `root`，它的后边紧跟着左子树和右子树的前序遍历结果。
+**单种前/中/后序遍历是无法确定一棵树**
 
-中序遍历的顺序是 `left->root->right`，也就是说在中序遍历的结果数组中，`root` 的左边是它左子树的中序遍历结果，它的右边是右子树的中序遍历结果。
+实际上构造一棵树的本质是：
 
-后序遍历的顺序是 `left->right->root`，也就是说在中序遍历的结果中，最后个节点就是 `root`，它的前面是左子树和右子树的后序遍历结果。
+1. 确定根节点
+2. 确定其左子树
+3. 确定其右子树
+
+
+
+- 前序遍历的顺序是 `root->left->right`，也就是说在前序遍历的结果中，**第一个节点就是 `root`**，它的后边紧跟着左子树和右子树的前序遍历结果。
+- 中序遍历的顺序是 `left->root->right`，也就是说在中序遍历的结果数组中，**`root` 的左边是它左子树的中序遍历结果，它的右边是右子树的中序遍历结果。**
+- 后序遍历的顺序是 `left->right->root`，也就是说在中序遍历的结果中，**最后个节点就是 `root**`，它的前面是左子树和右子树的后序遍历结果。
+
+#### 练习
+
+- [105. 从前序与中序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+  - []()
+- [106. 从中序与后序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+- [889. 根据前序和后序遍历构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/)
 
 ## 单调栈
 
