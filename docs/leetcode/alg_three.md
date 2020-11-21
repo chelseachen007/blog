@@ -5,7 +5,7 @@
 ```js
 class Stack {
     constructor() {
-        this.dataStore = []; //{2}
+        this.dataStore = []; 
         this.top = 0;
     }
     //Stack方法
@@ -49,123 +49,98 @@ class DoubleLinkedListNode {
 ### 链表操作
 
 ```js
-class LinkedList {
-    constructor() {
-        this.head = null;
-        this.tail = null;
-        this.length = 0;
-    }
-    isEmpty () {
-        return this.length === 0;
-    }
-    printList () {
-        const nodes = [];
-        let current = this.head;
-        while (current) {
-            nodes.push(current.value);
-            current = current.next;
+
+```
+
+## 堆
+
+```js
+class Heap {
+    constructor(list = [], comparator) {
+        this.list = list;
+
+        if (typeof comparator != 'function') {
+            this.comparator = function comparator (target, compared) {
+                return target < compared;
+            };
+        } else {
+            this.comparator = comparator;
         }
-        return nodes.join(' -> ');
+
+        this.init();
     }
-    push (value) {
-        const node = Node(value);
-        if (this.head === null) {
-            this.head = node;
-            this.tail = node;
-            this.length++;
-            return node;
+
+    init () {
+        const size = this.size();
+        for (let i = Math.floor(size / 2) - 1; i >= 0; i--) {
+            this.heapify(this.list, size, i);
         }
-        this.tail.next = node;
-        this.tail = node;
-        this.length++;
     }
+
+    insert (n) {
+        this.list.push(n);
+        this.init()
+    }
+
+    peek () {
+        return this.list[0];
+    }
+
     pop () {
-        if (this.isEmpty()) {
-            return null;
-        }
-        const nodeToRemove = this.tail;
-        if (this.head === this.tail) {
-            this.head = null;
-            this.tail = null;
-            this.length--;
-            return nodeToRemove;
-        }
-
-        let currentNode = this.head;
-        let secondToLastNode;
-
-        while (currentNode) {
-            if (currentNode.next === this.tail) {
-                secondToLastNode = currentNode;
-                break;
-            }
-            currentNode = currentNode.next;
-        }
-        secondToLastNode.next = null;
-        this.tail = secondToLastNode;
-        this.length--;
-
-        return nodeToRemove;
+        const last = this.list.pop();
+        if (this.size() === 0) return last;
+        const returnItem = this.list[0];
+        this.list[0] = last;
+        this.heapify(this.list, this.size(), 0);
+        return returnItem;
     }
-
-    get (index) {
-        if (index < 0 || index > this.length) {
-            return null;
-        }
-
-        if (this.isEmpty()) {
-            return null;
-        }
-
-        if (index === 0) {
-            return this.head;
-        }
-
-        let current = this.head;
-        let iterator = 0;
-
-        while (iterator < index) {
-            iterator++;
-            current = current.next;
-        }
-
-        return current;
+    replace (n) {
+        this.list[0] = n
+        this.init()
     }
-    delete (index) {
-        if (index < 0 || index > this.length - 1) {
-            return null;
+    sort () {
+        let k = this.size() - 1;
+        let sortArr = [...this.list]
+        while (k > 1) {
+            [sortArr[0], sortArr[k]] = [sortArr[k], sortArr[0]]
+            --k;
+            this.heapify(sortArr, k, 0);
         }
+        return sortArr
+    }
+    size () {
+        return this.list.length;
+    }
+    heapify (arr, size, i) {
+        let largest = i;
+        const left = i * 2 + 1;
+        const right = i * 2 + 2;
+        if (left < size && this.comparator(arr[largest], arr[left]))
+            largest = left;
+        if (right < size && this.comparator(arr[largest], arr[right]))
+            largest = right;
 
-        if (this.isEmpty()) {
-            return null;
+        if (largest !== i) {
+            [arr[largest], arr[i]] = [arr[i], arr[largest]];
+            this.heapify(arr, size, largest);
         }
+    }
+}
 
-        if (index === 0) {
-            const nodeToDelete = this.head;
-            this.head = this.head.next;
-            this.length--;
-            return nodeToDelete;
+class MaxHeap extends Heap {
+    constructor(list, comparator) {
+        super(list, comparator);
+    }
+}
+
+class MinHeap extends Heap {
+    constructor(list, comparator) {
+        if (typeof comparator != 'function') {
+            comparator = function comparator (inserted, compared) {
+                return inserted > compared;
+            };
         }
-
-        let current = this.head;
-        let previous;
-        let iterator = 0;
-
-        while (iterator < index) {
-            iterator++;
-            previous = current;
-            current = current.next;
-        }
-        const nodeToDelete = current;
-        previous.next = current.next;
-
-        if (previous.next === null) {
-            this.tail = previous;
-        }
-
-        this.length--;
-
-        return nodeToDelete;
+        super(list, comparator);
     }
 }
 ```
