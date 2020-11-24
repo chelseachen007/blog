@@ -4,7 +4,7 @@
 
 链表则不一定连续，因此其查找只能依靠别的方式，一般我们是通过一个叫 next 指针来遍历查找。
 
-链表的优势在于在增删上 
+链表的优势在于在增删上
 
 而数组的优势在于查找
 
@@ -12,31 +12,29 @@
 
 ### 反转整个链表
 
-
-
 ```js
-var reverseList = function (head) {
-    let [curr, pre] = [head, null]
-    while (curr) {
-        let next = curr.next
-        curr.next = pre
+var reverseList = function(head) {
+  let [curr, pre] = [head, null];
+  while (curr) {
+    let next = curr.next;
+    curr.next = pre;
 
-        pre = curr
-        curr = next
-    }
-    return pre
+    pre = curr;
+    curr = next;
+  }
+  return pre;
 };
 
-var reverseList = function (head) {
-    if (!head || !head.next) return head
-    const curr = reverseList(head.next)
-    head.next.next = head
-    head.next = null
-    return curr
+var reverseList = function(head) {
+  if (!head || !head.next) return head;
+  const curr = reverseList(head.next);
+  head.next.next = head;
+  head.next = null;
+  return curr;
 };
 ```
 
-### 反转前N个链表
+### 反转前 N 个链表
 
 ```js
 // 反转以 head 为起点的 n 个节点，返回新的头结点
@@ -56,16 +54,16 @@ function reverseN(head, n) {
 }
 ```
 
-### 反转M-N之间的链表
+### 反转 M-N 之间的链表
 
 ```js
-var reverseBetween = function (head, m, n) {
-    if (m == 1) {
-        return reverseN(head, n);
-    }
-    // 前进到反转的起点触发 base case
-    head.next = reverseBetween(head.next, m - 1, n - 1);
-    return head
+var reverseBetween = function(head, m, n) {
+  if (m == 1) {
+    return reverseN(head, n);
+  }
+  // 前进到反转的起点触发 base case
+  head.next = reverseBetween(head.next, m - 1, n - 1);
+  return head;
 };
 ```
 
@@ -81,15 +79,15 @@ I 题只要相遇就是有环
 
 快慢指针
 
-![fig1](Grokking_four.assets/142_fig1.png)
+![fig1](./images/142_fig1.png)
 
-任意时刻，*fast* 指针走过的距离都为 *slow* 指针的 2 倍。因此，我们有
+任意时刻，_fast_ 指针走过的距离都为 _slow_ 指针的 2 倍。因此，我们有
 
-​                                                        ***a*+(*n*+1)*b*+*nc*=2(*a*+*b*)⟹*a*=*c*+(*n*−1)(*b*+*c*)**
+​ **_a_+(_n_+1)_b_+_nc_=2(_a_+_b_)⟹*a*=_c_+(*n*−1)(_b_+_c_)**
 
 有了 a=c+(n-1)(b+c)a=c+(n−1)(b+c) 的等量关系，我们会发现：从相遇点到入环点的距离加上**n−1** 圈的环长，恰好等于从链表头部到入环点的距离。
 
-因此，当发现slow 与fast 相遇时，我们再额外使用一个指针 ptr。起始，它指向链表头部；随后，它和slow 每次向后移动一个位置。最终，它们会在入环点相遇。
+因此，当发现 slow 与 fast 相遇时，我们再额外使用一个指针 ptr。起始，它指向链表头部；随后，它和 slow 每次向后移动一个位置。最终，它们会在入环点相遇。
 
 ### 题目推荐
 
