@@ -12,6 +12,7 @@
 - [【91 算法-基础篇】01.数组，栈，队列](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-01.md)
 - [【91 算法-基础篇】02.链表](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-02.md)
 - [【91 算法-基础篇】03.树](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-03.md)
+- [【91 算法-基础篇】04.哈希表](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-04.md)
 
 ## 做题记录
 
