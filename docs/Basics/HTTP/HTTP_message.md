@@ -1,6 +1,6 @@
 # HTTP 报文
 
-<img :src="$withBase('/HTTP/message.png')" alt="请求报文">
+<img src="./images/message.png" alt="请求报文">
 
 ## 其他请求头
 

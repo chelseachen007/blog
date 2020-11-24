@@ -1,7 +1,6 @@
-
 # V8
 
-![img](./Chrome/8a34ae8c1a7a0f87e19b1384a025e354.jpg)
+![img](./images/8a34ae8c1a7a0f87e19b1384a025e354.jpg)
 
 ## 函数即对象
 
@@ -27,23 +26,23 @@
 
 如果一个对象的属性过多时，V8 就会采取另外一种存储策略，那就是“**慢属性**”策略，但慢属性的对象内部会有独立的非线性数据结构 (词典) 作为属性存储容器。所有的属性元信息不再是线性存储的，而是**直接保存在属性字典**中。
 
-![img](./Chrome/e8ce990dce53295a414ce79e38149917.jpg)
+![img](./images/e8ce990dce53295a414ce79e38149917.jpg)
 
 #### 内存查看
 
 ```js
-function Foo(property_num,element_num) {
-    //添加可索引属性
-    for (let i = 0; i < element_num; i++) {
-        this[i] = `element${i}`
-    }
-    //添加常规属性
-    for (let i = 0; i < property_num; i++) {
-        let ppt = `property${i}`
-        this[ppt] = ppt
-    }
+function Foo(property_num, element_num) {
+  //添加可索引属性
+  for (let i = 0; i < element_num; i++) {
+    this[i] = `element${i}`;
+  }
+  //添加常规属性
+  for (let i = 0; i < property_num; i++) {
+    let ppt = `property${i}`;
+    this[ppt] = ppt;
+  }
 }
-var bar = new Foo(10,10)
+var bar = new Foo(10, 10);
 ```
 
 Chrome 开发者工具切换到 Memory 标签，然后点击左侧的小圆圈就可以捕获当前的内存快照,查看创建不同数量属性的内存存储区别
@@ -56,10 +55,10 @@ Chrome 开发者工具切换到 Memory 标签，然后点击左侧的小圆圈�
 
 1. 把第一个表达式 (AdditiveExpression) 的值赋值给左引用 (lref)。
 2. 使用 GetValue(lref) 获取左引用 (lref) 的计算结果，并赋值给左值。
-3. 使用ReturnIfAbrupt(lval) 如果报错就返回错误。
+3. 使用 ReturnIfAbrupt(lval) 如果报错就返回错误。
 4. 把第二个表达式 (MultiplicativeExpression) 的值赋值给右引用 (rref)。
 5. 使用 GetValue(rref) 获取右引用 (rref) 的计算结果，并赋值给 rval。
-6. 使用ReturnIfAbrupt(rval) 如果报错就返回错误。
+6. 使用 ReturnIfAbrupt(rval) 如果报错就返回错误。
 7. 使用 ToPrimitive(lval) 获取左值 (lval) 的计算结果，并将其赋值给左原生值 (lprim)。
 8. 使用 ToPrimitive(rval) 获取右值 (rval) 的计算结果，并将其赋值给右原生值 (rprim)。
 9. 如果 Type(lprim) 和 Type(rprim) 中有一个是 String，则：
@@ -78,9 +77,7 @@ Chrome 开发者工具切换到 Memory 标签，然后点击左侧的小圆圈�
 
 - 如果 vauleOf 和 toString 两个方法都不返回基本类型值，便会触发一个 TypeError 的错误。
 
-  ![img](./Chrome/d150309b74f2c06e66011cf3e177dbaa.jpg)
-
-
+  ![img](./images/d150309b74f2c06e66011cf3e177dbaa.jpg)
 
 在执行加法操作的时候，V8 会通过 ToPrimitve 方法将对象类型转换为原生类型，最后就是两个原生类型相加，
 
@@ -94,18 +91,18 @@ Chrome 开发者工具切换到 Memory 标签，然后点击左侧的小圆圈�
 
 **而由解释型语言编写的程序，在每次运行时都需要通过解释器对程序进行动态解释和执行**。比如 Python、JavaScript 等都属于解释型语言。
 
-![image-20200914110124952](./Chrome/image-20200914110124952.png)
+![image-20200914110124952](./images/image-20200914110124952.png)
 
-### V8执行JavaScript 代码
+### V8 执行 JavaScript 代码
 
 #### 生成抽象语法树（AST）和执行上下文
 
-将源代码转换为**抽象语法树**，并生成**执行上下文**。 AST 看成代码的结构化的表示，编译器或者解释器后续的工作都需要依赖于 AST，而不是源代码。AST应用中最著名的一个项目是 Babel。Babel 的工作原理就是先将 ES6 源码转换为 AST，然后再将 ES6 语法的 AST 转换为 ES5 语法的 AST，最后利用 ES5 的 AST 生成 JavaScript 源代码。
+将源代码转换为**抽象语法树**，并生成**执行上下文**。 AST 看成代码的结构化的表示，编译器或者解释器后续的工作都需要依赖于 AST，而不是源代码。AST 应用中最著名的一个项目是 Babel。Babel 的工作原理就是先将 ES6 源码转换为 AST，然后再将 ES6 语法的 AST 转换为 ES5 语法的 AST，最后利用 ES5 的 AST 生成 JavaScript 源代码。
 
 1. **分词（tokenize），又称为词法分析**，其作用是将一行行的源码拆解成一个个 token。
 
 ```js
-var myName = 'xiaopang'
+var myName = "xiaopang";
 // token : var 、 myName 、= 、 'xiaopang'
 ```
 
@@ -113,9 +110,9 @@ var myName = 'xiaopang'
 
 #### 生成字节码
 
-![image-20200914110829819](./Chrome/image-20200914110829819.png)
+![image-20200914110829819](./images/image-20200914110829819.png)
 
-由于执行机器码的效率是非常高效的，所以早期chorme 直接将AST转化成机器码进行保存。
+由于执行机器码的效率是非常高效的，所以早期 chorme 直接将 AST 转化成机器码进行保存。
 
 但机器码占用内存过大，为了解决内存占用问题，V8 团队大幅重构了引擎架构，引入字节码。
 
@@ -127,13 +124,13 @@ var myName = 'xiaopang'
 
 ## 微任务
 
-MutationObserver和IntersectionObserver两个性质应该差不多。我这里简称ob。ob是一个微任务，通过浏览器的requestIdleCallback，在浏览器每一帧的空闲时间执行ob监听的回调，该监听是不影响主线程的，但是回调会阻塞主线程。当然有一个限制，如果100ms内主线程一直处于未空闲状态，那会强制触发ob。
+MutationObserver 和 IntersectionObserver 两个性质应该差不多。我这里简称 ob。ob 是一个微任务，通过浏览器的 requestIdleCallback，在浏览器每一帧的空闲时间执行 ob 监听的回调，该监听是不影响主线程的，但是回调会阻塞主线程。当然有一个限制，如果 100ms 内主线程一直处于未空闲状态，那会强制触发 ob。
 
 ### 协程
 
 协程是一种比线程更加轻量级的存在。你可以把协程看成是跑在线程上的任务，一个线程上可以存在多个协程，但是在线程上同时只能执行一个协程。最重要的是，协程不是被操作系统内核所管理，而完全是由程序所控制（也就是在用户态执行）。这样带来的好处就是性能得到了很大的提升，不会像线程切换那样消耗资源。
 
-### Async和await的优化
+### Async 和 await 的优化
 
 性能提升取决于以下三个因素：
 
@@ -141,24 +138,24 @@ MutationObserver和IntersectionObserver两个性质应该差不多。我这里�
 - Orinoco，新的垃圾回收器 🚛
 - 一个 Node.js 8 的 bug 导致 await 跳过了一些微 tick（microticks） 🐛
 
-#### bug优化
+#### bug 优化
 
 ```js
 const p = Promise.resolve();
 
 (async () => {
-  await p; console.log('after:await');
+  await p;
+  console.log("after:await");
 })();
 
-p.then(() => console.log('tick:a'))
- .then(() => console.log('tick:b'));
+p.then(() => console.log("tick:a")).then(() => console.log("tick:b"));
 ```
 
-通过判断 await 后的 是否是一个Promise，如果是的话直接返回，可以节省一个Promise，只封装必要的 promise。这个操作在值已经是 promose 的情况下可以省去一个额外的 promise 和两个微任务。
+通过判断 await 后的 是否是一个 Promise，如果是的话直接返回，可以节省一个 Promise，只封装必要的 promise。这个操作在值已经是 promose 的情况下可以省去一个额外的 promise 和两个微任务。
 
-#### 去除了throwaway
+#### 去除了 throwaway
 
-![image-20200928100913316](Chrome_V8.assets/image-20200928100913316.png)
+![image-20200928100913316](./images/image-20200928100913316.png)
 
 [「译」更快的 async 函数和 promises](https://mp.weixin.qq.com/s?__biz=MzUzNjk5MTE1OQ==&mid=2247488356&idx=1&sn=2f17461b11dcf6a8365a2488d7e25945&chksm=faec97bccd9b1eaa108a03c3bfde45944a3b6b766154bc1f2b67706decfbcc7300b03eb54d46&mpshare=1&scene=1&srcid=09285usyMosTYJPNjtBC8aBC&sharer_sharetime=1601257327974&sharer_shareid=12302458a55e6884c1bb1c47ff44880d&key=a5121dd1fbb299a4574b60008a7892715083167693e8e0e07a0ea940e7a39419e895c9b1b0ebc446a53ca95dcaf5eab4b6a36628ad873096de1719747022b983bf12d8b2773a40f206a5271e184c1cd0cf893260303fd38da8e48d9e6ac7b8f577ddd2ec049a147d51b1de5beafec1a50a681a0466cebea7415e7d883c9fef58&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=AXMYmDf2JEdNIm7d3TuwrRs%3D&pass_ticket=f%2BX7SDG7or8VWYKhna8jJ88M0v3Zv9Whtox6Rc4ZhhErghEtyOr5KNMpaF%2BaWmW3&wx_header=0)
 
@@ -168,15 +165,15 @@ p.then(() => console.log('tick:a'))
 
 不过有些数据被使用之后，可能就不再需要了，我们把这种数据称为**垃圾数据**。如果这些垃圾数据一直保存在内存中，那么内存会越用越多，所以我们需要**对这些垃圾数据进行回收，以释放有限的内存空间**。
 
-JS有垃圾处理器，所以无需手动回收内存，而是由垃圾处理器自动处理。譬如对于那些执行完毕的函数，如果没有外部引用（被引用的话会形成闭包），则会回收。
+JS 有垃圾处理器，所以无需手动回收内存，而是由垃圾处理器自动处理。譬如对于那些执行完毕的函数，如果没有外部引用（被引用的话会形成闭包），则会回收。
 
 ### 回收规则
 
 常用的两种垃圾回收规则是：**标记清除** 和 **引用计数**
 
-Javascript引擎基础GC方案是：标记清除 
+Javascript 引擎基础 GC 方案是：标记清除
 
-#### 标记清除 
+#### 标记清除
 
 简单解释为：
 
@@ -185,28 +182,26 @@ Javascript引擎基础GC方案是：标记清除
 
 #### 引用计数
 
-**跟踪记录每个值被引用的次数，当一个值被引用时，次数`+1`，减持时`-1`，下次垃圾回收器会回收次数为`0`的值的内存（当然了，容易出循环引用的bug）**
+**跟踪记录每个值被引用的次数，当一个值被引用时，次数`+1`，减持时`-1`，下次垃圾回收器会回收次数为`0`的值的内存（当然了，容易出循环引用的 bug）**
 
 ### 调用栈中的数据回收
 
 ```js
-function foo(){
-    var a = 1
-    var b = {name:" 测试 "}
-    function showName(){
-      var c = " 测试一下 "
-      var d = {name:" 测试一下 "}
-    }
-    showName()
+function foo() {
+  var a = 1;
+  var b = { name: " 测试 " };
+  function showName() {
+    var c = " 测试一下 ";
+    var d = { name: " 测试一下 " };
+  }
+  showName();
 }
-foo()
+foo();
 ```
 
+js 引擎 将 showName 函数 的执行上下文 压入 调用栈的同时，还有一个**记录当前执行状态的指针（称为 ESP）**，指向调用栈中 showName 函数的执行上下文。
 
-
-js引擎 将showName 函数 的执行上下文 压入 调用栈的同时，还有一个**记录当前执行状态的指针（称为 ESP）**，指向调用栈中showName 函数的执行上下文。
-
-当函数执行完毕后，JavaScript 就会将指针下移，同时进行showName 函数执行上下文的销毁
+当函数执行完毕后，JavaScript 就会将指针下移，同时进行 showName 函数执行上下文的销毁
 
 所以说，当一个函数执行结束之后，**JavaScript 引擎会通过向下移动 ESP 来销毁该函数保存在栈中的执行上下文**。
 
@@ -223,7 +218,7 @@ js引擎 将showName 函数 的执行上下文 压入 调用栈的同时，还�
 
 在 V8 中会把堆分为**新生代**和**老生代**两个区域，**新生代中存放的是生存时间短的对象，老生代中存放的生存时间久的对象**。
 
-新生区通常只支持 1～8M 的容量，而老生区支持的容量就大很多了。对于这两块区域，V8 分别使用两个不同的垃圾回收器，以便更高效地实施垃圾回收。
+新生区通常只支持 1 ～ 8M 的容量，而老生区支持的容量就大很多了。对于这两块区域，V8 分别使用两个不同的垃圾回收器，以便更高效地实施垃圾回收。
 
 - **副垃圾回收器，主要负责新生代的垃圾回收。**
 - **主垃圾回收器，主要负责老生代的垃圾回收。**
@@ -259,7 +254,7 @@ js引擎 将showName 函数 的执行上下文 压入 调用栈的同时，还�
 主垃圾回收器 考虑晋升的都是大对象，复制会花费时间多，所以采用**标记 - 清除（Mark-Sweep）**的算法进行垃圾回收。
 
 1. 标记阶段从一组根元素开始，递归遍历这组根元素，在这个遍历过程中，能到达的元素称为**活动对象**，没有到达的元素就可以判断为**垃圾数据**。
-2.  垃圾清除阶段
+2. 垃圾清除阶段
 3. **标记 - 整理（Mark-Compact）**：因为清除算法会产生大量不连续的内存碎片，所以整理算法在标记后不直接清除，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存。
 
 ### **优化策略**
@@ -268,19 +263,19 @@ js引擎 将showName 函数 的执行上下文 压入 调用栈的同时，还�
 
 所谓并行回收，是指垃圾回收器在主线程上执行的过程中，还会开启多个协助线程，同时执行同样的回收工作，其工作模式如下图所示：
 
-![img](Chrome_V8.assets/00537bdadac433a57c77c56c5cc33c1f.jpg)
+![img](./images/00537bdadac433a57c77c56c5cc33c1f.jpg)
 
 #### 增量回收
 
-javascript的GC策略无法避免一个问题： **GC时，停止响应其他操作**。这种行为叫做**全停顿（Stop-The-World）**。
+javascript 的 GC 策略无法避免一个问题： **GC 时，停止响应其他操作**。这种行为叫做**全停顿（Stop-The-World）**。
 
 为了降低老生代的垃圾回收而造成的卡顿，V8 将标记过程分为一个个的子标记过程，同时让垃圾回收标记和 JavaScript 应用逻辑交替进行，直到标记阶段完成，我们把这个算法称为**增量标记（Incremental Marking）算法**。
 
-![image-20200911171612153](./Chrome/image-20200911171612153.png)
+![image-20200911171612153](./images/image-20200911171612153.png)
 
 使用增量标记算法，可以把一个完整的垃圾回收任务拆分为很多小的任务，这些小的任务执行时间比较短，可以穿插在其他的 JavaScript 任务中间执行，这样当执行上述动画效果时，就不会让用户因为垃圾回收任务而感受到页面的卡顿了。
 
-这有和React 通过Fiber更新策略有着异曲同工之妙。
+这有和 React 通过 Fiber 更新策略有着异曲同工之妙。
 
 ##### 如何实现
 
@@ -301,7 +296,7 @@ javascript的GC策略无法避免一个问题： **GC时，停止响应其他操
 
 #### 并发回收机制
 
-所谓并发回收，是指**主线程在执行 JavaScript 的过程中，辅助线程能够在后台完成执行垃圾回收的操作**。并发标记的流程大致如下图所示：![img](Chrome_V8.assets/157052aa087c840f5f58a7708f30bdc2.jpg)
+所谓并发回收，是指**主线程在执行 JavaScript 的过程中，辅助线程能够在后台完成执行垃圾回收的操作**。并发标记的流程大致如下图所示：![img](./images/157052aa087c840f5f58a7708f30bdc2.jpg)
 
 并发回收是这三种技术中最难的一种，这主要由以下两个原因导致的：
 
@@ -311,7 +306,7 @@ javascript的GC策略无法避免一个问题： **GC时，停止响应其他操
 
 不过，这三种技术在实际使用中，并不是单独的存在，通常会将其融合在一起使用，V8 的主垃圾回收器就融合了这三种机制，来实现垃圾回收，那它具体是怎么工作的呢？你可以先看下图：
 
-![img](Chrome_V8.assets/7b8b901cb2eb575bb8907e1ad7dc1842.jpg)
+![img](./images/7b8b901cb2eb575bb8907e1ad7dc1842.jpg)
 
 可以看出来，主垃圾回收器同时采用了这三种策略：
 
@@ -324,23 +319,23 @@ javascript的GC策略无法避免一个问题： **GC时，停止响应其他操
 #### 合理应用闭包
 
 ```js
-function foo(){  
-    var temp_object = new Object()
-    temp_object.x = 1
-    temp_object.y = 2
-    temp_object.array = new Array(200000)
-    /**
-    *   使用temp_object
-    */
-   let closure = temp_object.x
-    return function(){
-        console.log(temp_object.x) // 错误：闭包引用的整个temp 对象
-        console.log(closure); //正确：闭包引用的仅仅是一个 closure 的变量
-    }
+function foo() {
+  var temp_object = new Object();
+  temp_object.x = 1;
+  temp_object.y = 2;
+  temp_object.array = new Array(200000);
+  /**
+   *   使用temp_object
+   */
+  let closure = temp_object.x;
+  return function() {
+    console.log(temp_object.x); // 错误：闭包引用的整个temp 对象
+    console.log(closure); //正确：闭包引用的仅仅是一个 closure 的变量
+  };
 }
 ```
 
-#### JS引用DOM
+#### JS 引用 DOM
 
 **只有同时满足 DOM 树和 JavaScript 代码都不引用某个 DOM 节点，该节点才会被作为垃圾进行回收。**
 
@@ -356,7 +351,4 @@ function foo(){
 
 那就是频繁使用大的临时变量，导致了新生代空间很快被装满，从而频繁触发垃圾回收。频繁的垃圾回收操作会让你感觉到页面卡顿。
 
-
-
 为了解决频繁的垃圾回收的问题，你可以考虑将这些临时变量设置为全局变量。
-

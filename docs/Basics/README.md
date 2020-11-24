@@ -9,7 +9,7 @@
 
 ## 主动学习和被动学习
 
-<img :src="$withBase('ConeofLearning.png')" alt="ConeofLearning">
+<img src="./images/ConeofLearning.jpg" alt="ConeofLearning">
 
 人的学习分为「被动学习」和「主动学习」两个层次。
 

@@ -23,7 +23,7 @@ JS 有两种类型，分别是基本类型和引用类型。
 ### typeof
 
 typeof 可以返回一个表示数据类型的字符串，返回结果包括： `number` , `boolean` , `string` , `symbol` , `object` , `undefined` , `function` 7 种数据类型 ，但是不能判断 null 和 array（也属于 object）等
-<img :src="$withBase('/JavaScript/typeof.png')" alt="typeof">
+<img src="./images/typeof.png" alt="typeof">
 
 Array 属于 Object 我可以理解，为什么 null 也是呢？
 

@@ -2,7 +2,7 @@
 
 **实际上变量和函数声明在代码里的位置是不会改变的，而且是在编译阶段被 JavaScript 引擎放入内存中**。
 
-##  编译阶段
+## 编译阶段
 
 1. **变量提升部分的代码。**
 
@@ -16,11 +16,9 @@
 
 #### 解决变量提升
 
-ES6 通过引入let、 const 创建一个块级作用域，解决的变量提升造成的种种问题。
+ES6 通过引入 let、 const 创建一个块级作用域，解决的变量提升造成的种种问题。
 
 实现：在词法环境内部，维护了一个小型栈结构，栈底是函数最外层的变量，进入一个作用域块后，就会把该作用域块内部的变量压到栈顶；当作用域执行完成之后，该作用域的信息就会从栈顶弹出。
-
-
 
 ## 执行阶段
 
@@ -40,7 +38,7 @@ ES6 通过引入let、 const 创建一个块级作用域，解决的变量提升
 
 也就是栈底永远会是全局上下文，遵循着先进后出的机制。
 
-​	![image-20200911112022295](JS_base.assets/image-20200911112022295.png)
+​ ![image-20200911112022295](./images/image-20200911112022295.png)
 
 ### 作用域链
 
@@ -60,24 +58,24 @@ ES6 通过引入let、 const 创建一个块级作用域，解决的变量提升
 
 ```js
 function foo() {
-    var myName = " 极客时间 "
-    let test1 = 1
-    const test2 = 2
-    var innerBar = {
-        getName:function(){
-            console.log(test1)
-            return myName
-        },
-        setName:function(newName){
-            myName = newName
-        }
-    }
-    return innerBar
+  var myName = " 极客时间 ";
+  let test1 = 1;
+  const test2 = 2;
+  var innerBar = {
+    getName: function() {
+      console.log(test1);
+      return myName;
+    },
+    setName: function(newName) {
+      myName = newName;
+    },
+  };
+  return innerBar;
 }
-var bar = foo()
-bar.setName(" 极客邦 ")
-bar.getName()
-console.log(bar.getName())
+var bar = foo();
+bar.setName(" 极客邦 ");
+bar.getName();
+console.log(bar.getName());
 ```
 
 **根据词法作用域的规则，内部函数 getName 和 setName 总是可以访问它们的外部函数 foo 中的变量**，所以当 innerBar 对象返回给全局变量 bar 时，虽然 foo 函数已经执行结束，但是 getName 和 setName 函数依然可以使用 foo 函数中的变量 myName 和 test1。
@@ -90,13 +88,13 @@ console.log(bar.getName())
 
 ```js
 function foo() {
-    var d = 20
-    return function inner(a, b) {
-        const c = a + b + d
-        return c
-    }
+  var d = 20;
+  return function inner(a, b) {
+    const c = a + b + d;
+    return c;
+  };
 }
-const f = foo()
+const f = foo();
 ```
 
 在执行全局代码时，V8 会将全局执行上下文压入到调用栈中，然后进入执行 foo 函数的调用过程，这时候 V8 会为 foo 函数创建执行上下文，执行上下文中包括了变量 d，然后将 foo 函数的执行上下文压入栈中，foo 函数执行结束之后，foo 函数执行上下文从栈中弹出，这时候 foo 执行上下文中的变量 d 也随之被销毁。
@@ -118,20 +116,19 @@ V8 引入预解析器，比如当解析顶层代码的时候，遇到了一个�
 
 **this 是和执行上下文绑定的**，也就是说每个执行上下文中都有一个 this。
 
-- 全局上下文中的this就指向 **window**
+- 全局上下文中的 this 就指向 **window**
 
 - 函数执行上下文中的 this
   - **在全局环境中调用一个函数，函数内部的 this 指向的是全局变量 window。**
   - **通过一个对象来调用其内部的一个方法，该方法的执行上下文中的 this 指向对象本身。**
 
-[this指针的绑定](./)
+[this 指针的绑定](./)
 
-#### this缺点
+#### this 缺点
 
 - 嵌套函数中的 this 不会从外层函数中继承
   - **ES6 中的箭头函数来解决**
   - **声明一个变量 self 用来保存 this**
--  普通函数中的 this 默认指向全局对象 window
-  - 严格模式 ，其函数的执行上下文中的 this 值是 undefined
-  - call、apply、bind
-
+- 普通函数中的 this 默认指向全局对象 window
+- 严格模式 ，其函数的执行上下文中的 this 值是 undefined
+- call、apply、bind

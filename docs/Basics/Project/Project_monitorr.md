@@ -2,7 +2,7 @@
 
 ## 异常类型
 
-### js异常
+### js 异常
 
 - **try-catch**
 
@@ -12,49 +12,53 @@
 
   可捕获异步，信息全面
 
-  *返回true 就不会被上抛了。不然控制台中还会看到错误日志。*
+  _返回 true 就不会被上抛了。不然控制台中还会看到错误日志。_
 
   缺点：无法捕获网络请求错误
 
-- **监听error事件**
+- **监听 error 事件**
 
   ```js
   window.addEventListener('error',() => {}）
   ```
 
-- **Promise错误**
+- **Promise 错误**
 
   ```js
-  window.addEventListener("unhandledrejection", e => {
-    throw e.reason
+  window.addEventListener("unhandledrejection", (e) => {
+    throw e.reason;
   });
   ```
 
 - **Async/await 错误**
 
-  本质就是Promise  监听 unhandledrejection 向上抛出错误即可
+  本质就是 Promise 监听 unhandledrejection 向上抛出错误即可
 
 - **总结**
 
-  我们可以将unhandledrejection事件抛出的异常再次抛出就可以统一通过error事件进行处理了。
+  我们可以将 unhandledrejection 事件抛出的异常再次抛出就可以统一通过 error 事件进行处理了。
 
   ```js
-  window.addEventListener("unhandledrejection", e => {
-    throw e.reason
+  window.addEventListener("unhandledrejection", (e) => {
+    throw e.reason;
   });
-  window.addEventListener('error', args => {
-    console.log('error event:', args);
-    return true;
-  }, 	true);
+  window.addEventListener(
+    "error",
+    (args) => {
+      console.log("error event:", args);
+      return true;
+    },
+    true
+  );
   ```
 
 ### Vue
 
 ```js
 Vue.config.errorHandler = (err, vm, info) => {
-    let { message, name, script = '', line = 0, column = 0, stack } = err
-    console.log('errorHandler:', err)
-}
+  let { message, name, script = "", line = 0, column = 0, stack } = err;
+  console.log("errorHandler:", err);
+};
 ```
 
 ### React
@@ -62,44 +66,42 @@ Vue.config.errorHandler = (err, vm, info) => {
 **错误边界仅可以捕获其子组件的错误**。错误边界无法捕获其自身的错误。如果一个错误边界无法渲染错误信息，则错误会向上冒泡至最接近的错误边界。
 
 ```js
-import React from 'react'; 
+import React from "react";
 export default class ErrorBoundary extends React.Component {
-    constructor(props) {
-      super(props);
-    }
-  
-    componentDidCatch(error, info) {
-      // 发生异常时打印错误
-      console.log('componentDidCatch',error)
-    }
-  
-    render() {
-      return this.props.children;
-    }
+  constructor(props) {
+    super(props);
   }
+
+  componentDidCatch(error, info) {
+    // 发生异常时打印错误
+    console.log("componentDidCatch", error);
+  }
+
+  render() {
+    return this.props.children;
+  }
+}
 ```
-
-
 
 ## 错误上报
 
-### img上报
+### img 上报
 
-动态创建标签方式。因为这种方式**无需加载任何通讯库，而且页面是无需刷新的**。基本上目前包括百度统计 Google统计都是基于这个原理做的埋点。而且可以**通过标签来避免跨域**
+动态创建标签方式。因为这种方式**无需加载任何通讯库，而且页面是无需刷新的**。基本上目前包括百度统计 Google 统计都是基于这个原理做的埋点。而且可以**通过标签来避免跨域**
 
 ```js
-new Image().src = 'http://localhost:7001/monitor/error'
+new Image().src = "http://localhost:7001/monitor/error";
 ```
 
-### ajax上报
+### ajax 上报
 
 ```js
-axios.post('http://localhost:7001/monitor/error')
+axios.post("http://localhost:7001/monitor/error");
 ```
 
 ### 上报数据
 
-![image-20201119171440046](Project_monitorr.assets/image-20201119171440046.png)
+![image-20201119171440046](./images/image-20201119171440046.png)
 
 ```js
 // 分别是错误信息，错误地址，lineno，colno，error.message,error.stack
@@ -107,14 +109,14 @@ axios.post('http://localhost:7001/monitor/error')
 
 ```js
 // 将info信息序列化后上传
-const str = window.btoa(JSON.stringify(info))
-const host = 'http://localhost:7001/monitor/error'
-new Image().src = `${host}?info=${str}`
+const str = window.btoa(JSON.stringify(info));
+const host = "http://localhost:7001/monitor/error";
+new Image().src = `${host}?info=${str}`;
 ```
 
 ## 异常收集
 
-这里使用egg 进行异常收集
+这里使用 egg 进行异常收集
 
 将错误接收并转码写入到日志中
 
@@ -132,7 +134,7 @@ async index() {
 
 ## 日志分析
 
-日志分析的关键在于 webpack打包时将打包完成的sourceMap进行上传
+日志分析的关键在于 webpack 打包时将打包完成的 sourceMap 进行上传
 
 ### webpack Plugins
 
@@ -170,7 +172,6 @@ async upload() {
 }
 ```
 
-### 反序列化Error
+### 反序列化 Error
 
-使用error-stack-parser 将上传的
-
+使用 error-stack-parser 将上传的
