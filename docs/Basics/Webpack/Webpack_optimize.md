@@ -1,22 +1,22 @@
-# Webpack优化
+# Webpack 优化
 
 ## 编译阶段优化
 
 ### 分析准备
 
-#### 速度分析 
+#### 速度分析
 
 ```js
 const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 const smp = new SpeedMeasurePlugin();
 
-let webpackProdOut = webpackMerge(webpackBase, webpackProd)
+let webpackProdOut = webpackMerge(webpackBase, webpackProd);
 if (process.env.SMP_OPEN) {
   webpackProdOut = smp.wrap(webpackProdOut);
 }
 ```
 
-检查那个插件或者loader时间过长，可以配合缓存进行优化
+检查那个插件或者 loader 时间过长，可以配合缓存进行优化
 
 ```cmd
  SMP  ⏱
@@ -42,14 +42,15 @@ html-webpack-plugin took 0.021 secs
 #### 体积分析
 
 ```js
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 
 if (WATCH_ANALYZER) {
-  plugins.push(new BundleAnalyzerPlugin())
+  plugins.push(new BundleAnalyzerPlugin());
 }
 ```
 
-就会生成一个可视化的体积页面，进行分析优化，将大包进行分包，不常更新的包进行CDN引入，或者打成DLL包
+就会生成一个可视化的体积页面，进行分析优化，将大包进行分包，不常更新的包进行 CDN 引入，或者打成 DLL 包
 
 ### 并行构建以提升总体效率
 
@@ -61,28 +62,28 @@ if (WATCH_ANALYZER) {
 
 ```js
 rules: [
-      {
-        test: /\.js$/,
-        include: path.resolve("src"),
-        use: [
-          "thread-loader",
-          // your expensive loader (e.g babel-loader)
-        ]
-      }
-    ]
+  {
+    test: /\.js$/,
+    include: path.resolve("src"),
+    use: [
+      "thread-loader",
+      // your expensive loader (e.g babel-loader)
+    ],
+  },
+];
 ```
 
 #### parallel-webpack
 
 针对与多配置构建。Webpack 的配置文件可以是一个包含多个子配置对象的数组，在执行这类多配置构建时，默认串行执行，而通过 parallel-webpack，就能实现相关配置的并行处理。
 
-### 生产环境关闭sourcemap
+### 生产环境关闭 sourcemap
 
 ### Externals
 
-与CDN配合将大型的库或者框架从打包中移除，使用CDN
+与 CDN 配合将大型的库或者框架从打包中移除，使用 CDN
 
-### DLL打包
+### DLL 打包
 
 在使用`webpack`进行打包时候，对于依赖的第三方库，比如`vue`，`vuex`等这些不会修改的依赖，我们可以让它和我们自己编写的代码分开打包，这样做的好处是每次更改我本地代码的文件的时候，`webpack`只需要打包我项目本身的文件代码，而不会再去编译第三方库。
 
@@ -103,44 +104,46 @@ rules: [
 ```js
 //* webpack.dll.js
 
-const path = require('path');
-const webpack = require('webpack');
+const path = require("path");
+const webpack = require("webpack");
 module.exports = {
-  mode: 'production',
+  mode: "production",
   entry: {
-    vendors: ['lodash'],
+    vendors: ["lodash"],
   },
   output: {
-    filename: '[name].dll.js',
-    path: path.resolve(__dirname, '../dll'),
-    library: '[name]'
+    filename: "[name].dll.js",
+    path: path.resolve(__dirname, "../dll"),
+    library: "[name]",
   },
   plugins: [
     new webpack.DllPlugin({
-      name: '[name]',
-      path: path.resolve(__dirname, '../dll/[name].manifest.json')
-    })
-  ]
-}
+      name: "[name]",
+      path: path.resolve(__dirname, "../dll/[name].manifest.json"),
+    }),
+  ],
+};
 ```
-
-
 
 ```js
 // webpack.config.base.js
-const files = fs.readdirSync(path.resolve(__dirname, '../dll'));
-files.forEach(file => {
+const files = fs.readdirSync(path.resolve(__dirname, "../dll"));
+files.forEach((file) => {
   if (/.*\.dll.js/.test(file)) {
-    plugins.push(new AddAssetHtmlWebpackPlugin({
-      filepath: path.resolve(__dirname, '../dll', file)
-    }))
+    plugins.push(
+      new AddAssetHtmlWebpackPlugin({
+        filepath: path.resolve(__dirname, "../dll", file),
+      })
+    );
   }
   if (/.*\.manifest.json/.test(file)) {
-    plugins.push(new webpack.DllReferencePlugin({
-      manifest: path.resolve(__dirname, '../dll', file)
-    }))
+    plugins.push(
+      new webpack.DllReferencePlugin({
+        manifest: path.resolve(__dirname, "../dll", file),
+      })
+    );
   }
-})
+});
 ```
 
 ### IgnorePlugin
@@ -178,55 +181,49 @@ Split Chunks 有诸多优点，例如有利于缓存命中、有利于运行时�
 大模块不提取，重复打包，影响较大
 
 ```js
-  optimization: {
-    splitChunks: {
-      // 自动提取所有公共模块到单独 bundle
-      chunks: 'all'
-    }
+optimization: {
+  splitChunks: {
+    // 自动提取所有公共模块到单独 bundle
+    chunks: "all";
   }
+}
 ```
 
 除此之外，splitChunks 还支持很多高级的用法，可以实现各种各样的分包策略，这些我们可以在 [文档](https://webpack.js.org/plugins/split-chunks-plugin/) 中找到对应的介绍。
 
 ### 代码压缩
 
-webpack4 已经默认支持 ES6语法的压缩。所以不用uglyjs 该用webpack官方的 terser-webpack-plugin
+webpack4 已经默认支持 ES6 语法的压缩。所以不用 uglyjs 该用 webpack 官方的 terser-webpack-plugin
 
 ```js
 // ./webpack.config.js
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
-const TerserWebpackPlugin = require('terser-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCssAssetsWebpackPlugin = require("optimize-css-assets-webpack-plugin");
+const TerserWebpackPlugin = require("terser-webpack-plugin");
 module.exports = {
-  mode: 'none',
+  mode: "none",
   entry: {
-    main: './src/index.js'
+    main: "./src/index.js",
   },
   output: {
-    filename: '[name].bundle.js'
+    filename: "[name].bundle.js",
   },
   optimization: {
     minimizer: [
       new TerserWebpackPlugin(),
-      new OptimizeCssAssetsWebpackPlugin()
-    ]
+      new OptimizeCssAssetsWebpackPlugin(),
+    ],
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader'
-        ]
-      }
-    ]
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+    ],
   },
-  plugins: [
-    new MiniCssExtractPlugin()
-  ]
-}
-
+  plugins: [new MiniCssExtractPlugin()],
+};
 ```
 
 #### TerserWebpackPlugin 原理
@@ -254,8 +251,6 @@ if (cache.isEnabled()) {
 }
 ```
 
-
-
 ### 利用缓存
 
 #### babel-loader
@@ -282,7 +277,7 @@ if (cache.isEnabled()) {
         ],
 ```
 
-请注意，保存和读取这些缓存文件会有一些时间开销，所以请只对性能开销较大的 `loader` 使用此 `loader`。可以结合smp分析
+请注意，保存和读取这些缓存文件会有一些时间开销，所以请只对性能开销较大的 `loader` 使用此 `loader`。可以结合 smp 分析
 
 #### hard-source-webpack-plugin
 
@@ -298,22 +293,23 @@ module.exports = {
 }
 ```
 
-构建速度提升50%以上 `webpack5`中会内置`hard-source-webpack-plugin`。
+构建速度提升 50%以上 `webpack5`中会内置`hard-source-webpack-plugin`。
 
 ### 动态导入
 
-require.ensure（vue-router配置路由，使用webpack的require.ensure技术，也可以实现按需加载。）
+require.ensure（vue-router 配置路由，使用 webpack 的 require.ensure 技术，也可以实现按需加载。）
 
-#### vue异步组件技术
+#### vue 异步组件技术
 
 ```js
- component: resolve => require(['../components/PromiseDemo'], resolve)
+component: (resolve) => require(["../components/PromiseDemo"], resolve);
 ```
 
-#### es提案的import()
+#### es 提案的 import()
 
 ```js
-const Home =  () => import(/* webpackChunkName: 'ImportFuncDemo' */ '@/components/home')
+const Home = () =>
+  import(/* webpackChunkName: 'ImportFuncDemo' */ "@/components/home");
 ```
 
 ##### 魔法注释
@@ -322,13 +318,12 @@ const Home =  () => import(/* webpackChunkName: 'ImportFuncDemo' */ '@/component
 
 但是如果你还是需要给这些 bundle 命名的话，就可以使用 Webpack 所特有的魔法注释去实现。
 
-#### webpack	
+#### webpack
 
 ```js
- component: r => require.ensure([], () => r(require('@/components/home')), 'demo')
+component: (r) =>
+  require.ensure([], () => r(require("@/components/home")), "demo");
 ```
-
-
 
 ## webpack5
 
@@ -338,7 +333,7 @@ const Home =  () => import(/* webpackChunkName: 'ImportFuncDemo' */ '@/component
 
 #### Cache 基本配置
 
-在 Webpack 4 中，cache 只是单个属性d的配置，所对应的赋值为 true 或 false，用来代表是否启用缓存，或者赋值为对象来表示在构建中使用的缓存对象。而在 Webpack 5 中，cache 配置除了原本的 true 和 false 外，还增加了许多子配置项，例如：
+在 Webpack 4 中，cache 只是单个属性 d 的配置，所对应的赋值为 true 或 false，用来代表是否启用缓存，或者赋值为对象来表示在构建中使用的缓存对象。而在 Webpack 5 中，cache 配置除了原本的 true 和 false 外，还增加了许多子配置项，例如：
 
 - cache.**type**：缓存类型。值为 'memory'或‘filesystem’，分别代表基于内存的临时缓存，以及基于文件系统的持久化缓存。在选择 filesystem 的情况下，下面介绍的其他属性生效。
 - cache.**cacheDirectory**：缓存目录。默认目录为 node_modules/.cache/webpack。
@@ -349,7 +344,7 @@ const Home =  () => import(/* webpackChunkName: 'ImportFuncDemo' */ '@/component
 
 Webpack 5 会跟踪每个模块的依赖项：fileDependencies、contextDependencies、missingDependencies。当模块本身或其依赖项发生变更时，Webpack 能找到所有受影响的模块，并重新进行构建处理。
 
-这里需要注意的是，对于 node_modules 中的第三方依赖包中的模块，出于性能考虑，Webpack 不会跟踪具体模块文件的内容和修改时间，而是依据依赖包里package.json 的 name 和 version 字段来判断模块是否发生变更。因此，单纯修改 node_modules 中的模块内容，在构建时不会触发缓存的失效。
+这里需要注意的是，对于 node_modules 中的第三方依赖包中的模块，出于性能考虑，Webpack 不会跟踪具体模块文件的内容和修改时间，而是依据依赖包里 package.json 的 name 和 version 字段来判断模块是否发生变更。因此，单纯修改 node_modules 中的模块内容，在构建时不会触发缓存的失效。
 
 #### 全局的缓存失效
 
@@ -357,7 +352,7 @@ Webpack 5 会跟踪每个模块的依赖项：fileDependencies、contextDependen
 
 ##### buildDependencies
 
-第一种配置是cache.buildDependencies，用于指定可能对构建过程产生影响的依赖项。
+第一种配置是 cache.buildDependencies，用于指定可能对构建过程产生影响的依赖项。
 
 它的默认选项是{defaultWebpack: ["webpack/lib"]}。这一选项的含义是，当 node_modules 中的 Webpack 或 Webpack 的依赖项（例如 watchpack 等）发生变化时，当前的构建缓存即失效。
 
@@ -371,7 +366,7 @@ Webpack 5 会跟踪每个模块的依赖项：fileDependencies、contextDependen
 
 缓存的名称除了作为默认的缓存目录下的子目录名称外，也起到区分缓存数据的作用。例如，可以传入 cache: {name: process.env.NODE_ENV}。这里有两点需要补充说明：
 
-name 的特殊性：与 version 或 buildDependencies 等配置不同，name 在默认情况下是作为缓存的子目录名称存在的，因此可以利用 name保留多套缓存。在 name 切换时，若已存在同名称的缓存，则可以复用之前的缓存。与之相比，当其他全局配置发生变化时，会直接将之前的缓存失效，即使切换回之前已缓存过的设置，也会当作无缓存处理。
+name 的特殊性：与 version 或 buildDependencies 等配置不同，name 在默认情况下是作为缓存的子目录名称存在的，因此可以利用 name 保留多套缓存。在 name 切换时，若已存在同名称的缓存，则可以复用之前的缓存。与之相比，当其他全局配置发生变化时，会直接将之前的缓存失效，即使切换回之前已缓存过的设置，也会当作无缓存处理。
 
 当 cacheLocation 配置存在时，将忽略 name 的缓存目录功能，上述多套缓存复用的功能也将失效。
 
@@ -415,13 +410,13 @@ Webpack 5 中增加了对一些 CommonJS 风格模块代码的静态分析功功
 
 ### Vite
 
-![Drawing 4.png](Webpack_optimize.assets/Ciqc1F9yo_GAWATTAACYUvrJKL4148.png)
+![Drawing 4.png](./images/Ciqc1F9yo_GAWATTAACYUvrJKL4148.png)
 
 详细运行查看[Vite](./Vue_vite.md)
 
 ### Snowpack
 
-Snowpack 是另一个比较知名的无包构建工具，从整体功能来说和上述 Vite工具提供的功能大致相同，主要差异点在 Snowpack 在生产环境下默认使用无包构建而非打包模式（可以通过引入打包插件例如 @snowpack/plugin-webpack 来实现打包模式）
+Snowpack 是另一个比较知名的无包构建工具，从整体功能来说和上述 Vite 工具提供的功能大致相同，主要差异点在 Snowpack 在生产环境下默认使用无包构建而非打包模式（可以通过引入打包插件例如 @snowpack/plugin-webpack 来实现打包模式）
 
 ### 无包构建与打包构建
 
@@ -433,5 +428,5 @@ Snowpack 是另一个比较知名的无包构建工具，从整体功能来说�
 
 缺点：
 
-- 浏览器网络请求数量剧增，尤其对不支持的HTTP2.0的服务器
+- 浏览器网络请求数量剧增，尤其对不支持的 HTTP2.0 的服务器
 - 浏览器兼容性

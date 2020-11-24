@@ -1,4 +1,4 @@
-# Webpack实现
+# Webpack 实现
 
 ## 流程提炼
 
@@ -75,12 +75,12 @@ new CommonJsPlugin(options.module).apply(compiler);
 
 优化阶段在 seal 函数中共有 12 个主要的处理过程，如下图所示：
 
-![image (4).png](Webpack_principle.assets/Ciqc1F9bGtqAJo4uAABnYGwsyYs218.png)
+![image (4).png](./images/Ciqc1F9bGtqAJo4uAABnYGwsyYs218.png)
 
 每个过程都暴露了相应的 Hooks，分别如下:
 
 - seal、needAdditionalSeal、unseal、afterSeal：分别在 seal 函数的起始和结束的位置触发。
-- optimizeDependencies、afterOptimizeDependencies：触发优化依赖的插件执行，例如FlagDependencyUsagePlugin。
+- optimizeDependencies、afterOptimizeDependencies：触发优化依赖的插件执行，例如 FlagDependencyUsagePlugin。
 - beforeChunks、afterChunks：分别在生成 Chunks 的过程的前后触发。
 - optimize：在生成 chunks 之后，开始执行优化处理的阶段触发。
 - optimizeModule、afterOptimizeModule：在优化模块过程的前后触发。
