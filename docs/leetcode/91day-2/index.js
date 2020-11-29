@@ -6,7 +6,6 @@ const walk = (path) =>
     fs.readdirSync(path).reduce((files, file) => {
         // const filePath = path + "/" + file;
         const stat = fs.statSync(file);
-
         if (stat.isFile()) {
             if (/(.*)\.(md)/.test(file)) {
                 return files.concat(file);
@@ -92,7 +91,6 @@ const getReadme = () => {
             const prev = await pre
             return `${prev} \n - [x]  [${title}](./${v.file}) `
         }, '')
-        console.log(mulu)
         fs.writeFileSync("./mulu.md", mulu);
     };
     handleFetchQueue(func, fileList, max, callback);
