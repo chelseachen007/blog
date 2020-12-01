@@ -283,18 +283,13 @@ timing: {
 通过以上数据，我们可以得到几个有用的时间
 
 ```js
-// 重定向耗时
-redirect: timing.redirectEnd - timing.redirectStart,
-// DOM 渲染耗时
-dom: timing.domComplete - timing.domLoading,
-// 页面加载耗时
-load: timing.loadEventEnd - timing.navigationStart,
-// 页面卸载耗时
-unload: timing.unloadEventEnd - timing.unloadEventStart,
-// 请求耗时
-request: timing.responseEnd - timing.requestStart,
-// 获取性能信息时当前时间
-time: new Date().getTime(),
+DNS 查询耗时 ：domainLookupEnd - domainLookupStart
+TCP 链接耗时 ：connectEnd - connectStart
+request 请求耗时 ：responseEnd - responseStart
+解析 dom 树耗时 ： domComplete - domInteractive
+白屏时间 ：responseStart - navigationStart
+domready 时间 ：domContentLoadedEventEnd - navigationStart
+onload 时间 ：loadEventEnd – navigationStart
 ```
 
 ### 业务层

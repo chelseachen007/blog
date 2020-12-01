@@ -163,6 +163,94 @@ off" 或 0 - 关闭规则
 
 "error" 或 2 - 开启规则，使用错误级别的错误：error (当被触发的时候，程序会退出)
 
+```js
+// http://eslint.org/docs/user-guide/configuring
+// .eslintrc.js
+module.exports = {
+  //此项是用来告诉eslint找当前配置文件不能往父级查找
+  root: true,
+  //此项是用来指定eslint解析器的，解析器必须符合规则，babel-eslint解析器是对babel解析器的包装使其与ESLint解析
+  parser: 'babel-eslint',
+  parserOptions: {
+    sourceType: 'module'
+  },
+  env: {
+    browser: true,
+   // "node": true,
+    //"commonjs": true,
+    //"es6": true,
+    //"amd": true
+  },
+  // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
+  // 此项是用来配置标准的js风格，
+  extends: 'standard',
+   // 此项是用来提供插件的，插件名称省略了eslint-plugin-，
+  plugins: [
+    'html'
+  ],
+  // add your custom rules here
+  'rules': {
+    'prettier/prettier': ['error'],// [error,wran,off]
+    // allow paren-less arrow functions
+    'arrow-parens': 0,
+    // allow async-await
+    'generator-star-spacing': 0,
+    // allow debugger during development
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    "no-irregular-whitespace": 0,//不能有不规则的空格
+    "no-mixed-operators": 0,
+    "sort-vars": 0,//变量声明时排序
+    "prefer-const": 0,//首选const
+    "newline-after-var": 0,//变量声明后是否需要空一行
+    "quotes": [0, "single"],//引号类型 `` "" ''
+    "quote-props":[0, "always"],//对象字面量中的属性名是否强制双引号
+    "array-bracket-spacing": [2, "never"],//是否允许非空数组里面有多余的空格
+    "arrow-spacing": 0,//=>的前/后括号
+    "spaced-comment": 0,//注释风格要不要有空格什么的
+    "eol-last": 0,//文件以单一的换行符结束
+    "no-extra-semi": 0,//禁止多余的冒号
+    "no-inline-comments": 0,//禁止行内备注
+    "no-else-return": 0,//如果if语句里面有return,后面不能跟else语句
+    "comma-dangle": [0, "never"],//对象字面量项尾不能有逗号
+    "comma-spacing": 0,//逗号前后的空格
+    "func-names": 0,//函数表达式必须有名字
+    "guard-for-in": 0,//for in循环要用if语句过滤
+    "handle-callback-err": 0,//nodejs 处理错误
+    "space-after-keywords": [0, "always"],//关键字后面是否要空一格
+    "space-before-blocks": [0, "always"],//不以新行开始的块{前面要不要有空格
+    "max-len": [0, 80, 4],//字符串最大长度
+    "no-unneeded-ternary":0,
+    "camelcase": 'off',
+    '@typescript-eslint/camelcase': 0,
+    "no-self-assign": 0,
+    "no-delete-var": 1,//不能对var声明的变量使用delete操作符
+    "no-div-regex": 1,//不能使用看起来像除法的正则表达式/=foo/
+    "indent": [2, 4],//缩进风格
+    "semi-spacing": [2, {"before": false, "after": false}],//分号前后空格
+    "no-dupe-keys": 2,//在创建对象字面量时不允许键重复 {a:1,a:1}
+    "no-duplicate-case": 2,//switch中的case标签不能重复
+    "comma-style": [2, "last"],//逗号风格，换行时在行首还是行尾
+    "no-ex-assign": 2,//禁止给catch语句中的异常参数赋值
+    "no-extend-native": 2,//禁止扩展native对象
+    "no-extra-bind": 2,//禁止不必要的函数绑定
+    "no-extra-boolean-cast": 2,//禁止不必要的bool转换
+    "no-extra-parens": 2,//禁止非必要的括号
+    "eqeqeq": 2,//必须使用全等
+    "no-implied-eval": 2,//禁止使用隐式eval
+    "no-inner-declarations": [2, "functions"],//禁止在块语句中使用声明（变量或函数）
+    "no-invalid-regexp": 2,//禁止无效的正则表达式
+    "no-invalid-this": 2,//禁止无效的this，只能用在构造器，类，对象字面量
+    "no-dupe-args": 2,//函数参数不能重复
+    "valid-typeof": 2,//必须使用合法的typeof的值
+    "no-with": 2,//禁用with
+    "semi": [2, "always"],//语句强制分号结尾
+    "key-spacing": [2, { "beforeColon": false, "afterColon": true }],//对象字面量中冒号的前后空格
+  }
+}
+```
+
+
+
 ## Prettier
 
 VS Code 的 [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) 
