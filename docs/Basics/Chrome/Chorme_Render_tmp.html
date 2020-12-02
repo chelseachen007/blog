@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chorme_Render.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%E5%85%B3%E9%94%AE%E6%B8%B2%E6%9F%93%E8%B7%AF%E5%BE%84">关键渲染路径</h1>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/image-20200908170237110.png" alt="image-20200908170237110"></p>
+<p>关键渲染路径就是将 HTML, CSS, JavaScript 文件转化成漂亮页面的过程</p>
+<h2 id="dom-%E7%94%9F%E6%88%90">DOM 生成</h2>
+<p>为什么要构建 DOM 树呢？<strong>这是因为浏览器无法直接理解和使用 HTML，所以需要将 HTML 转换为浏览器能够理解的结构——DOM 树</strong>。</p>
+<p>浏览器会遵守一套定义完善的步骤来处理 HTML 并构建 DOM：</p>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/image-20200909143341459.png" alt="image-20200909143341459"></p>
+<h3 id="%E7%AC%AC%E4%B8%80%E6%AD%A5%E8%BD%AC%E6%8D%A2">第一步：转换</h3>
+<p>浏览器从磁盘或网络读取 HTML 的原始字节，并根据文件的指定编码（例如 UTF-8）将它们转换成字符，</p>
+<pre class="hljs"><code><div>3C 62 6F 64 79 3E 48 65 6C 6C =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>... <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+</div></code></pre>
+<h3 id="%E7%AC%AC%E4%BA%8C%E6%AD%A5-token-%E5%8C%96">第二步: Token 化</h3>
+<p>将字符串转换成 Token，例如：“ <code>&lt;html&gt;</code> ”、“ <code>&lt;body&gt;</code> ”等。Token 中会标识出当前 Token 是“开始标签”或是“结束标签”亦或是“文本”等信息。</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>... <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+</div></code></pre>
+<p>↓</p>
+<p><code>StartTag: html</code> 、 <code>StartTag: head</code> 、 <code>..</code> 、 <code>EndTag: head</code> 、 <code>StartTag: body</code>
+其内部实现是通过维护一个栈，遇到 start 压入栈，遇到 end 弹出，节点与节点之间的关系通过标签的闭合辨别，比如两个相同标签的 start 和 end 内的元素都是其子元素。</p>
+<h3 id="%E7%AC%AC%E4%B8%89%E6%AD%A5%E7%94%9F%E6%88%90%E8%8A%82%E7%82%B9%E5%AF%B9%E8%B1%A1%E5%B9%B6%E6%9E%84%E5%BB%BA-dom">第三步：生成节点对象并构建 DOM</h3>
+<p>事实上，构建 DOM 的过程中，不是等所有 Token 都转换完成后再去生成节点对象，而是一边生成 Token 一边消耗 Token 来生成节点对象。换句话说，每个 Token 被生成后，会立刻消耗这个 Token 创建出节点对象，这些对象分别定义他们的属性和规则。</p>
+<p>因为 HTML 标记定义的就是不同标签之间的关系，这个关系就像是一个树形结构一样</p>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/1460000013662139.png" alt="img"></p>
+<h2 id="%E6%A0%B7%E5%BC%8F%E8%AE%A1%E7%AE%97">样式计算</h2>
+<p>样式计算的目的是为了计算出 DOM 节点中每个元素的具体样式，这个阶段大体可分为三步来完成。</p>
+<h3 id="1-%E6%8A%8A-css-%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%B5%8F%E8%A7%88%E5%99%A8%E8%83%BD%E5%A4%9F%E7%90%86%E8%A7%A3%E7%9A%84%E7%BB%93%E6%9E%84">1. 把 CSS 转换为浏览器能够理解的结构</h3>
+<p>CSS 样式来源主要有三种：</p>
+<ul>
+<li>通过 link 引用的外部 CSS 文件</li>
+<li><code>&lt;style&gt;</code> 标记内的 CSS</li>
+<li>元素的 style 属性内嵌的 CSS</li>
+</ul>
+<p>和 HTML 文件一样，浏览器也是无法直接理解这些纯文本的 CSS 样式，所以<strong>当渲染引擎接收到 CSS 文本时，会执行一个转换操作，将 CSS 文本转换为浏览器可以理解的结构——styleSheets</strong>。</p>
+<blockquote>
+<p>Bytes → characters → tokens → nodes → CSSOM</p>
+</blockquote>
+<p>只需要在控制台中输入 document.styleSheets，然后就看到如下图所示的结构：</p>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/image-20200908170738879.png" alt="image-20200908170738879"></p>
+<h3 id="2-%E8%BD%AC%E6%8D%A2%E6%A0%B7%E5%BC%8F%E8%A1%A8%E4%B8%AD%E7%9A%84%E5%B1%9E%E6%80%A7%E5%80%BC%E4%BD%BF%E5%85%B6%E6%A0%87%E5%87%86%E5%8C%96">2. 转换样式表中的属性值，使其标准化</h3>
+<p><strong>需要将所有值转换为渲染引擎容易理解的、标准化的计算值</strong>，这 个过程就是属性值标准化。</p>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/image-20200908170841875.png" alt="image-20200908170841875"></p>
+<h3 id="3-%E8%AE%A1%E7%AE%97%E5%87%BA-dom-%E6%A0%91%E4%B8%AD%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E5%85%B7%E4%BD%93%E6%A0%B7%E5%BC%8F">3. 计算出 DOM 树中每个节点的具体样式</h3>
+<h4 id="css-%E7%9A%84%E7%BB%A7%E6%89%BF%E8%A7%84%E5%88%99">CSS 的继承规则</h4>
+<p><strong>CSS 继承就是每个 DOM 节点都包含有父节点的样式</strong>。</p>
+<h4 id="css-%E7%9A%84%E5%B1%82%E5%8F%A0%E8%A7%84%E5%88%99"><strong>CSS 的层叠规则</strong></h4>
+<p><strong>层叠是 CSS 的一个基本特征，它是一个定义了如何合并来自多个源的属性值的算法。它在 CSS 处于核心地位，CSS 的全称“层叠样式表”正是强调了这一点</strong>。</p>
+<h3 id="%E6%B3%A8%E6%84%8F">注意</h3>
+<p>不完整的 CSS 是无法使用的，因为 CSS 的每个属性都可以改变 CSSOM。所以必须等 CSSOM 构建完毕才能进入到下一个阶段，哪怕 DOM 已经构建完，它也得等 CSSOM，然后才能进入下一个阶段。</p>
+<p><strong>所以，CSS 的加载速度与构建 CSSOM 的速度将直接影响首屏渲染速度，因此在默认情况下 CSS 被视为阻塞渲染的资源。</strong></p>
+<p>另外，而 JavaScript 引擎在解析 JavaScript 之前，是不知道 JavaScript 是否操纵了 CSSOM 的，所以渲染引擎在遇到 JavaScript 脚本时，不管该脚本是否操纵了 CSSOM，都会执行 CSS 文件下载，解析操作，再执行 JavaScript 脚本。</p>
+<p>所以说 <strong>JavaScript 脚本是依赖样式表</strong>的，这又多了一个阻塞过程。</p>
+<p>现在，我们有 DOM 树和 DOM 树中元素的样式，但这还不足以显示页面，因为我们还不知道 DOM 元素的几何位置信息。<strong>那么接下来就需要计算出 DOM 树中可见元素的几何位置，我们把这个计算过程叫做布局</strong>。</p>
+<h3 id="1-%E5%88%9B%E5%BB%BA%E6%B8%B2%E6%9F%93%E6%A0%91">1. 创建渲染树</h3>
+<p>为了构建渲染树，浏览器大体上完成了下面这些工作：</p>
+<ul>
+<li>遍历 DOM 树中的所有可见节点，并把这些节点加到布局中；</li>
+<li>而不可见的节点会被布局树忽略掉，如 head 标签下面的全部内容，再比如 body.p.span 这个元素，因为它的属性包含 dispaly:none，所以这个元素也没有被包进布局树。</li>
+</ul>
+<h3 id="2-%E5%B8%83%E5%B1%80%E8%AE%A1%E7%AE%97">2. 布局计算</h3>
+<h4 id="%E7%8E%B0%E5%9C%A8%E7%9A%84%E5%B8%83%E5%B1%80%E8%AE%A1%E7%AE%97-layertree">现在的布局计算 LayerTree</h4>
+<p>因为页面中有很多复杂的效果，如一些复杂的 3D 变换、页面滚动，或者使用 z-indexing 做 z 轴排序等，为了更加方便地实现这些效果，<strong>渲染引擎还需要为特定的节点生成专用的图层，并生成一棵对应的图层树</strong>（LayerTree）。</p>
+<h5 id="%E9%82%A3%E4%B9%88%E9%9C%80%E8%A6%81%E6%BB%A1%E8%B6%B3%E4%BB%80%E4%B9%88%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93%E5%BC%95%E6%93%8E%E6%89%8D%E4%BC%9A%E4%B8%BA%E7%89%B9%E5%AE%9A%E7%9A%84%E8%8A%82%E7%82%B9%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84%E5%B1%82%E5%91%A2">那么需要满足什么条件，渲染引擎才会为特定的节点创建新的层呢?</h5>
+<h6 id="%E7%AC%AC%E4%B8%80%E7%82%B9%E6%8B%A5%E6%9C%89%E5%B1%82%E5%8F%A0%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B1%9E%E6%80%A7%E7%9A%84%E5%85%83%E7%B4%A0%E4%BC%9A%E8%A2%AB%E6%8F%90%E5%8D%87%E4%B8%BA%E5%8D%95%E7%8B%AC%E7%9A%84%E4%B8%80%E5%B1%82"><strong>第一点，拥有层叠上下文属性的元素会被提升为单独的一层。</strong></h6>
+<ul>
+<li>档根元素（ <code>&lt;html&gt;</code> ）；</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/position"> <code>position</code> </a> 值为 <code>absolute</code> （绝对定位）或 <code>relative</code> （相对定位）且 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index"> <code>z-index</code> </a> 值不为 <code>auto</code> 的元素；</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/position"> <code>position</code> </a> 值为 <code>fixed</code> （固定定位）或 <code>sticky</code> （粘滞定位）的元素（沾滞定位适配所有移动设备上的浏览器，但老的桌面浏览器不支持）；</li>
+<li>flex (<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/flexbox"> <code>flexbox</code> </a>) 容器的子元素，且 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index"> <code>z-index</code> </a> 值不为 <code>auto</code> ；</li>
+<li>grid (<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid"> <code>grid</code> </a>) 容器的子元素，且 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index"> <code>z-index</code> </a> 值不为 <code>auto</code> ；</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/opacity"> <code>opacity</code> </a> 属性值小于 <code>1</code> 的元素（参见 <a href="http://www.w3.org/TR/css3-color/#transparency">the specification for opacity</a>）；</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mix-blend-mode"> <code>mix-blend-mode</code> </a> 属性值不为 <code>normal</code> 的元素；</li>
+<li>以下任意属性值不为 <code>none</code> 的元素：
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform"> <code>transform</code> </a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter"> <code>filter</code> </a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective"> <code>perspective</code> </a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/clip-path"> <code>clip-path</code> </a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask"> <code>mask</code> </a> / <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-image"> <code>mask-image</code> </a> / <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-border"> <code>mask-border</code> </a></li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/isolation"> <code>isolation</code> </a> 属性值为 <code>isolate</code> 的元素；</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/-webkit-overflow-scrolling"> <code>-webkit-overflow-scrolling</code> </a> 属性值为 <code>touch</code> 的元素；</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/will-change"> <code>will-change</code> </a> 值设定了任一属性而该属性在 non-initial 值时会创建层叠上下文的元素（参考<a href="http://dev.opera.com/articles/css-will-change-property/">这篇文章</a>）；</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/contain"> <code>contain</code> </a> 属性值为 <code>layout</code> 、 <code>paint</code> 或包含它们其中之一的合成值（比如 <code>contain: strict</code> 、 <code>contain: content</code> ）的元素。</li>
+</ul>
+<h6 id="%E7%AC%AC%E4%BA%8C%E7%82%B9%E9%9C%80%E8%A6%81%E5%89%AA%E8%A3%81clip%E7%9A%84%E5%9C%B0%E6%96%B9%E4%B9%9F%E4%BC%9A%E8%A2%AB%E5%88%9B%E5%BB%BA%E4%B8%BA%E5%9B%BE%E5%B1%82"><strong>第二点，需要剪裁（clip）的地方也会被创建为图层。</strong></h6>
+<pre class="hljs"><code><div>      div {
+          <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>;
+          height: <span class="hljs-number">200</span>;
+          overflow: auto;
+          background: gray;
+      }
+</div></code></pre>
+<p>出现这种裁剪情况的时候，渲染引擎会为文字部分单独创建一个层，如果出现滚动条，滚动条也会被提升为单独的层</p>
+<h4 id="%E4%B8%8B%E4%B8%80%E4%BB%A3%E5%B8%83%E5%B1%80%E8%AE%A1%E7%AE%97-layoutng">下一代布局计算 LayoutNG</h4>
+<p>在执行布局操作的时候，会把布局运算的结果重新写回布局树中，所以布局树既是输入内容也是输出内容，这是布局阶段一个不合理的地方，因为在布局阶段并没有清晰地将输入内容和输出内容区分开来。针对这个问题，Chrome 团队正在重构布局代码，下一代布局系统叫 LayoutNG，试图更清晰地分离输入和输出，从而让新设计的布局算法更加简单。</p>
+<h2 id="%E5%9B%BE%E5%B1%82%E7%BB%98%E5%88%B6">图层绘制</h2>
+<p>渲染引擎实现图层的绘制，会把一个图层的绘制拆分成很多小的<strong>绘制指令</strong>，然后再把这些指令按照顺序组成一个待绘制列表，</p>
+<h2 id="%E6%A0%85%E6%A0%BC%E5%8C%96raster%E6%93%8D%E4%BD%9C">栅格化（raster）操作</h2>
+<p>绘制列表只是用来记录绘制顺序和绘制指令的列表，而实际上绘制操作是由渲染引擎中的合成线程来完成的。</p>
+<p>在有些情况下，有的图层可以很大，比如有的页面你使用滚动条要滚动好久才能滚动到底部，但是通过视口，用户只能看到页面的很小一部分，所以在这种情况下，要绘制出所有图层内容的话，就会产生太大的开销，而且也没有必要。</p>
+<p>基于这个原因，<strong>合成线程会将图层划分为图块（tile）</strong>，</p>
+<p>然后<strong>合成线程会按照视口附近的图块来优先生成位图，实际生成位图的操作是由栅格化来执行的。所谓栅格化，是指将图块转换为位图</strong>。而图块是栅格化执行的最小单位。</p>
+<p>通常，栅格化过程都会使用 GPU 来加速生成，使用 GPU 生成位图的过程叫快速栅格化，或者 GPU 栅格化，生成的位图<strong>被保存在 GPU 内存中</strong>。</p>
+<p>GPU 操作是运行在 GPU 进程中，如果栅格化操作使用了 GPU，那么最终生成位图的操作是在 GPU 中完成的，这就涉及到了跨进程操作。渲染进程把生成图块的指令发送给 GPU，然后在 GPU 中执行生成图块的位图，并保存在 GPU 的内存中。</p>
+<h2 id="%E5%90%88%E6%88%90%E5%92%8C%E6%98%BE%E7%A4%BA">合成和显示</h2>
+<p>一旦所有图块都被光栅化，合成线程就会生成一个绘制图块的命令——“DrawQuad”，然后将该命令提交给浏览器进程。</p>
+<p>浏览器进程里面有一个叫 viz 的组件，用来接收合成线程发过来的 DrawQuad 命令，然后根据 DrawQuad 命令，将其页面内容绘制到内存中，最后再将内存显示在屏幕上。</p>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/image-20200909104016011.png" alt="image-20200909104016011"></p>
+<p>综合上图，我们总结下渲染进程的流程：</p>
+<ol>
+<li>渲染引擎将 HTML 内容转化成可以读懂的<strong>DOM 结构</strong></li>
+<li>将 CSS 文件转化成<strong>styleSheets</strong>，计算出 DOM 节点样式</li>
+<li>合并生成<strong>loyoutTree</strong></li>
+<li>按照不同的层叠上下文进行分层，创建不同图层</li>
+<li>把一个图层的绘制拆分成很多小的<strong>绘制指令</strong>并将其提交到合成线程</li>
+<li>合成线程将图层分成<strong>图块</strong>，并在<strong>光栅化线程池</strong>中将图块转换成位图。</li>
+<li>生成绘制命令-“<strong>DrawQuad</strong>”，发送到浏览器进程</li>
+<li>viz 组件将内容绘制到内存，并显示到显示器上</li>
+</ol>
+<h2 id="%E9%87%8D%E7%BB%98%E9%87%8D%E6%8E%92%E5%92%8C%E5%90%88%E6%88%90">重绘、重排和合成</h2>
+<h3 id="%E9%87%8D%E6%8E%92">重排</h3>
+<p>如果你通过 JavaScript 或者 CSS 修改元素的几何位置属性，例如改变元素的宽度、高度等，那么浏览器会触发重新布局，解析之后的一系列子阶段，这个过程就叫<strong>重排</strong>。无疑，<strong>重排需要更新完整的渲染流水线，所以开销也是最大的</strong>。</p>
+<h3 id="%E9%87%8D%E7%BB%98">重绘</h3>
+<p>如果修改了元素的背景颜色，那么布局阶段将不会被执行，因为并没有引起几何位置的变换，所以就直接进入了绘制阶段，然后执行之后的一系列子阶段，这个过程就叫<strong>重绘</strong>。相较于重排操作，<strong>重绘省去了布局和分层阶段，所以执行效率会比重排操作要高一些</strong>。</p>
+<h3 id="%E5%90%88%E6%88%90">合成</h3>
+<p>如果你更改一个既不要布局也不要绘制的属性，渲染引擎将跳过布局和绘制，只执行后续的合成操作，我们把这个过程叫做<strong>合成</strong>。</p>
+<p>使用 CSS 的 transform 来实现动画效果，这可以避开重排和重绘阶段，直接在非主线程上执行合成动画操作。这样的效率是最高的，因为是在非主线程上合成，并没有占用主线程的资源，另外也<strong>避开了布局和绘制</strong>两个子阶段，所以<strong>相对于重绘和重排，合成能大大提升绘制效率</strong>。‘如果采用了 GPU，那么合成的效率会非常高。</p>
+<p><strong>需要重点关注的是，合成操作是在合成线程上完成的，这也就意味着在执行合成操作时，是不会影响到主线程执行的</strong>。</p>
+<h4 id="%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%90%88%E6%88%90%E4%BC%98%E5%8C%96">如何利用合成优化</h4>
+<p>使用 will-change，这段代码就是提前告诉渲染引擎 box 元素将要做几何变换和透明度变换操作，这时候渲染引擎会将该元素单独实现一帧，等这些变换发生时，渲染引擎会通过合成线程直接去处理变换，这些变换并没有涉及到主线程，这样就大大提升了渲染的效率。<strong>这也是 CSS 动画比 JavaScript 动画高效的原因</strong>。</p>
+<pre class="hljs"><code><div><span class="hljs-selector-class">.box</span> {
+  <span class="hljs-attribute">will-change</span>: transform, opacity;
+}
+</div></code></pre>
+<p>详细例子查看：<a href="https://github.com/chelseachen007/writeCode/tree/master/css/will-change"> will-change-code </a></p>
+<h2 id="%E5%85%B3%E9%94%AE%E6%B8%B2%E6%9F%93%E8%B7%AF%E5%BE%84%E4%BC%98%E5%8C%96">关键渲染路径优化</h2>
+<p>优化关键渲染路径有很多种方法与情况，不同情况下优化方式也各不相同，初步看起来这些优化方法五花八门，知识非常的零散。</p>
+<p>但总结下来，只有三种因素会影响到关键渲染路径：</p>
+<ul>
+<li>关键资源的数量</li>
+<li>关键路径的长度</li>
+<li>关键字节的数量</li>
+</ul>
+<p>关键资源指的是那些可以阻塞页面首次渲染的资源。例如 JavaScript、CSS 都是可以阻塞关键渲染路径的资源，这些资源就属于“关键资源”。关键资源的数量越少，浏览器处理渲染的工作量就越少，同时 CPU 及其他资源的占用也越少。</p>
+<p>关键路径的长度指的是浏览器和资源服务器之间的往返次数(<strong>Round-Trip Time</strong>)，通常被称作 RTT。</p>
+<p><strong>它是网络中一个重要的性能指标，表示从发送端发送数据开始，到发送端收到来自接收端的确认，总共经历的时延</strong>。通常 1 个 HTTP 的数据包在 14KB 左右，所以 1 个 0.1M 的页面就需要拆分成 8 个包来传输了，也就是说需要 8 个 RTT。</p>
+<p>关键字节的数量指的是关键资源的字节大小，浏览器要下载的资源字节越小，则下载速度与处理资源</p>
+<p>的速度都会更快。通常很多优化方法都是针对关键字节的数量进行优化。例如：压缩。</p>
+<blockquote>
+<p>关键路径中的每一步耗时越长，由于阻塞会导致渲染路径的整体耗时变长。</p>
+</blockquote>
+<h3 id="%E4%BC%98%E5%8C%96-dom">优化 DOM</h3>
+<p>总结起来有三种方式可以优化 HTML：<strong>缩小文件的尺寸（Minify）</strong>、<strong>使用 gzip 压缩（Compress）</strong>、<strong>使用缓存（HTTP Cache）</strong>。</p>
+<h3 id="%E4%BC%98%E5%8C%96-cssom">优化 CSSOM</h3>
+<p>和优化 DOM 策略一样，但是 CSS 还有一个可以影响性能的因素是：<strong>CSS 会阻塞关键渲染路径</strong>。</p>
+<p>CSS 资源的处理有几个特点：</p>
+<ul>
+<li>CSS 下载时异步，不会阻塞浏览器构建 DOM 树</li>
+<li>但是会阻塞渲染，也就是在构建 render 时，会等到 css 下载解析完毕后才进行（这点与浏览器优化有关，防止 css 规则不断改变，避免了重复的构建）</li>
+<li>有例外， <code>media query</code> 声明的 CSS 是不会阻塞渲染的</li>
+</ul>
+<h4 id="%E5%AA%92%E4%BD%93%E6%9F%A5%E8%AF%A2">媒体查询</h4>
+<p>通过改变媒体查询，让 css 不阻塞首屏渲染，当仍在当前页面生效</p>
+<pre class="hljs"><code><div>&lt;<span class="hljs-selector-tag">link</span> <span class="hljs-selector-tag">href</span>="<span class="hljs-selector-tag">style</span><span class="hljs-selector-class">.css</span>"<span class="hljs-selector-tag">rel</span>="<span class="hljs-selector-tag">stylesheet</span>"<span class="hljs-selector-tag">media</span>="<span class="hljs-selector-tag">print</span>"<span class="hljs-selector-tag">onload</span>="<span class="hljs-selector-tag">this</span><span class="hljs-selector-class">.media</span>='<span class="hljs-selector-tag">all</span>'"&gt;
+</div></code></pre>
+<p>关于 CSS 的加载最佳实践：<strong><a href="https://github.com/addyosmani/critical">Critical CSS</a></strong>。</p>
+<p><strong>Critical CSS 的意思是：把首屏渲染需要使用的 CSS 通过 style 标签内嵌到 head 标签中，其余 CSS 资源使用异步的方式非阻塞加载。</strong></p>
+<p>所以 Critical CSS 从两个方面解决了性能问题：</p>
+<ol>
+<li><strong>减少关键资源的数量</strong>（将所有与首屏渲染无关的 CSS 使用异步非阻塞加载）</li>
+<li><strong>减少关键路径的长度</strong>（将首屏渲染需要的 CSS 直接内嵌到 head 标签中，移除了网络请求的时间）。</li>
+</ol>
+<h4 id="%E9%81%BF%E5%85%8D%E4%BD%BF%E7%94%A8import">避免使用@import</h4>
+<p>使用 link 标签 css 标签是<strong>并行下载</strong>，</p>
+<p>而使用 <code>@import</code> ，两个 CSS 变成了<strong>串行加载</strong>，前一个 CSS 加载完后再去下载使用 <code>@import</code> 导入的 CSS 资源。</p>
+<p><strong>所以避免使用 <code>@import</code> 是为了降低关键路径的长度。</strong></p>
+<h3 id="%E9%81%87%E5%88%B0-js-%E8%84%9A%E6%9C%AC%E8%B5%84%E6%BA%90">遇到 JS 脚本资源</h3>
+<p>JS 脚本资源的处理有几个特点：</p>
+<ul>
+<li>阻塞浏览器的解析，也就是说发现一个外链脚本时，需等待脚本下载完成并执行后才会继续解析 HTML</li>
+<li>浏览器的优化，一般现代浏览器有优化，在脚本阻塞时，也会继续下载其它资源（当然有并发上限），但是虽然脚本可以并行下载，解析过程仍然是阻塞的，也就是说必须这个脚本执行完毕后才会接下来的解析，并行下载只是一种优化而已</li>
+<li>defer 与 async，普通的脚本是会阻塞浏览器解析的，但是可以加上 defer 或 async 属性，这样脚本就变成异步了，可以等到浏览器解析完毕后再执行</li>
+</ul>
+<p>注意，defer 和 async 是有区别的： <strong>defer 是延迟执行，而 async 是异步执行。</strong></p>
+<p>简单的说（不展开）：</p>
+<ul>
+<li><code>async</code> 是异步执行，异步下载完毕后就会执行，不确保执行顺序，一定在 <code>onload</code> 前，但不确定在 <code>DOMContentLoaded</code> 事件的前或后</li>
+<li><code>defer</code> 是延迟执行，在浏览器看起来的效果像是将脚本放在了 <code>body</code> 后面一样（虽然按规范应该是在 <code>DOMContentLoaded</code> 事件前，但实际上不同浏览器的优化效果不一样，也有可能在它后面）</li>
+</ul>
+<h3 id="%E9%81%87%E5%88%B0-img-%E5%9B%BE%E7%89%87%E7%B1%BB%E8%B5%84%E6%BA%90">遇到 img 图片类资源</h3>
+<p>遇到图片等资源时，直接就是异步下载，不会阻塞解析，下载完毕后直接用图片替换原有 src 的地方</p>
+<h3 id="performance">Performance</h3>
+<p>可以通过 Performance 进行堵塞时间的检测</p>
+<pre class="hljs"><code><div><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Test<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span>
+      <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span>
+      <span class="hljs-attr">href</span>=<span class="hljs-string">"https://static.xx.fbcdn.net/rsrc.php/v3/y6/l/1,cross/9Ia-Y9BtgQu.css"</span>
+    /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    aa
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</div></code></pre>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/image-20200909153229328-1599721498641.png" alt="image-20200909153229328"></p>
+<p>//TODO: Performance 性能可视化</p>
+<h3 id="%E6%80%BB%E7%BB%93">总结</h3>
+<p>CSSOM 会阻塞渲染，只有当 CSSOM 构建完毕后才会进入下一个阶段构建渲染树。</p>
+<p>通常情况下 DOM 和 CSSOM 是并行构建的，但是当浏览器遇到一个 <code>script</code> 标签时，DOM 构建将暂停，直至脚本完成执行。但由于 JavaScript 可以修改 CSSOM，所以需要等 CSSOM 构建完毕后再执行 JS。</p>
+<p><a href="https://juejin.cn/post/6900850262689185800#heading-2">&lt;深入了解现代浏览器&gt;</a></p>
+<h2 id="performance">Performance</h2>
+<p>首先打开无痕模式</p>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/image-20200910153802551.png" alt="image-20200910153802551"></p>
+<p>除了上面标注的要学会看</p>
+<p>还要认识几个时间节点</p>
+<ul>
+<li><strong>FP (First Paint) 首次绘制</strong>: 标记浏览器渲染任何在视觉上不同于导航前屏幕内容之内容的时间点.</li>
+<li><strong>FCP (First Contentful Paint) 首次内容绘制</strong> 标记浏览器渲染来自 DOM 第一位内容的时间点，该内容可能是文本、图像、SVG 甚至 元素.</li>
+<li><strong>LCP (Largest Contentful Paint) 最大内容渲染</strong>: 代表在 viewport 中最大的页面元素加载的时间. LCP 的数据会通过 PerformanceEntry 对象记录, 每次出现更大的内容渲染, 则会产生一个新的 PerformanceEntry 对象.(2019 年 11 月新增)</li>
+<li><strong>DCL (DomContentloaded)</strong>: 当 HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，无需等待样式表、图像和子框架的完成加载.</li>
+<li><strong>FMP(First Meaningful Paint) 首次有效绘制</strong>: 例如，在 YouTube 观看页面上，主视频就是主角元素. 看这个 csdn 的网站不是很明显, 这几个都成一个时间线了, 截个 weibo 的看下. 下面的示例图可以看到, 微博的博文是主要元素.</li>
+<li><strong>L (onLoad)</strong>, 当依赖的资源, 全部加载完毕之后才会触发.</li>
+</ul>
+<h3 id="performance-%E5%AF%B9%E8%B1%A1">performance 对象</h3>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/image-20200910155220279.png" alt="image-20200910155220279"></p>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/640.png" alt="img"></p>
+<p>然后剩下的就要具体分析了。</p>
+<p>我们常说的首屏绘制时间也就是<strong>FP</strong>，关键路径的优化主要也是在优化 FP 之前的加载 所以，学会看 Performance 尤为重要！</p>
+<h3 id="lighthouse">lighthouse</h3>
+<p>谷歌开源的自动化分析工具</p>
+<p>使用</p>
+<pre class="hljs"><code><div>npm install -g lighthouse
+lighthouse --locale=zh https://google.comgoogle.com  // 默认移动端
+lighthouse https://google.comgoogle.com --view --emulated-form-factor=desktop // 桌面端
+</div></code></pre>
+<p>准确衡量网站的性能 根据 Google 在 web.dev 上公布的数据，他们认为以用户为中心的性能指标，应该能回答以下四个问题 ：</p>
+<blockquote>
+<p>web.dev 是 Google Developer 提供的开发者社区，里面主要提到了一下列出的诸多类型的数据 指标。</p>
+</blockquote>
+<ol>
+<li>
+<p>是否发生？ 导航是否成功启动？服务器是否有响应？</p>
+</li>
+<li>
+<p>是否有用？ 是否已渲染可以与用户互动的足够内容？</p>
+</li>
+<li>
+<p>是否可用？ 用户可以与页面交互，还是页面仍在忙于加载？</p>
+</li>
+<li>
+<p>是否令人愉快？ 交互是否顺畅而自然，没有滞后和卡顿</p>
+</li>
+</ol>
+<h4 id="%E6%98%AF%E5%90%A6%E5%8F%91%E7%94%9F">是否发生</h4>
+<p>当用户访问一个网站的时候，关心的第一个问题永远是“是否发生”——浏览器是否成功地把我的请求发 送出去，而服务器是否已经知道并开始处理我的请求。</p>
+<p><strong>TTFB (Time to First Byte) 首字节到达的时间点。</strong></p>
+<p><strong>FP (First Paint) 首次绘制</strong>，标记浏览器渲染任何在视觉上不同于导航前屏幕内容的时间点。</p>
+<p><strong>FCP First Contentful Paint 首次内容绘制</strong>，标记浏览器渲染来自 DOM 第一位内容的时间点，内容可能是文本、图像等元素。 测试加载速度的体验，页面最主要的内容何时呈现。</p>
+<h4 id="%E6%98%AF%E5%90%A6%E6%9C%89%E7%94%A8">是否有用</h4>
+<p>当用户确定自己的请求发生了后，就会开始关心第二个问题：“是否有用？” 例如，用户在使用天气应用，在确定页面有反应了后，就开始关心，什么时候能展现有用的内容，从而 得知今天的天气。</p>
+<p><strong>LCP Largest Contentful Paint 最大内容绘制时间</strong>，计算从页面开始加载到用户与页面发生交互（点击，滚动）这段时间内，最大元素绘制的时间，该时间会随着页面渲染变化而变化，因为页面中的最大元素在渲染过程中可能会发生改 变。</p>
+<p><strong>SI Speed Index 速度指标</strong>，填充页面内容的速度，取开始加载到最后完成渲染，每一时刻页面未完成度的积分。</p>
+<h4 id="%E6%98%AF%E5%90%A6%E5%8F%AF%E7%94%A8">是否可用</h4>
+<p>在用户得到了有用的信息后，用户就会基于得到的信息作出反应，这就是页面“是否可用？”例如看到了 新闻后，想要评论。TTI、FID、TBT 就是回答这些问题的指标。</p>
+<p><strong>TTI (Time to Interactive)</strong> 可交互时间，用于标记页面已进行视觉渲染并能可靠响应用户输入的时间点。页面可能会因为多种原因 而无法响应用户输入，例如页面组件运行所需的 Javascript 尚未加载，或者耗时较长的任务阻塞主线 程。TTI 指标可识别页面初始 JavaScript 已加载且主线程处于空闲状态（没有耗时较长的任务）的时间 点。</p>
+<p><strong>TBT Total Blocking Time 总共阻塞时间</strong>，计算的是从 FCP 到 TTI 之间，主线程阻塞的总时间。阻塞时间是指单次任务占用主线程 超过 50 ms 的部分。</p>
+<p><strong>FID (First Input Delay) 首次输入延迟</strong>，指用户首次输入到页面响应的时间。我们都知道第一印象的重要性，网站亦是如此。首 次输入延迟会成为用户对网站很重要的第一印象，决定用户有可能成为忠实用户或者弃之而去。值得注 意的是，FID 仅关注用户离散的操作，如点击，轻击，按键等，其他交互如滚动和缩放，并不是 FID 关 注的，因为通常浏览器会用一个单独的线程来处理它们。</p>
+<h4 id="%E6%98%AF%E5%90%A6%E4%BB%A4%E4%BA%BA%E6%84%89%E5%BF%AB">是否令人愉快</h4>
+<p>使用是否流畅，有没有发生预料外的视觉偏移。</p>
+<p><strong>CLS (Cumulative Layout Shift) 累计布局偏移</strong>。测量在页面的整个生命周期中发生的每个意外的样式移动所造成的布局偏移分数的总 和测试视觉稳定性上的体验，有多少内容发生了意外的偏移。</p>
+<p><img src="file:///d:/study/github/blog/docs/Basics/Chrome/images/image-20200910162000360.png" alt="image-20200910162000360"></p>
+
+</body>
+</html>

@@ -114,6 +114,45 @@ const host = "http://localhost:7001/monitor/error";
 new Image().src = `${host}?info=${str}`;
 ```
 
+## 数据清洗去重
+
+```js
+      except: [
+        /^Script error\.?/,
+        /^Javascript error: Script error\.? on line 0/,
+      ], // 忽略某个错误
+     repeat:5
+// 重复出现的错误，只上报config.repeat次
+    repeat(error) {
+      const rowNum = error.rowNum || '';
+      const colNum = error.colNum || '';
+      const repeatName = error.msg + rowNum + colNum;
+      this.repeatList[repeatName] = this.repeatList[repeatName]
+        ? this.repeatList[repeatName] + 1
+        : 1;
+      return this.repeatList[repeatName] > this.config.repeat;
+    }
+
+    // 忽略错误
+    except(error) {
+      const oExcept = this.config.except;
+      let result = false;
+      let v = null;
+      if (utils.typeDecide(oExcept, 'Array')) {
+        for (let i = 0, len = oExcept.length; i < len; i++) {
+          v = oExcept[i];
+          if ((utils.typeDecide(v, 'RegExp') && v.test(error.msg))) {
+            result = true;
+            break;
+          }
+        }
+      }
+      return result;
+    }
+```
+
+
+
 ## 异常收集
 
 这里使用 egg 进行异常收集
@@ -297,3 +336,55 @@ onload 时间 ：loadEventEnd – navigationStart
 - PV(Page View)：页面浏览量或点击量
 - UV()：指访问某个站点的不同ip地址的人数
 - 页面停留时间：用户在每一个页面的停留时间
+
+
+
+## 小程序错误上报
+
+劫持APP方法
+
+```js
+  // 劫持原小程序App方法
+  rewriteApp() {
+    const originApp = App;
+
+    const self = this;
+    App = function (app) {
+      // 合并方法，插入记录脚本
+      ['onLaunch', 'onShow', 'onHide', 'onError'].forEach((methodName) => {
+        const userDefinedMethod = app[methodName]; // 暂存用户定义的方法
+        if (methodName === 'onLaunch') {
+          self.getNetworkType();
+          self.config.setLocation && self.getLocation();
+          self.config.setSystemInfo && self.getSystemInfo();
+        }
+        app[methodName] = function (options) {
+          methodName === 'onError' && self.error({ msg: options }); // 错误上报
+          return userDefinedMethod && userDefinedMethod.call(this, options);
+        };
+      });
+      return originApp(app);
+    };
+  }
+```
+
+劫持Page方法
+
+```js
+  // 劫持原小程序Page方法
+ function rewritePage() {
+    const originPage = Page;
+    Page = (page) => {
+      Object.keys(page).forEach((methodName) => {
+        typeof page[methodName] === 'function'
+          && this.recordPageFn(page, methodName);
+      });
+      // 强制记录两生命周期函数
+      page.onReady || this.recordPageFn(page, 'onReady'); // 这个函数记录错误的时间，所在页面，方法名等信息
+      page.onLoad || this.recordPageFn(page, 'onLoad');
+      // 执行原Page对象
+      return originPage(page);
+    };
+  }
+```
+

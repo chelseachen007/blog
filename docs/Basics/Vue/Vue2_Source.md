@@ -317,7 +317,7 @@ export default class VNode {
 
 #### update
 
-Vue 的 _update 是实例的⼀个私有⽅法，它被调⽤的时机有 2 个，⼀个是⾸次渲染，⼀个是数据更 新的时候；
+Vue 的 _update 是实例的⼀个私有⽅法，**它被调⽤的时机有 2 个，⼀个是⾸次渲染，⼀个是数据更新的时候；**
 
 ```js
 //src/core/instance/lifecycle.js 
@@ -353,6 +353,8 @@ Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
   }
 ```
 
+这里逻辑不用看，下面会详细说，我们知道最后会进入`__patch__` 即可
+
 核心方法`__patch__`  区分服务端渲染
 
 ```js
@@ -384,3 +386,482 @@ VDom 进行diff 的地方 ，后面再来分析
   - Dom变化，diff算法后 异步更新
 - 渲染完成，等待更新
   - Mounted
+
+## 组件化
+
+### **createElement**
+
+createElement 有三个分支逻辑
+
+1. 假如是普通的html标签，渲染一个VNode
+2. 假如是componen且options中注册了 ，就进入createComponent 逻辑
+3. 不命名tag，也创建一个VNode
+
+```js
+//src\core\vdom\create-element.js  function _createElement
+if (typeof tag === 'string') {
+    let Ctor
+    ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag)
+    if (config.isReservedTag(tag)) {
+      // platform built-in elements
+      vnode = new VNode(
+        config.parsePlatformTagName(tag), data, children,
+        undefined, undefined, context
+      )
+    } else if ((!data || !data.pre) && isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
+      // component
+      vnode = createComponent(Ctor, data, context, children, tag)
+    } else {
+      // unknown or unlisted namespaced elements
+      // check at runtime because it may get assigned a namespace when its
+      // parent normalizes children
+      vnode = new VNode(
+        tag, data, children,
+        undefined, undefined, context
+      )
+    }
+  } else {
+    // 组件的构造函数
+    vnode = createComponent(tag, data, context, children)
+  }
+```
+
+### createComponent
+
+```js
+export function createComponent (
+  Ctor: Class<Component> | Function | Object | void,
+  data: ?VNodeData,
+  context: Component,
+  children: ?Array<VNode>,
+  tag?: string
+): VNode | Array<VNode> | void {
+    
+  // plain options object: turn it into a constructor
+  if (isObject(Ctor)) {
+    Ctor = baseCtor.extend(Ctor)
+  }
+  // async component
+  let asyncFactory
+  if (isUndef(Ctor.cid)) {
+    asyncFactory = Ctor
+    Ctor = resolveAsyncComponent(asyncFactory, baseCtor)
+    if (Ctor === undefined) {
+      // return a placeholder node for async component, which is rendered
+      // as a comment node but preserves all the raw information for the node.
+      // the information will be used for async server-rendering and hydration.
+      return createAsyncPlaceholder(
+        asyncFactory,
+        data,
+        context,
+        children,
+        tag
+      )
+    }
+  }
+
+  data = data || {}
+
+  // resolve constructor options in case global mixins are applied after
+  // component constructor creation
+  resolveConstructorOptions(Ctor)
+
+  // transform component v-model data into props & events
+  if (isDef(data.model)) {
+    transformModel(Ctor.options, data)
+  }
+
+  // extract props
+  const propsData = extractPropsFromVNodeData(data, Ctor, tag)
+
+  // functional component
+  if (isTrue(Ctor.options.functional)) {
+    return createFunctionalComponent(Ctor, propsData, data, context, children)
+  }
+
+
+  const listeners = data.on
+  data.on = data.nativeOn
+
+  if (isTrue(Ctor.options.abstract)) {
+    // abstract components do not keep anything
+    // other than props & listeners & slot
+
+    // work around flow
+    const slot = data.slot
+    data = {}
+    if (slot) {
+      data.slot = slot
+    }
+  }
+
+  // install component management hooks onto the placeholder node
+  installComponentHooks(data)
+
+  // return a placeholder vnode
+  const name = Ctor.options.name || tag
+  const vnode = new VNode(
+    `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
+    data, undefined, undefined, undefined, context,
+    { Ctor, propsData, listeners, tag, children },
+    asyncFactory
+  )
+  return vnode
+}
+```
+
+去掉多余的判断，可以整理出他做了三件事
+
+#### 构造⼦类构造函数
+
+```js
+export default {
+    name: 'app',
+    components: {
+        HelloWorld
+    }
+}
+// 我们平时传入的都是一个对象
+  if (isObject(Ctor)) {
+    Ctor = baseCtor.extend(Ctor)
+  }
+//src/core/global-api/extend.js 
+
+```
+
+Vue.extend 的作⽤就是构造⼀个 Vue 的⼦类，它使⽤⼀种⾮常经典的原型继承的⽅式把⼀个纯对 象转换⼀个继承于 Vue 的构造器 Sub 并返回，然后对 Sub 这个对象本⾝扩展了⼀些属性，如扩 展 options 、添加全局 API 等；并且对配置中的 props 和 computed 做了初始化⼯作；最后对于 这个 Sub 构造函数做了缓存，避免多次执⾏ Vue.extend 的时候对同⼀个⼦组件重复构造。
+
+```js
+Vue.extend = function (extendOptions: Object): Function {
+    extendOptions = extendOptions || {}
+    const Super = this
+    const SuperId = Super.cid
+    const cachedCtors = extendOptions._Ctor || (extendOptions._Ctor = {})
+    if (cachedCtors[SuperId]) {
+      return cachedCtors[SuperId]
+    }
+
+    const name = extendOptions.name || Super.options.name
+    if (process.env.NODE_ENV !== 'production' && name) {
+      validateComponentName(name)
+    }
+
+    const Sub = function VueComponent (options) {
+      this._init(options)
+    }
+    Sub.prototype = Object.create(Super.prototype)
+    Sub.prototype.constructor = Sub
+    Sub.cid = cid++
+    Sub.options = mergeOptions(
+      Super.options,
+      extendOptions
+    )
+    Sub['super'] = Super
+
+    // For props and computed properties, we define the proxy getters on
+    // the Vue instances at extension time, on the extended prototype. This
+    // avoids Object.defineProperty calls for each instance created.
+    if (Sub.options.props) {
+      initProps(Sub)
+    }
+    if (Sub.options.computed) {
+      initComputed(Sub)
+    }
+
+    // allow further extension/mixin/plugin usage
+    Sub.extend = Super.extend
+    Sub.mixin = Super.mixin
+    Sub.use = Super.use
+
+    // create asset registers, so extended classes
+    // can have their private assets too.
+    ASSET_TYPES.forEach(function (type) {
+      Sub[type] = Super[type]
+    })
+    // enable recursive self-lookup
+    if (name) {
+      Sub.options.components[name] = Sub
+    }
+
+    // keep a reference to the super options at extension time.
+    // later at instantiation we can check if Super's options have
+    // been updated.
+    Sub.superOptions = Super.options
+    Sub.extendOptions = extendOptions
+    Sub.sealedOptions = extend({}, Sub.options)
+
+    // cache constructor
+    cachedCtors[SuperId] = Sub
+    return Sub
+  }
+```
+
+
+
+#### 安装组件钩⼦函数
+
+整个 **installComponentHooks** 的过程就是把 componentVNodeHooks 的钩⼦函数合并到 **data.hook** 中，在 VNode 执⾏ patch 的过程中执⾏相关的钩⼦函数,但他的Marge不是覆盖，而是按顺序执行。
+
+#### 实例化VNode
+
+最后⼀步⾮常简单，通过 new VNode 实例化⼀个 vnode 并返回。需要注意的是和普通元素节点的 vnode 不同，组件的 vnode 是没有 children 的，这点很关键。
+
+### patch
+
+**执⾏ vm.patch 去把 VNode 转换成真正的 DOM 节点。**
+
+```js
+//src/core/vdom/patch.js 
+function createElm (
+    vnode,
+    insertedVnodeQueue,
+    parentElm,
+    refElm,
+    nested,
+    ownerArray,
+    index
+) {
+    // ...
+    if (createComponent(vnode, insertedVnodeQueue, parentElm, refElm)) {
+        return
+    }
+    // ...
+  }
+```
+
+#### createComponent
+
+```js
+	function createComponent (vnode, insertedVnodeQueue, parentElm, refElm) {
+		let i = vnode.data
+		if (isDef(i)) {
+			const isReactivated = isDef(vnode.componentInstance) && i.keepAlive
+			if (isDef(i = i.hook) && isDef(i = i.init)) {
+				i(vnode, false /* hydrating */)
+			}
+			//调用init钩子后，如果vnode为子组件。
+            //它应该已经创建子实例并挂载它。这孩子。
+            //组件还设置了占位符vnode的elm。
+            //在这种情况下，我们只需返回元素即可完成。
+			if (isDef(vnode.componentInstance)) {
+				//属性回调执行
+				initComponent(vnode, insertedVnodeQueue)
+				//追加到父组件
+				insert(parentElm, vnode.elm, refElm)
+				if (isTrue(isReactivated)) {
+					reactivateComponent(vnode, insertedVnodeQueue, parentElm, refElm)
+				}
+				return true
+			}
+		}
+	}
+```
+
+如果 vnode 是⼀个组件 VNode，那么条件会满⾜，并且得到 i 就是 init 钩⼦函数，执行`_init`
+
+⼦组件的实例化实际上就是在这个时机执⾏的，并且它会执⾏实例的 _init ⽅法，
+
+#### _render()
+
+然后进行_render()
+
+```js
+// src/core/instance/render.js
+  Vue.prototype._render = function (): VNode {
+    const vm: Component = this
+    const { render, _parentVnode } = vm.$options
+
+    if (_parentVnode) {
+      vm.$scopedSlots = normalizeScopedSlots(
+        _parentVnode.data.scopedSlots,
+        vm.$slots,
+        vm.$scopedSlots
+      )
+    }
+    vm.$vnode = _parentVnode
+    // render self
+    let vnode
+    try {
+      currentRenderingInstance = vm
+      vnode = render.call(vm._renderProxy, vm.$createElement)
+    } 
+    // 如果返回的数组只包含一个节点，则允许它
+    if (Array.isArray(vnode) && vnode.length === 1) {
+      vnode = vnode[0]
+    }
+
+      vnode = createEmptyVNode()
+    }
+    // set parent
+    vnode.parent = _parentVnode
+    return vnode
+  }
+```
+
+我们只保留关键部分的代码，这⾥的 _parentVnode 就是当前组件的⽗ VNode，⽽ render 函数⽣ 成的 vnode 当前组件的渲染 vnode ， vnode 的 parent 指向了 _parentVnode ，也就是 vm.$vnode ，它们是⼀种⽗⼦的关系。
+
+#### _update
+
+```js
+//src/core/instance/lifecycle.js 
+Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
+    const vm: Component = this
+    const prevEl = vm.$el
+    const prevVnode = vm._vnode
+    //是保持当前上下⽂的 Vue 实例，它是在 lifecycle 模块的全局变量
+    const restoreActiveInstance = setActiveInstance(vm)
+    vm._vnode = vnode
+    // Vue.prototype.__patch__ is injected in entry points
+    // based on the rendering backend used.
+    if (!prevVnode) {
+      // initial render
+      vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
+    } else {
+      // updates
+      vm.$el = vm.__patch__(prevVnode, vnode)
+    }
+    restoreActiveInstance()
+    // update __vue__ reference
+    if (prevEl) {
+      prevEl.__vue__ = null
+    }
+    if (vm.$el) {
+      vm.$el.__vue__ = vm
+    }
+    // if parent is an HOC, update its $el as well
+    if (vm.$vnode && vm.$parent && vm.$vnode === vm.$parent._vnode) {
+      vm.$parent.$el = vm.$el
+    }
+    // updated hook is called by the scheduler to ensure that children are
+    // updated in a parent's updated hook.
+  }
+```
+
+这里要理清，vm._vnode 和 vm.$vnode 的关系就是⼀种⽗⼦关系，⽤代码表示就是   **vm.`vnode.parent `=== vm.$vnode**
+
+restoreActiveInstance是用来保持递归过程中记录当前vm的parent，当⼀个 vm 实例完成它的所有⼦树的 patch 或者 update 过程后，
+
+restoreActiveInstance回到他的父实例后，传入的Vue实例和vm.$parent 依然能保留
+
+#### `__patch_`
+
+```js
+vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
+
+function patch (oldVnode, vnode, hydrating, removeOnly) {
+    // ...
+    let isInitialPatch = false
+    const insertedVnodeQueue = []
+    // 首次渲染
+    if (isUndef(oldVnode)) {
+        // empty mount (likely as component), create new root element
+        isInitialPatch = true
+        createElm(vnode, insertedVnodeQueue)
+    } else {
+        // ...
+    }
+    // ...
+}
+```
+
+##### createElm
+
+```js
+	function createElm (
+		vnode,
+		insertedVnodeQueue,
+		parentElm,
+		refElm,
+		nested,
+		ownerArray,
+		index
+	) {
+		if (isDef(vnode.elm) && isDef(ownerArray)) {
+			// This vnode was used in a previous render!
+			// now it's used as a new node, overwriting its elm would cause
+			// potential patch errors down the road when it's used as an insertion
+			// reference node. Instead, we clone the node on-demand before creating
+			// associated DOM element for it.
+			vnode = ownerArray[index] = cloneVNode(vnode)
+		}
+
+		vnode.isRootInsert = !nested // for transition enter check
+		if (createComponent(vnode, insertedVnodeQueue, parentElm, refElm)) {
+			return
+		}
+
+		const data = vnode.data
+		const children = vnode.children
+		const tag = vnode.tag
+		if (isDef(tag)) {
+			if (process.env.NODE_ENV !== 'production') {
+				if (data && data.pre) {
+					creatingElmInVPre++
+				}
+				if (isUnknownElement(vnode, creatingElmInVPre)) {
+					warn(
+						'Unknown custom element: <' + tag + '> - did you ' +
+						'register the component correctly? For recursive components, ' +
+						'make sure to provide the "name" option.',
+						vnode.context
+					)
+				}
+			}
+
+			vnode.elm = vnode.ns
+				? nodeOps.createElementNS(vnode.ns, tag)
+				: nodeOps.createElement(tag, vnode)
+			setScope(vnode)
+
+			/* istanbul ignore if */
+			if (__WEEX__) {
+				// in Weex, the default insertion order is parent-first.
+				// List items can be optimized to use children-first insertion
+				// with append="tree".
+				const appendAsTree = isDef(data) && isTrue(data.appendAsTree)
+				if (!appendAsTree) {
+					if (isDef(data)) {
+						invokeCreateHooks(vnode, insertedVnodeQueue)
+					}
+					insert(parentElm, vnode.elm, refElm)
+				}
+				createChildren(vnode, children, insertedVnodeQueue)
+				if (appendAsTree) {
+					if (isDef(data)) {
+						invokeCreateHooks(vnode, insertedVnodeQueue)
+					}
+					insert(parentElm, vnode.elm, refElm)
+				}
+			} else {
+				createChildren(vnode, children, insertedVnodeQueue)
+				if (isDef(data)) {
+					invokeCreateHooks(vnode, insertedVnodeQueue)
+				}
+				insert(parentElm, vnode.elm, refElm)
+			}
+
+			if (process.env.NODE_ENV !== 'production' && data && data.pre) {
+				creatingElmInVPre--
+			}
+		} else if (isTrue(vnode.isComment)) {
+			vnode.elm = nodeOps.createComment(vnode.text)
+			insert(parentElm, vnode.elm, refElm)
+		} else {
+			vnode.elm = nodeOps.createTextNode(vnode.text)
+			insert(parentElm, vnode.elm, refElm)
+		}
+	}
+```
+
+又回到了这里，当遇到普通的VNode createComponent就会返回false，然后重新上面创建父占位符，并遍历所有子VNode调用**createElm** 当遇到组件VNode则进行深入的递归
+
+在完成组件的整个 patch 过程后，最后执⾏ **insert(parentElm, vnode.elm, refElm)** 完成组件 的 DOM 插⼊，**如果组件 patch 过程中⼜创建了子组件，那么DOM 的插入顺序是先子后父。**
+
+### 总结
+
+第一次渲染，没有oldVodeTree，就是创建占位符 => 遍历子VNode => 遇到组件VNode => 向下递归 然后开始DOM操作 直到回到占位符的位置。
+
+这一圈下来，基本的执行流程和代码都有了眼缘了，我们开始深入一些细节进行学习。
+
+
+
