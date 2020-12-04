@@ -127,6 +127,9 @@ module.exports = {
 
 ```js
 // webpack.config.base.js
+const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
+const webpack = require('webpack')
+
 const files = fs.readdirSync(path.resolve(__dirname, "../dll"));
 files.forEach((file) => {
   if (/.*\.dll.js/.test(file)) {

@@ -36,9 +36,9 @@
 <body>
 ```
 
- ↓
+↓
 
-`StartTag: html` 、 `StartTag: head` 、 `` .. `` 、 `EndTag: head` 、 `StartTag: body`
+`StartTag: html` 、 `StartTag: head` 、 `..` 、 `EndTag: head` 、 `StartTag: body`
 其内部实现是通过维护一个栈，遇到 start 压入栈，遇到 end 弹出，节点与节点之间的关系通过标签的闭合辨别，比如两个相同标签的 start 和 end 内的元素都是其子元素。
 
 ### 第三步：生成节点对象并构建 DOM
@@ -331,8 +331,6 @@ CSSOM 会阻塞渲染，只有当 CSSOM 构建完毕后才会进入下一个阶�
 
 通常情况下 DOM 和 CSSOM 是并行构建的，但是当浏览器遇到一个 `script` 标签时，DOM 构建将暂停，直至脚本完成执行。但由于 JavaScript 可以修改 CSSOM，所以需要等 CSSOM 构建完毕后再执行 JS。
 
-
-
 [<深入了解现代浏览器>](https://juejin.cn/post/6900850262689185800#heading-2)
 
 ## Performance
@@ -420,4 +418,4 @@ lighthouse https://google.comgoogle.com --view --emulated-form-factor=desktop //
 
 **CLS (Cumulative Layout Shift) 累计布局偏移**。测量在页面的整个生命周期中发生的每个意外的样式移动所造成的布局偏移分数的总 和测试视觉稳定性上的体验，有多少内容发生了意外的偏移。
 
-![image-20200910162000360](./images/image-20200910162000360.png)
+强烈建议用 lighthouse 跑一遍自己的网站，里面的链接才是精华，另外可以看看 Googel 的开发者网站，要不是我不懂英文就看完了。
