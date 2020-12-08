@@ -1,5 +1,7 @@
 # webpack
 
+<img src='./images/webpack.png'>
+
 ## 基础概念
 
 **webpack_require**
