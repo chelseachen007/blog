@@ -1,19 +1,30 @@
 # 目录
 
-## [第一章 - 先导篇](https://github.com/leetcode-pp/91alg-2/blob/master/introduction.md)
+### [第一章 - 先导篇](https://github.com/leetcode-pp/91alg-2/blob/master/introduction.md)
 
 - [数据结构与算法概述](https://github.com/leetcode-pp/91alg-2/blob/master/algo.md)
 - [如何衡量算法的性能](https://github.com/leetcode-pp/91alg-2/blob/master/bigO.md)
 - [视频 1](https://www.bilibili.com/video/BV17t4y1i71G)
 - [视频 2](https://www.bilibili.com/video/BV1pa4y1s7g2)
 
-## [第二章 - 基础篇](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic.md)
+
+
+### [第二章 - 基础篇](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic.md)
 
 - [【91 算法-基础篇】01.数组，栈，队列](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-01.md)
 - [【91 算法-基础篇】02.链表](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-02.md)
 - [【91 算法-基础篇】03.树](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-03.md)
 - [【91 算法-基础篇】04.哈希表](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-04.md)
 - [【91 算法-基础篇】05.双指针](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-05.md)
+- [【91 算法-基础篇】06.图（加餐）](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-06.md)
+
+
+
+### [第三章 - 进阶篇](https://github.com/leetcode-pp/91alg-2/blob/master)
+
+- [【91 算法-进阶篇】07.高频面试题](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/advanced-07.md)
+
+
 
 ## 做题记录
 
@@ -35,9 +46,9 @@
 - [x] [【基础篇 - Day 15】 2020-11-15 - 129. 求根到叶子节点数字之和（03.树）](./15.md)
 - [x] [【基础篇 - Day 16】 513. 找树左下角的值](./16.md)
 - [x] [【基础篇 - Day 17】 2020-11-17 - Offer 37. 序列化二叉树（03. 树）](./17.md)
-- [x] [从前序与中序遍历序列构造二叉树](./17-1.md)
-- [x] [从中序与后序遍历序列构造二叉树](./17-2.md)
-- [x] [根据前序和后序遍历构造二叉树](./17-3.md)
+- [ ] [从前序与中序遍历序列构造二叉树](./17-1.md)
+- [ ] [从中序与后序遍历序列构造二叉树](./17-2.md)
+- [ ] [根据前序和后序遍历构造二叉树](./17-3.md)
 - [x] [【基础篇 - Day 18】 2020-11-18 - 987. 二叉树的垂序遍历（03. 树 ）](./18.md)
 - [x] [【基础篇 - Day 19】 2020-11-19 - 1. 两数之和](./19.md)
 - [x] [15. 三数之和](./19-1.md)
@@ -50,3 +61,14 @@
 - [x] [【基础篇 - Day 24】 2020-11-24 - 37. 解数独](./24.md)
 - [x] [36. 有效的数独](./24-1.md)
 - [x] [【基础篇 - Day 25】 2020-11-25 - 35. 搜索插入位置](./25.md)
+- [x] [【基础篇 - Day 26】 2020-11-26 - 74. 搜索二维矩阵](./26.md)
+- [x] [【基础篇 - Day 27】 2020-11-27 - 26. 删除排序数组中的重复项](./27.md)
+- [x] [【基础篇 - Day 28】 2020-11-28 - 876. 链表的中间结点](./28.md)
+- [x] [【基础篇 - Day 29】 2020-11-29 - 1052. 爱生气的书店老板](./29.md)
+- [x] [【基础篇 - Day 30】 2020-11-30 - 239. 滑动窗口最大值](./30.md)
+- [x] [【进阶篇 - Day 34】 2020-11-04 - 树的遍历系列（07. 高频面试题 ）](./34.md)
+- [x] [【进阶篇 - Day 35】 2020-12-05 -反转链表系列（07. 高频面试题 ）](./35.md)
+- [x] [【进阶篇 - Day 36】 2020-12-06 位运算系列（07. 高频面试题 )](./36.md)
+- [x] [【进阶篇 - Day 37】 2020-12-07 -动态规划系列（07. 高频面试题 ）](./37.md)
+- [x] [【进阶篇 - Day 38】 2020-12-08 有效括号（07. 高频面试题 ）](./38.md)
+- [x] [【进阶篇 - Day 39】 2020-12-09 设计系列（07. 高频面试题 ）](./39.md)

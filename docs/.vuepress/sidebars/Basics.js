@@ -58,6 +58,7 @@ module.exports = [
     {
         title: "Vue",
         children: [
+            "/Basics/Vue/Vue2_Source.md",
             "/Basics/Vue/Vue_vue3.md",
             "/Basics/Vue/Vue_React.md",
             "/Basics/Vue/Vue_vite.md",
