@@ -1,6 +1,6 @@
 # webpack
 
-<img src='./images/webpack.png'>
+<img src='./images/Webpack.png'>
 
 ## 基础概念
 
