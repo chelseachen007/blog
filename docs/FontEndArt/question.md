@@ -10,3 +10,11 @@ Object.create原理
 虚拟列表原理
 浏览器缓存原理
 并发调度
+
+MutationObserver 不能监控到的点
+
+Vue的keep-alive 缓存机制
+
+Http2 和 Http3 的优化？你有实践吗
+
+深拷贝的实现? 函数，Map的拷贝

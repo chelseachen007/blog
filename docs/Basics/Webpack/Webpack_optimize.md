@@ -194,6 +194,81 @@ optimization: {
 
 除此之外，splitChunks 还支持很多高级的用法，可以实现各种各样的分包策略，这些我们可以在 [文档](https://webpack.js.org/plugins/split-chunks-plugin/) 中找到对应的介绍。
 
+vue 配置
+
+```js
+optimization: {
+    splitChunks: {
+        cacheGroups: {
+            vendors: {
+                name: 'chunk-vendors',
+                    test: /[\\\/
+                    ]node_modules[\\\/
+                    ]/,
+                priority: -10,
+                    chunks: 'initial'
+            },
+            common: {
+                name: 'chunk-common',
+                    minChunks: 2,
+                        priority: -20,
+                            chunks: 'initial',
+                                reuseExistingChunk: true
+            }
+        }
+    },
+    minimizer: [
+        {
+            options: {
+                test: /\.m?js(\?.*)?$/i,
+                chunkFilter: () => true,
+                warningsFilter: () => true,
+                extractComments: false,
+                sourceMap: true,
+                cache: true,
+                cacheKeys: defaultCacheKeys => defaultCacheKeys,
+                parallel: true,
+                include: undefined,
+                exclude: undefined,
+                minify: undefined,
+                terserOptions: {
+                    compress: {
+                        arrows: false,
+                        collapse_vars: false,
+                        comparisons: false,
+                        computed_props: false,
+                        hoist_funs: false,
+                        hoist_props: false,
+                        hoist_vars: false,
+                        inline: false,
+                        loops: false,
+                        negate_iife: false,
+                        properties: false,
+                        reduce_funcs: false,
+                        reduce_vars: false,
+                        switches: false,
+                        toplevel: false,
+                        typeofs: false,
+                        booleans: true,
+                        if_return: true,
+                        sequences: true,
+                        unused: true,
+                        conditionals: true,
+                        dead_code: true,
+                        evaluate: true
+                    },
+                    mangle: {
+                        safari10: true
+                    }
+                }
+            }
+        }
+    ]
+},
+```
+
+
+
 ### 代码压缩
 
 webpack4 已经默认支持 ES6 语法的压缩。所以不用 uglyjs 该用 webpack 官方的 terser-webpack-plugin
@@ -300,7 +375,7 @@ module.exports = {
 
 ### 动态导入
 
-require.ensure（vue-router 配置路由，使用 webpack 的 require.ensure 技术，也可以实现按需加载。）
+require.ensure（vue-router 配置路由，使用 webpack 的 require.ensure 技术，也可以实现按需加载。
 
 #### vue 异步组件技术
 
@@ -330,7 +405,7 @@ component: (r) =>
 
 ## webpack5
 
-### Persistent Cac·hing
+### Persistent Caching
 
 实现了生产环境的增量更新
 

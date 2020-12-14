@@ -22,10 +22,6 @@
       }
 ```
 
-
-
-
-
 ## 要求设计LazyMan类，实现以下功能
 
 ```js
@@ -148,13 +144,7 @@ function handleFetchQueue(func, urls, max, callback) {
 
 
 
-
-
-
-
 ### 实现36进制加法，不得直接使用parselnt转化十进制进行计算，如‘1b'+'0a'=57
-
-
 
 
 
@@ -309,3 +299,21 @@ app.init();
 
 ```
 
+## 实现一个函数将对象结构转成在树形结构
+
+```js
+// 原始 list 如下
+let list =[
+    {id:1,name:'部门A',parentId:0},
+    {id:2,name:'部门B',parentId:0},
+    {id:3,name:'部门C',parentId:1},
+    {id:4,name:'部门D',parentId:1},
+    {id:5,name:'部门E',parentId:2},
+    {id:6,name:'部门F',parentId:3},
+    {id:7,name:'部门G',parentId:2},
+    {id:8,name:'部门H',parentId:4}
+];
+const result = convert(list, ...);
+```
+
+## 实现一个函数将小驼峰转化成大驼峰

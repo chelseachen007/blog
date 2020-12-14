@@ -170,7 +170,7 @@ Vue.prototype.$mount = function (
 }
 ```
 
-⾸先，它 对 el 做了限制，Vue 不能挂载在 body 、 html 这样的根节点上。
+首先，它 对 el 做了限制，Vue 不能挂载在 body 、 html 这样的根节点上。
 
 接下来的是很关键的逻辑 —— 如果没有定义 render 方法，则会把 el 或者 template 字符串**转换成 render 方法**。
 
@@ -896,7 +896,6 @@ export function initState (vm: Component) {
 值得注意的是初始化顺序是 prop => methods => data => computed => watch
 
 ```js
-
 function initData (vm: Component) {
   let data = vm.$options.data
   data = vm._data = typeof data === 'function'
@@ -1155,7 +1154,7 @@ Vue 的 mount 过程是通过 mountComponent 函数，其中有⼀段比较重�
 
 **每一个组件都会生成一个Watcher 里面生成一个Dep(),里面每个对象值都持有一个dep，当render时，会触发所有数据的getter 进行 dep.append() 方法（这里会做逻辑判断，防止同样的数据重复添加）。就完成了依赖收集，**
 
-接下来因为Vue 是数据驱动的，所以每次数据变化都会重新 render，那么 vm._render() 方法又会再次执行，并再次触发数据的 getters，**所以 Wathcer 在构造函数中会初始化 2 个 Dep 实例数 组， newDeps 表示新添加的 Dep 实例数组，而 deps 表示上⼀次添加的 Dep 实例数组。** 在执行 cleanupDeps 函数的时候，会⾸先遍历 deps ，移除对 dep 的订阅，然后把 newDepIds 和 depIds 交换， newDeps 和 deps 交换，并把 newDepIds 和 newDeps 清空。
+接下来因为Vue 是数据驱动的，所以每次数据变化都会重新 render，那么 vm._render() 方法又会再次执行，并再次触发数据的 getters，**所以 Wathcer 在构造函数中会初始化 2 个 Dep 实例数组， newDeps 表示新添加的 Dep 实例数组，而 deps 表示上⼀次添加的 Dep 实例数组。** 在执行 cleanupDeps 函数的时候，会首先遍历 deps ，移除对 dep 的订阅，然后把 newDepIds 和 depIds 交换， newDeps 和 deps 交换，并把 newDepIds 和 newDeps 清空。
 
 #### 派发更新
 
@@ -1338,7 +1337,7 @@ if (!prevVnode) {
 }
 ```
 
-这里执行 patch 的逻辑和⾸次渲染是不⼀样的，因为 oldVnode 不为空，并且它和 vnode 都是 VNode 类型，接下来会通过 **sameVNode(oldVnode, vnode)** 判断它们是否是相同的 VNode 来决定⾛ 不同的更新逻辑：
+这里执行 patch 的逻辑和首次渲染是不⼀样的，因为 oldVnode 不为空，并且它和 vnode 都是 VNode 类型，接下来会通过 **sameVNode(oldVnode, vnode)** 判断它们是否是相同的 VNode 来决定⾛ 不同的更新逻辑：
 
 ```js
    return function patch (oldVnode, vnode, hydrating, removeOnly) {
@@ -2089,7 +2088,7 @@ export default {
 
 ```
 
-注意它有⼀个属性 abstract 为 true，是⼀个 抽象组件，Vue 的⽂档没有提这个概念，实际上它在组件实例建⽴父子关系的时候会被忽略，
+注意它有⼀个属性 abstract 为 true，是⼀个抽象组件，Vue 的⽂档没有提这个概念，实际上它在组件实例建立父子关系的时候会被忽略，
 
 include 和 exclude 可以传入动态值是因为在watch中监听变化
 
@@ -2322,7 +2321,11 @@ Vue 是一个通过响应式对象 实现的一个MVVM框架，他的渲染流�
 
 **--- callHook(*vm*, 'Mount') ---** 
 
-触发更新时，Dep接受到变化通知，通知内部的watcher进行视图更新，watcher.run()会进入队列进行一波去重，然后异步去调用patch，patch这边也重新生成一个Vnode Tree 与旧tree 进行 diff 算法。
+响应式： 最开始init时已经对每个数据进行了响应式声明，在$mount阶段，将template 转化成 AST 树时，同时也会触发响应式对象的get 方法，将相应的watcher push 到 Dep的sub数组里，这里有一个细节，他在全局声明了一个Dep.target,保证同时只有一个watcher在执行，
+
+然后就是
+
+触发更新时，Dep接受到变化通知，通知内部的watcher进行视图更新，Watcher内部有新旧Dep两个数组，他会先去取消旧Watcher的订阅，然后执行watcher.run()会进入队列进行一波去重，然后异步去调用patch，patch这边也重新生成一个Vnode Tree 与旧tree 进行 diff 算法。
 
 
 

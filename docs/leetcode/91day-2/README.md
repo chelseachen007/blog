@@ -23,8 +23,8 @@
 ### [第三章 - 进阶篇](https://github.com/leetcode-pp/91alg-2/blob/master)
 
 - [【91 算法-进阶篇】07.高频面试题](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/advanced-07.md)
-
-
+- [【91 算法-进阶篇】08.Trie](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/advanced-trie.md)
+- [【91 算法-进阶篇】09.并查集 ](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/advanced-union-find-set.md)
 
 ## 做题记录
 

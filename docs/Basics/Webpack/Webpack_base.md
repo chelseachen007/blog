@@ -10,7 +10,7 @@ webpack_exports
 
 ### hash chunkhash contenthash 区别
 
-- hash 代码发生改变 hash 就会改变
+- hash 整个文件任何代码发生改变 hash 就会改变
 
 - contenthash 自身内容发生改变 才会改变
 
@@ -231,7 +231,7 @@ if (module.hot) {
 
 #### 预设
 
-1.babel-loader 是 webpack 与 babel 的通信桥梁，不会做把 es6 转成 es5 的⼯作，这部分⼯作需要⽤到 **@babel/preset-env**来做 2.@babel/preset-env ⾥包含了 es，6，7，8 转 es5 的转换规则
+1.babel-loader 是 webpack 与 babel 的通信桥梁，不会做把 es6 转成 es5 的⼯作，这部分⼯作需要用到 **@babel/preset-env**来做 2.@babel/preset-env ⾥包含了 es，6，7，8 转 es5 的转换规则
 
 #### polyfill
 
@@ -268,13 +268,13 @@ import "@babel/polyfill";
 
 ```
 
-useBuiltIns 选项是 babel 7 的新功能，这个选项告诉 babel 如何配置 @babel/polyfill 。 它有三 个参数可以使⽤：
+useBuiltIns 选项是 babel 7 的新功能，这个选项告诉 babel 如何配置 @babel/polyfill 。 它有三个参数可以使用：
 
-①entry: 需要在 webpack 的⼊⼝⽂件⾥ import "@babel/polyfill" ⼀ 次。 babel 会根据你的使⽤情况导⼊垫⽚，没有使⽤的功能不会被导⼊相应的垫⽚。
+①entry: 需要在 webpack 的⼊⼝⽂件⾥ import "@babel/polyfill" ⼀次。 babel 会根据你的使用情况导⼊垫片，没有使用的功能不会被导⼊相应的垫片。
 
 ②usage: 不需要 import ，全⾃动检测，但是要安装 @babel/polyfill 。（试验阶段）
 
-③false: 如果你 import "@babel/polyfill" ，它不会排除掉没有使⽤的垫⽚，程序体积会庞⼤。(不推荐)
+③false: 如果你 import "@babel/polyfill" ，它不会排除掉没有使用的垫片，程序体积会庞⼤。(不推荐)
 
 ## tree-shaking
 
