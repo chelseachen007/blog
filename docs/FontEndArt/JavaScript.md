@@ -44,5 +44,21 @@ if (!Array.isArray) {
 
 最先有的是CommonJS，为了是让JS可以运行在浏览器之外，得到了NodeJS的完美支持，但是因为浏览器同步加载文件会造成性能问题，所以AMD和CMD作为异步加载的规范诞生了，他们很类似，但是AMD推崇**依赖前置，提前执行**，CMD则推崇**依赖就近，延迟执行**。但是，ES6的module通过静态编译实现比ComonJS更佳的性能，借鉴了AMD的异步却拥有更高的灵活度，所以我们应该拥抱ESmodule，现代的snowPack和Vite都是通过静态编译大幅度提升了打包速度。
 
+## 解决 0.1 + 0.2 !=0.3
+
+产生原因：js中的数字是采用双精度64位浮点数存储，计算使用二进制，呈现结果时才会转换成十进制，当十进制小数的二进制表示的有限数字超过 52 位时，在 JavaScript 里是不能精确存储的，这时候就存在舍入误差
+
+```js
+//0.1+0.2==0.3
+function FixAdd (nums1, nums2) {
+    return (nums1 * 1000 + nums2 * 1000) / 1000
+}
+function FixAdd (nums1, nums2) {
+    return (nums1 + nums2).toFixed(1)
+}
+```
+
+
+
 
 ## 下一道幸运题目

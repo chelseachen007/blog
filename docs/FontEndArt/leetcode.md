@@ -92,10 +92,6 @@ LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk foo
       }
 ```
 
-
-
-
-
 ## 实现一个批量请求函数
 
 要求：
@@ -144,11 +140,11 @@ function handleFetchQueue(func, urls, max, callback) {
 
 
 
-### 实现36进制加法，不得直接使用parselnt转化十进制进行计算，如‘1b'+'0a'=57
+## 实现36进制加法，不得直接使用parselnt转化十进制进行计算，如‘1b'+'0a'=57
 
 
 
-### 实现sortByDept()函数，被依赖最深的元素，输出到最前
+## 实现sortByDept()函数，被依赖最深的元素，输出到最前
 
 ```js
 sortByDept([
@@ -316,4 +312,89 @@ let list =[
 const result = convert(list, ...);
 ```
 
+解：
+
+```js
+function convert () {
+    let res = []
+    let temp = {}
+    for (let i = 0; i < list.length; i++) {
+        temp[list[i].id] = list[i]; // 以id作为索引存储元素，可以无需遍历直接定位元素
+    }
+    for (let j = 0; j < list.length; j++) {
+        const item = list[j]
+        const current = temp[item.id]
+        if (item.parentId === 0) {
+            res.push(current)
+        } else {
+            if (!temp[item.parentId]['children']) temp[item.parentId].children = []
+            temp[item.parentId].children.push(item)
+        }
+    }
+    return res
+}
+```
+
 ## 实现一个函数将小驼峰转化成大驼峰
+
+## 实现超大整数相加
+
+```js
+function bigNumAdd (num1, num2) {
+    let res = '', carry = 0
+    num1 = `${num1}`.split('')
+    num2 = `${num2}`.split('')
+    while (num1.length || num2.length || carry) {
+        carry = ~~num1.pop() + ~~num2.pop()
+        res = (carry % 10) + res
+        carry = carry > 9
+    }
+    return res
+}
+```
+
+## 将如下对象输出成指定数组
+
+```js
+var obj = {
+    a: {
+        b: {
+            c: { f: "aa" }
+        },
+        d: {
+            e: { g: "bb" },
+            h: { i: "cc" }
+        },
+        j: {
+            k: "dd"
+        }
+    }
+}
+//预期结果 [f,g,i,c,e,h,k,b,d,j,a]
+```
+
+解：用层序遍历的思想
+
+```js
+function Format (obj) {
+    if (!obj) return []
+    let res = []
+    let queue = [obj]
+    while (queue.length) {
+        let arr = []
+        let length = queue.length
+        for (let i = 0; i < length; i++) {
+            let curr = queue.shift()
+            for (let s in curr) {
+                if (typeof curr === 'object') {
+                    queue.push(curr[s])
+                    arr.push(s)
+                }
+            }
+        }
+        res = [...arr, ...res]
+    }
+    return res
+}
+```
+

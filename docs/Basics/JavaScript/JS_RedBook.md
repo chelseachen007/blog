@@ -1083,8 +1083,6 @@ window.addEventListener('scroll', () => {
 
 #### 可读流
 
-
-
 ```js
     // 每 1000 毫秒生成一个递增的整数
     for (let i = 0; i < 5; ++i) {

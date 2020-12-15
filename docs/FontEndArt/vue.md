@@ -46,7 +46,7 @@ computed 可以依赖其它 computed，甚至是其它组件的 data。
 
 缺点：因为是根据Key进行覆盖，容易出现命名空间混乱导致不想要发生的覆盖
 
-## **vue3和wue2双向绑定的区别,优化点在哪,用 proxy为什么是一种优化**
+## **vue3和vue2双向绑定的区别,优化点在哪,用 proxy为什么是一种优化**
 
 Vue3采用了proxy进行数据拦截，这是一个ES6自带的一个API，支持拦截整个对象几乎所有操作，不需要像Vue2一样对每个Key进行循环递归生成Watcher。
 
@@ -139,4 +139,80 @@ Vue的nextTick采用的是降级策略， 优先使用的是微任务的Promise 
 
 ## 谈一谈你对vue响应式原理的理解？
 
+1. 由于 Vue 执行一个组件的 `render` 函数是由 `Watcher` 去代理执行的，`Watcher` 在执行前会把 `Watcher` 自身先赋值给 `Dep.target` 这个全局变量，等待响应式属性去收集它
+2. 这样在哪个组件执行 `render` 函数时访问了响应式属性，响应式属性就会精确的收集到当前全局存在的 `Dep.target` 作为自身的依赖
+3. 在响应式属性发生更新时通知 `Watcher` 去重新调用 `vm._update(vm._render())` 进行组件的视图更新
+
 ## 手写一个简单的diff算法
+
+```js
+function patchNode (oldNode, newNode) {
+    const oldChildren = oldNode.children
+    const newChildren = newNode.children
+    // 老的有子节点，新的没有就移除
+    if (oldChildren.length && !newChildren.length) {
+        // remove oldChildren
+    }
+    // 老的没有子节点，新的有 就 清空老节点并将新节点加入到DOM下
+    else if (oldChildren.length && !newChildren.length) {
+        // oldChildren =null 
+        // Dom.append(newChildren)
+    }
+    // 都没有 就只做文本的替换
+    else if (!oldChildren.length && !newChildren.length) {
+        // 替换文本
+    }
+    else {
+        update(oldChildren, newChildren)
+    }
+
+}
+function someNode () {
+    // 优先判断 key 是否相同
+    // 异步组件 判断 asyncFactory  是否相同
+    // 同步组件 判断input,data,isComment  是否相同
+}
+function update (oldNode, newNode) {
+    let newStart
+    let oldStart
+    let oldEnd
+    let newEnd
+    while (oldStart <= oldEnd && newStart <= newEnd) {
+        // someNode 判断后 都进入 patchVnode
+        //新头和旧头 
+        if (newStart === oldStart) {
+            newStart++
+            oldStart++
+        }
+        //旧尾和新尾  
+        else if (oldEnd === newEnd) {
+            oldEnd--
+            newEnd--
+        }
+        //旧头和新尾
+        else if (oldStart === newEnd) {
+            oldStart++
+            newEnd--
+        }
+        //新头和旧尾
+        else if (newStart === oldEnd) {
+            newStart++
+            oldEnd--
+        }
+        //都找不到 就遍历oldNode 生成一个 {key:index} 的Map
+        let oldKeyToIdx = {}
+        if (oldKeyToIdx[newStart.key]) {
+            // move 这个节点到 oldStart 之前 然后继续遍历
+            newStart++
+        }
+        // 如果找不到，或者 key 相同 但内容不相同
+        else {
+            //createElm创建一个新的DOM节点。
+        }
+    }
+    //循环完
+    // 新的比老的长 addVnodes 多出来的节点
+    // 老的比新的长 removeVnodes 多出来的节点
+}
+```
+
