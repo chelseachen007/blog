@@ -344,7 +344,7 @@ async upload() {
 
 ```js
 timing: {
-        // 同一个浏览器上一个页面卸载(unload)结束时的时间戳。如果没有上一个页面，这个值会和fetchStart相同。
+    // 同一个浏览器上一个页面卸载(unload)结束时的时间戳。如果没有上一个页面，这个值会和fetchStart相同。
 	navigationStart: 1543806782096,
 
 	// 上一个页面unload事件抛出时的时间戳。如果没有上一个页面，这个值会返回0。
@@ -364,7 +364,7 @@ timing: {
 	fetchStart: 1543806782096,
 
 	// DNS 域名查询开始的UNIX时间戳。
-        //如果使用了持续连接(persistent connection)，或者这个信息存储到了缓存或者本地资源上，这个值将和fetchStart一致。
+    //如果使用了持续连接(persistent connection)，或者这个信息存储到了缓存或者本地资源上，这个值将和fetchStart一致。
 	domainLookupStart: 1543806782096,
 
 	// DNS 域名查询完成的时间.
@@ -372,11 +372,11 @@ timing: {
 	domainLookupEnd: 1543806782096,
 
 	// HTTP（TCP） 域名查询结束的时间戳。
-        //如果使用了持续连接(persistent connection)，或者这个信息存储到了缓存或者本地资源上，这个值将和 fetchStart一致。
+    //如果使用了持续连接(persistent connection)，或者这个信息存储到了缓存或者本地资源上，这个值将和 fetchStart一致。
 	connectStart: 1543806782099,
 
 	// HTTP（TCP） 返回浏览器与服务器之间的连接建立时的时间戳。
-        // 如果建立的是持久连接，则返回值等同于fetchStart属性的值。连接建立指的是所有握手和认证过程全部结束。
+    // 如果建立的是持久连接，则返回值等同于fetchStart属性的值。连接建立指的是所有握手和认证过程全部结束。
 	connectEnd: 1543806782227,
 
 	// HTTPS 返回浏览器与服务器开始安全链接的握手时的时间戳。如果当前网页不要求安全连接，则返回0。
@@ -386,11 +386,11 @@ timing: {
 	requestStart: 1543806782241,
 
 	// 返回浏览器从服务器收到（或从本地缓存读取）第一个字节时的时间戳。
-        //如果传输层在开始请求之后失败并且连接被重开，该属性将会被数制成新的请求的相对应的发起时间。
+    //如果传输层在开始请求之后失败并且连接被重开，该属性将会被数制成新的请求的相对应的发起时间。
 	responseStart: 1543806782516,
 
 	// 返回浏览器从服务器收到（或从本地缓存读取，或从本地资源读取）最后一个字节时
-        //（如果在此之前HTTP连接已经关闭，则返回关闭时）的时间戳。
+    //（如果在此之前HTTP连接已经关闭，则返回关闭时）的时间戳。
 	responseEnd: 1543806782537,
 
 	// 当前网页DOM结构开始解析时（即Document.readyState属性变为“loading”、相应的 readystatechange事件触发时）的时间戳。
@@ -426,6 +426,25 @@ request 请求耗时 ：responseEnd - responseStart
 白屏时间 ：responseStart - navigationStart
 domready 时间 ：domContentLoadedEventEnd - navigationStart
 onload 时间 ：loadEventEnd – navigationStart
+```
+
+### **关键性能指标**
+
+```js
+//首包时间
+firstbyte: timing.responseStart - timing.domainLookupStart
+
+//First Paint Time, 首次渲染时间 / 白屏时间
+fpt: timing.responseEnd - timing.fetchStart
+
+//Time to Interact，首次可交互时间
+TTI: timing.domInteractive - timing.fetchStart
+
+//HTML 加载完成时间， 即 DOM Ready 时间
+ready: timing.domContentLoadedEventEnd - timing.fetchStart
+
+//页面完全加载时间
+load:timing.loadEventEnd - timing.fetchStart
 ```
 
 ### 业务层

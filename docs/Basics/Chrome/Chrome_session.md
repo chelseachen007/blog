@@ -27,8 +27,7 @@ cookie 的产生是为了解决 http 传输无状态问题
 // path = cookie 所属的路径（默认值是当前页面的路径）：
 // secure 设置web页面只有在HTTPS安全连接时，才可以发送Cookie。
 // HttpOnly 它使JavaScript 脚本无法获得Cookie
-document.cookie = "logcookie=3qjj; expires=Wed, 13-Mar-2019 12:08:53 GMT; Max-Age=31536000; path=/;
- domain=fafa.com;secure; HttpOnly;"
+document.cookie = "logcookie=3qjj; expires=Wed, 13-Mar-2019 12:08:53 GMT; Max-Age=31536000; path=/;domain=fafa.com;secure; HttpOnly;"
 ```
 
 #### 读取具有特定名称的 Cookie

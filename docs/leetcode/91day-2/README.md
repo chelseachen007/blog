@@ -7,8 +7,6 @@
 - [视频 1](https://www.bilibili.com/video/BV17t4y1i71G)
 - [视频 2](https://www.bilibili.com/video/BV1pa4y1s7g2)
 
-
-
 ### [第二章 - 基础篇](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic.md)
 
 - [【91 算法-基础篇】01.数组，栈，队列](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-01.md)
@@ -18,13 +16,13 @@
 - [【91 算法-基础篇】05.双指针](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-05.md)
 - [【91 算法-基础篇】06.图（加餐）](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/basic-06.md)
 
-
-
 ### [第三章 - 进阶篇](https://github.com/leetcode-pp/91alg-2/blob/master)
 
 - [【91 算法-进阶篇】07.高频面试题](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/advanced-07.md)
 - [【91 算法-进阶篇】08.Trie](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/advanced-trie.md)
 - [【91 算法-进阶篇】09.并查集 ](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/advanced-union-find-set.md)
+- [【91 算法-进阶篇】03.跳表](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/advanced-skiplist.md)
+- [【91 算法-进阶篇】04.剪枝](https://github.com/leetcode-pp/91alg-2/blob/master/lecture/advanced_prune.md)
 
 ## 做题记录
 
@@ -72,3 +70,19 @@
 - [x] [【进阶篇 - Day 37】 2020-12-07 -动态规划系列（07. 高频面试题 ）](./37.md)
 - [x] [【进阶篇 - Day 38】 2020-12-08 有效括号（07. 高频面试题 ）](./38.md)
 - [x] [【进阶篇 - Day 39】 2020-12-09 设计系列（07. 高频面试题 ）](./39.md)
+- [ ] [【进阶篇 - Day 40】 2020-12-10 前缀和系列（07. 高频面试题 ）](./40.md)
+- [ ] [【进阶篇 - Day 41】 2020-12-10 - 208. 实现 Trie（02. Trie ）](./41.md)
+- [ ] [【进阶篇 - Day 42】 2020-12-12 - 677. 键盘映射（02.Trie ）](./42.md)
+- [ ] [【进阶篇 - Day 43】 2020-12-13 - 面试题 17.17 多次搜索（02. trie ）](./43.md)
+- [ ] [【进阶篇 - Day 44】 2020-12-13 - 547. 朋友圈](./44.md)
+- [ ] [【进阶篇 - Day 45】 2020-12-15 - 924. 尽量减少恶意软件的传播](./45.md)
+- [ ] [【进阶篇 - Day 46】 2020-12-16 - 1319. 连通网络的操作次数](./46.md)
+- [ ] [【进阶篇 - Day 47】 2020-12-17 - 1206. 设计跳表](./47.md)
+- [ ] [【进阶篇 - Day 48】 2020-12-18 - 814. 二叉树剪枝](./48.md)
+- [x] [【进阶篇 - Day 49】 2020-12-19 - 39. 组合总和（03. 剪枝 ）](./49.md)
+- [x] [【进阶篇 - Day 50】 2020-12-20 - 40. 组合总和 II（05. 剪枝）](./50.md)
+- [x] [【进阶篇 - Day 51】 2020-12-21 - 47. 全排列 II（05.剪枝 ）](./51.md)
+- [ ] [【进阶篇 - Day 52】 2020-12-22 - 28. 实现 strStr()-BF&RK](./52.md)
+- [ ] [【进阶篇 - Day 53】 2020-12-23 - 28. 实现 strStr()-KMP](./53.md)
+- [x] [【进阶篇 - Day 54】 2020-12-24 - 215. 数组中的第 K 个最大元素](./54.md)
+- [x] [【进阶篇 - Day 55】 2020-12-25 - 1046 最后一块石头的重量](./55.md)

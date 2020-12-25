@@ -152,7 +152,7 @@ server suite 意思是：“**握手时使用 `ECDHE 算法`进行密钥交换�
 
 pre-master 是经过公钥加密之后传输的，所以黑客无法获取到 pre-master，这样黑客就无法生成密钥，也就保证了黑客无法破解传输过程中的数据了
 
-- 服务器收到后，使用私钥解密并验证合法性，至此，两边就都可以通过 **cilent-random** 和**server-random** 、 **Pre-master** 三个共同随机数生成**对称秘钥**(**Master Secret**)进行加密传输了
+- 服务器收到后，使用私钥解密并验证合法性，至此，两边就都可以通过 **cilent-random** 和 **server-random** 、 **Pre-master** 三个共同随机数生成**对称秘钥**(**Master Secret**)进行加密传输了
 
 ```js
 master_secret = PRF(

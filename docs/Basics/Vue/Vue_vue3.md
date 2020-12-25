@@ -156,3 +156,24 @@ const state = reactive({
 | beforeDestroy | onBeforeUnmount |
 | destroyed     | onUnmounted     |
 | errorCaptured | onErrorCaptured |
+
+## 静态节点
+
+vue3 会找到静态根结点，并直接提升到顶层，传入render的时候，对这部分节点不进行path
+
+而Vue 2 则是在通过生成AST树后进行一次遍历，将节点标记成 isStatic ，但这样在diff的时候还是要递归遍历到，只不过会走到另一个分支。
+
+```js
+// vue2 的静态节点
+render(){
+  createVNode("h1", null, "Hello World")
+  // ...
+}
+
+// vue3 的静态节点
+const hoisted = createVNode("h1", null, "Hello World")
+function render(){
+  // 直接使用 hoisted 即可
+}
+```
+

@@ -943,7 +943,7 @@ function initData (vm: Component) {
 2. 将每一个data 都从vm._data.xxx 代理到 vm.xxx 上 
 3. 另外一个就是我们熟悉的 将遍历每个key 转变成响应式
 
-proxy的实现 是通过 defineProperty 将 vm._data 的get 和set 改成null，同时将vm.xxx的读取都绑定到 vm._data  详细代码就不贴了
+proxy的实现 是通过 defineProperty 将 vm._data 的 get和 set 改成 null，同时将 vm.xxx 的读取都绑定到  vm._data  详细代码就不贴了
 
 我们接下来看看下核心observe的实现
 
@@ -1402,7 +1402,7 @@ setter 的逻辑有 2 个关键的点，⼀个是 **childOb = !shallow && observ
 
 ### 特殊情况
 
-#### $set
+#### $set	
 
 Vue考虑到初始化时未声明情况，提供了$set 方法
 
@@ -1929,7 +1929,7 @@ function genStaticKeys (keys: string): Function {
 }
 ```
 
-isStatic 是对⼀个 AST 元素节点是否是静态的判断，如果是表达式，就是非静态；如果是**纯⽂本**， 就是静态；对于⼀个**普通元素**，如果**有 pre 属性**，那么它使用了 v-pre 指令，是静态，否则要同时 满⾜以下条件：**没有使用 v-if 、 v-for ，没有使用其它指令（不包括 v-once ），非内置组件， 是平台保留的标签，非带有 v-for 的 template 标签的直接子节点，节点的所有属性的 key 都满足静态 key；**这些都满⾜则这个 AST 节点是⼀个静态节点。
+isStatic 是对⼀个 AST 元素节点是否是静态的判断，如果是表达式，就是非静态；如果是**纯文本**， 就是静态；对于⼀个**普通元素**，如果**有 pre 属性**，那么它使用了 v-pre 指令，是静态，否则要同时 满⾜以下条件：**没有使用 v-if 、 v-for ，没有使用其它指令（不包括 v-once ），非内置组件， 是平台保留的标签，非带有 v-for 的 template 标签的直接子节点，节点的所有属性的 key 都满足静态 key；**这些都满⾜则这个 AST 节点是⼀个静态节点。
 
 如果这个节点是⼀个普通元素，则遍历它的所有 children ，递归执⾏ markStatic 。因为所有的 elseif 和 else 节点都不在 children 中， 如果节点的 ifConditions 不为空，则遍历 ifConditions 拿到所有条件中的 block ，也就是它们对应的 AST 节点，递归执⾏ markStatic 。**在这些递归过程中，⼀旦子节点有不是 static 的情况，则它的⽗节点的 static 均变成 false。**
 

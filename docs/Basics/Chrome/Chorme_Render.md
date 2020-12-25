@@ -368,8 +368,8 @@ CSSOM 会阻塞渲染，只有当 CSSOM 构建完毕后才会进入下一个阶�
 
 ```cmd
 npm install -g lighthouse
-lighthouse --locale=zh https://google.comgoogle.com  // 默认移动端
-lighthouse https://google.comgoogle.com --view --emulated-form-factor=desktop // 桌面端
+lighthouse --locale=zh https://www.google.com  // 默认移动端
+lighthouse --locale=zh https://www.google.com --view --emulated-form-factor=desktop // 桌面端
 ```
 
 准确衡量网站的性能 根据 Google 在 web.dev 上公布的数据，他们认为以用户为中心的性能指标，应该能回答以下四个问题 ：
