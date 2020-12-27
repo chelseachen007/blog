@@ -2,6 +2,10 @@
 
 ![img](images/clipboard.png)
 
+![image-20201227143655635](images/image-20201227143655635.png)
+
+
+
 ## Http优化
 
 HTTP 优化有两个大的方向：
@@ -139,7 +143,7 @@ Object.freeze 冻结数据
 
 另外就是框架方面的合理运用，异步等待的恰当使用。
 
-
+// TODO：
 
 ## 参考资料
 
