@@ -42,3 +42,7 @@
 
 下载[Wireshark](https://www.wireshark.org/download.html)
 
+### UDP和TCP 
+
+可靠数据传输、吞吐量、定时和安全性。
+
