@@ -3,6 +3,8 @@ node_modules
 /docs/.vuepress/dist
 mulu.md
 Interview
+work
+
 
 # local env files
 .env.local
