@@ -12,9 +12,9 @@ module.exports = [
             "/book/2021/6.md",
             "/book/2021/7.md",
             "/book/2021/8.md",
-            // "/book/2021/9.md",
-            // "/book/2021/10.md",
-            // "/book/2021/11.md",
+            "/book/2021/9.md",
+            "/book/2021/10.md",
+            "/book/2021/11.md",
         ],
     },
 ];
