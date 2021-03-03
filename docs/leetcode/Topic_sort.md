@@ -1,21 +1,19 @@
 # 排序算法
 
-计时都是使用一个长度为1000的随机数组
+计时都是使用一个长度为 1000 的随机数组
 
 ### 复杂度列表
 
-| 排序法 | 平均时间 | 最差情形    | 稳定度 | 额外空间 | 备注                          |
-| ------ | -------- | ----------- | ------ | -------- | ----------------------------- |
-| 冒泡   | O(n2)    | O(n2)       | 稳定   | O(1)     | n小时较好                     |
-| 选择   | O(n2)    | O(n2)       | 不稳定 | O(1)     | n小时较好                     |
-| 插入   | O(n2)    | O(n2)       | 稳定   | O(1)     | 大部分已排序时较好            |
-| 基数   | O(logRB) | O(logRB)    | 稳定   | O(n)     | B是真数(0-9)，R是基数(个十百) |
-| Shell  | O(nlogn) | O(ns) 1<s<2 | 不稳定 | O(1)     | s是所选分组                   |
-| 快速   | O(nlogn) | O(n2)       | 不稳定 | O(nlogn) | n大时较好                     |
-| 归并   | O(nlogn) | O(nlogn)    | 稳定   | O(1)     | n大时较好                     |
-| 堆     | O(nlogn) | O(nlogn)    | 不稳定 | O(1)     | n大时较好                     |
-
-
+| 排序法 | 平均时间 | 最差情形    | 稳定度 | 额外空间 | 备注                            |
+| ------ | -------- | ----------- | ------ | -------- | ------------------------------- |
+| 冒泡   | O(n2)    | O(n2)       | 稳定   | O(1)     | n 小时较好                      |
+| 选择   | O(n2)    | O(n2)       | 不稳定 | O(1)     | n 小时较好                      |
+| 插入   | O(n2)    | O(n2)       | 稳定   | O(1)     | 大部分已排序时较好              |
+| 基数   | O(logRB) | O(logRB)    | 稳定   | O(n)     | B 是真数(0-9)，R 是基数(个十百) |
+| Shell  | O(nlogn) | O(ns) 1<s<2 | 不稳定 | O(1)     | s 是所选分组                    |
+| 快速   | O(nlogn) | O(n2)       | 不稳定 | O(nlogn) | n 大时较好                      |
+| 归并   | O(nlogn) | O(nlogn)    | 稳定   | O(1)     | n 大时较好                      |
+| 堆     | O(nlogn) | O(nlogn)    | 不稳定 | O(1)     | n 大时较好                      |
 
 ### 冒泡排序
 
@@ -25,7 +23,7 @@
 
 基础版本也叫交换排序，双层循环遇到比自己大的进行交换
 
-```js
+```JavaScript
 function bubbleSort(arr) {
   for (let i = 0; i < arr.length; i++) {
     for (let j = i + 1; j < arr.length; j++) {
@@ -45,7 +43,7 @@ function bubbleSort(arr) {
 1. 从后往前，把过程中的几次交换提到更前面位置，减少了交换过程中的不必要交换
 2. 循环 一次没有进行交换，则已完成排序，退出
 
-```js
+```JavaScript
 function HighBubbleSort(arr) {
   let flag = true;
   for (let i = 0; i < arr.length && flag; i++) {
@@ -63,18 +61,16 @@ function HighBubbleSort(arr) {
 
 #### 计时比较
 
-```js
+```JavaScript
 bubbleSort: 7.117ms
 HighBubbleSort: 0.109ms
 ```
-
-
 
 ### 插入排序
 
 取出下一个元素和当前元素比较，如果当前元素大就交换位置。那么此时第一个元素就是当前的最小数，所以下次取出操作从第三个元素开始，向前对比，重复之前的操作。
 
-```js
+```JavaScript
 function insertSort(arr) {
   for (var i = 1; i < arr.length; i++) {
     let preIndex = i - 1;
@@ -93,11 +89,9 @@ function insertSort(arr) {
 
 #### 计时
 
-```js
+```JavaScript
 insertSort: 4.876ms
 ```
-
-
 
 ### 选择排序
 
@@ -105,7 +99,7 @@ insertSort: 4.876ms
 
 循环过去 记录最小值下标 比起冒泡 不用多次交换位置
 
-```js
+```JavaScript
 function selectSort(arr) {
   for (var i = 0; i < arr.length; i++) {
     let minIndex = i;
@@ -122,7 +116,7 @@ function selectSort(arr) {
 
 #### 计时
 
-```js
+```JavaScript
 selectSort: 6.682ms
 ```
 
@@ -130,7 +124,7 @@ selectSort: 6.682ms
 
 快速排序是对冒泡排序的一种改进，第一趟排序时将数据分成两部分，一部分比另一部分的所有数据都要小。然后递归调用，在两边都实行快速排序。
 
-```js
+```JavaScript
 function quickSort (arr, begin = 0, end = arr.length - 1) {
     //递归出口
     if (begin >= end)
@@ -167,11 +161,10 @@ const swap = (nums, i, j) => ([nums[i], nums[j]] = [nums[j], nums[i]]);
 
 #### 计时
 
-```js
+```JavaScript
 quickSort: 4.178ms
 ```
 
 ### 归并排序
 
 归并排序通过分治的思想，把长度为 n 的数列，每次简化为两个长度为 n/2 的数列。这更有利于计算机的并行处理，只需要 log2n 次归并。
-

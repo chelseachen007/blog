@@ -1,12 +1,12 @@
 # 设计模式
 
-## ⑥大原则
+## ⑥ 大原则
 
 ### 开闭原则
 
 开闭原则指的就是对扩展开放、对修改关闭。编写代码的时候不可避免地会碰到修改的情况，而遵循开闭原则就意味着当代码需要修改时，**可以通过编写新的代码来扩展已有的代码，而不是直接修改已有代码本身**。**对扩展开放，对修改封闭**
 
-```js
+```JavaScript
 function validate() {
     // 校验用户名
     if (!username)  ... else ...
@@ -17,7 +17,7 @@ function validate() {
 
 如果此时增加一个校验条件，就要修改 validate() 函数内容。
 
-```js
+```JavaScript
 class Validation {
     private validateHandlers: ValidateHandler[] = [];
     public addValidateHandler(handler: IValidateHandler) {
@@ -118,7 +118,7 @@ class UsernameValidateHandler implements IValidateHandler {
 
 ### 创建型-单例模式
 
-```js
+```JavaScript
 class Storage {
     static getInstance() {
         // 判断是否已经new过1个实例
@@ -145,4 +145,3 @@ class Storage {
 观察者模式和发布-订阅模式之间的区别，在于是否存在第三方、发布者能否直接感知订阅者
 
 ### 行为性-迭代器模式
-

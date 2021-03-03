@@ -18,13 +18,13 @@
 
 - **监听 error 事件**
 
-  ```js
+  ```JavaScript
   window.addEventListener('error',() => {}）
   ```
 
 - **Promise 错误**
 
-  ```js
+  ```JavaScript
   window.addEventListener("unhandledrejection", (e) => {
     throw e.reason;
   });
@@ -38,7 +38,7 @@
 
   我们可以将 unhandledrejection 事件抛出的异常再次抛出就可以统一通过 error 事件进行处理了。
 
-  ```js
+  ```JavaScript
   window.addEventListener("unhandledrejection", (e) => {
     throw e.reason;
   });
@@ -58,7 +58,7 @@
 
 ### Vue
 
-```js
+```JavaScript
 Vue.config.errorHandler = (err, vm, info) => {
   let { message, name, script = "", line = 0, column = 0, stack } = err;
   console.log("errorHandler:", err);
@@ -69,9 +69,9 @@ Vue.config.errorHandler = (err, vm, info) => {
 
 **错误边界仅可以捕获其子组件的错误**。错误边界无法捕获其自身的错误。如果一个错误边界无法渲染错误信息，则错误会向上冒泡至最接近的错误边界。
 
-使用componentDidCatch 进行错误捕获
+使用 componentDidCatch 进行错误捕获
 
-```js
+```JavaScript
 import React from "react";
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -113,7 +113,7 @@ export default class ErrorBoundary extends React.Component {
 
 ### img 上报
 
-推荐使用1*1的gif
+推荐使用 1\*1 的 gif
 
 **原因是：**
 1、没有跨域问题
@@ -122,13 +122,13 @@ export default class ErrorBoundary extends React.Component {
 4、不会阻塞页面加载，影响用户的体验，只需 **new Image** 对象
 5、相比于 BMP/PNG 体积最小，可以节约 41% / 35% 的网络资源小
 
-```js
+```JavaScript
 new Image().src = "http://localhost:7001/monitor/error";
 ```
 
 ### ajax 上报
 
-```js
+```JavaScript
 axios.post("http://localhost:7001/monitor/error");
 ```
 
@@ -136,11 +136,11 @@ axios.post("http://localhost:7001/monitor/error");
 
 ![image-20201119171440046](./images/image-20201119171440046.png)
 
-```js
+```JavaScript
 // 分别是错误信息，错误地址，lineno，colno，error.message,error.stack
 ```
 
-```js
+```JavaScript
 // 将info信息序列化后上传
 const str = window.btoa(JSON.stringify(info));
 const host = "http://localhost:7001/monitor/error";
@@ -149,7 +149,7 @@ new Image().src = `${host}?info=${str}`;
 
 ## 数据清洗去重
 
-```js
+```JavaScript
       except: [
         /^Script error\.?/,
         /^Javascript error: Script error\.? on line 0/,
@@ -184,9 +184,9 @@ new Image().src = `${host}?info=${str}`;
     }
 ```
 
-## sourceMap上传
+## sourceMap 上传
 
-```js
+```JavaScript
 let mapKeys = Object.keys(compilation.assets).filter(item => /.map$/.test(item.toLowerCase()))
 let promiseList = []
 for (let item in mapKeys) {
@@ -202,9 +202,9 @@ for (let item in mapKeys) {
 Promise.all(promiseList)
 ```
 
-## 插入html
+## 插入 html
 
-```js
+```JavaScript
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { type } = require('os')
 const { resolve } = require('path')
@@ -248,15 +248,13 @@ class HtmlAddAttrPlugins {
 }
 ```
 
-
-
 ## 异常收集
 
 这里使用 egg 进行异常收集
 
 将错误接收并转码写入到日志中
 
-```js
+```JavaScript
 async index() {
     const { ctx } = this;
     const { info } = ctx.query
@@ -270,7 +268,7 @@ async index() {
 
 ## **整理与上报方案**
 
-除了异常报错信息本身，我们还需要记录用户操作日志，以实现场景复原。这就涉及到上报的量和频率问题。如果任何日志都立即上报，这无异于自造的DDOS攻击。因此，我们需要合理的上报方案。
+除了异常报错信息本身，我们还需要记录用户操作日志，以实现场景复原。这就涉及到上报的量和频率问题。如果任何日志都立即上报，这无异于自造的 DDOS 攻击。因此，我们需要合理的上报方案。
 
 ### **前端存储日志**
 
@@ -284,9 +282,9 @@ async index() {
 | **检索**     |        | key          | key            | key, index | field  |
 | **性能**     |        | 读快写慢     |                | 读慢写快   |        |
 
-综合之后，IndexedDB是最好的选择，它具有容量大、异步的优势，异步的特性保证它不会对界面的渲染产生阻塞。缺点，就是api非常复杂，不像localStorage那么简单直接。针对这一点，我们可以使用**hello-indexeddb**这个工具
+综合之后，IndexedDB 是最好的选择，它具有容量大、异步的优势，异步的特性保证它不会对界面的渲染产生阻塞。缺点，就是 api 非常复杂，不像 localStorage 那么简单直接。针对这一点，我们可以使用**hello-indexeddb**这个工具
 
-当一个事件、变动、异常被捕获之后，形成一条初始日志，被立即放入暂存区（indexedDB的一个store），之后主程序就结束了收集过程，**后续的事只在webworker中发生**。在一个webworker中，一个循环任务不断从暂存区中取出日志，对日志进行分类，将分类结果存储到索引区中，并对日志记录的信息进行丰富，将最终将会上报到服务端的日志记录转存到归档区
+当一个事件、变动、异常被捕获之后，形成一条初始日志，被立即放入暂存区（indexedDB 的一个 store），之后主程序就结束了收集过程，**后续的事只在 webworker 中发生**。在一个 webworker 中，一个循环任务不断从暂存区中取出日志，对日志进行分类，将分类结果存储到索引区中，并对日志记录的信息进行丰富，将最终将会上报到服务端的日志记录转存到归档区
 
 ## 日志分析
 
@@ -294,7 +292,7 @@ async index() {
 
 ### webpack Plugins
 
-```js
+```JavaScript
 apply(compiler) {
     console.log('UploadSourceMapWebPackPlugin apply')
     // 定义在打包后执行
@@ -311,7 +309,7 @@ apply(compiler) {
 
 ### 服务端接收并保存
 
-```js
+```JavaScript
 async upload() {
     const { ctx } = this
     const stream = ctx.req
@@ -332,17 +330,13 @@ async upload() {
 
 使用 error-stack-parser 将上传的
 
-
-
-
-
 ## 信息上报
 
 ### 用户体验层
 
- window.performance.timing
+window.performance.timing
 
-```js
+```JavaScript
 timing: {
     // 同一个浏览器上一个页面卸载(unload)结束时的时间戳。如果没有上一个页面，这个值会和fetchStart相同。
 	navigationStart: 1543806782096,
@@ -357,7 +351,7 @@ timing: {
 	redirectStart: 0,
 
 	// 最后一个HTTP重定向完成时（也就是说是HTTP响应的最后一个比特直接被收到的时间）的时间戳。
-	// 如果没有重定向，或者重定向中的一个不同源，这个值会返回0. 
+	// 如果没有重定向，或者重定向中的一个不同源，这个值会返回0.
 	redirectEnd: 0,
 
 	// 浏览器准备好使用HTTP请求来获取(fetch)文档的时间戳。这个时间点会在检查任何应用缓存之前。
@@ -418,7 +412,7 @@ timing: {
 
 通过以上数据，我们可以得到几个有用的时间
 
-```js
+```JavaScript
 DNS 查询耗时 ：domainLookupEnd - domainLookupStart
 TCP 链接耗时 ：connectEnd - connectStart
 request 请求耗时 ：responseEnd - responseStart
@@ -430,7 +424,7 @@ onload 时间 ：loadEventEnd – navigationStart
 
 ### **关键性能指标**
 
-```js
+```JavaScript
 //首包时间
 firstbyte: timing.responseStart - timing.domainLookupStart
 
@@ -450,18 +444,16 @@ load:timing.loadEventEnd - timing.fetchStart
 ### 业务层
 
 - PV(Page View)：页面浏览量或点击量
-- UV()：指访问某个站点的不同ip地址的人数
+- UV()：指访问某个站点的不同 ip 地址的人数
 - 页面停留时间：用户在每一个页面的停留时间
-
-
 
 ## 小程序错误上报
 
 **差异化劫持，格式化上报**
 
-劫持APP方法
+劫持 APP 方法
 
-```js
+```JavaScript
   // 劫持原小程序App方法
   rewriteApp() {
     const originApp = App;
@@ -486,9 +478,9 @@ load:timing.loadEventEnd - timing.fetchStart
   }
 ```
 
-劫持Page方法
+劫持 Page 方法
 
-```js
+```JavaScript
   // 劫持原小程序Page方法
  function rewritePage() {
     const originPage = Page;
@@ -508,7 +500,7 @@ load:timing.loadEventEnd - timing.fetchStart
 
 ### 环境信息获取
 
-```js
+```JavaScript
 //app.js
 globalData:{
     referrer:{}
@@ -522,11 +514,9 @@ let App= getApp()
 let refererObj= App.globalData.referrer
 ```
 
-
-
 ## 参考文章
 
-[使用vue+node搭建前端异常监控系统](https://mp.weixin.qq.com/s?__biz=MzAwMDY2OTU3NQ==&mid=2247483938&idx=1&sn=071276a967d289cd6fc52599da7099fc&chksm=9ae420caad93a9dc3338077c4ebec113ce3815b107182792312d39d3dd58a6da42f86f2d94e7&mpshare=1&scene=1&srcid=1012eLPZMNk9ggaxTGm2Ofgi&sharer_sharetime=1602485080984&sharer_shareid=12302458a55e6884c1bb1c47ff44880d&key=e916915e2e1878497a86d937dde233c512320fc8e640b974e1f6c8c394c152aad3a254e5a4afe776e24633c05a376f0859850be412fb70d735aee1c4f2c332918e39756025b36355e5ce41ffc21e4190f8b32f8a56f9edc97078f44646c9e857c3fba9fdf680b5e4f92e9cffd766a34a0f91a8b579ea96b3beaddc2db079c7e5&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=6300002f&lang=zh_CN&exportkey=AbhxOcEv5LRRnJfJpOYk54M%3D&pass_ticket=RBJLbuhFUaC7C9iLpQ3G0QWDO%2FARo9ozdYLpRAv%2BPLVGoUhb9Vsl%2FpuWtmjHagMs&wx_header=0)
+[使用 vue+node 搭建前端异常监控系统](https://mp.weixin.qq.com/s?__biz=MzAwMDY2OTU3NQ==&mid=2247483938&idx=1&sn=071276a967d289cd6fc52599da7099fc&chksm=9ae420caad93a9dc3338077c4ebec113ce3815b107182792312d39d3dd58a6da42f86f2d94e7&mpshare=1&scene=1&srcid=1012eLPZMNk9ggaxTGm2Ofgi&sharer_sharetime=1602485080984&sharer_shareid=12302458a55e6884c1bb1c47ff44880d&key=e916915e2e1878497a86d937dde233c512320fc8e640b974e1f6c8c394c152aad3a254e5a4afe776e24633c05a376f0859850be412fb70d735aee1c4f2c332918e39756025b36355e5ce41ffc21e4190f8b32f8a56f9edc97078f44646c9e857c3fba9fdf680b5e4f92e9cffd766a34a0f91a8b579ea96b3beaddc2db079c7e5&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=6300002f&lang=zh_CN&exportkey=AbhxOcEv5LRRnJfJpOYk54M%3D&pass_ticket=RBJLbuhFUaC7C9iLpQ3G0QWDO%2FARo9ozdYLpRAv%2BPLVGoUhb9Vsl%2FpuWtmjHagMs&wx_header=0)
 
 [深入理解前端性能监控](https://mp.weixin.qq.com/s?__biz=MzUzNjk5MTE1OQ==&mid=2247487964&idx=1&sn=bd50e0b48efc9a26c733e76c4159762c&chksm=faec9504cd9b1c1222b63267a27939c567cd0306a1db227eb77132be1d467be008d344cf1d04&mpshare=1&scene=1&srcid=0913rGwXFrCN0r0Sw4dlB9eI&sharer_sharetime=1600002595509&sharer_shareid=12302458a55e6884c1bb1c47ff44880d&key=2feebe5847c6e0bc331f0531a0062a22c6a77e1714978022748867c3e6f7fdf3572cc4b0f1cefc7209b4ee272f0b306f520eb065c223c2e0a75e06144b45c94decfae44e4e2efd1cef22401d277069cf0f643807b04cb9e6840b48abcb43e9235449e0abc1e91d9bdfcf71c6f95545a19135a8486191820fde8c7da86053ae2b&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=6300002f&lang=zh_CN&exportkey=AYK1gS0QZbiyqzYZK1AxjSY%3D&pass_ticket=RBJLbuhFUaC7C9iLpQ3G0QWDO%2FARo9ozdYLpRAv%2BPLVGoUhb9Vsl%2FpuWtmjHagMs&wx_header=0)
 

@@ -1,4 +1,4 @@
-# 浏览器EventLoop
+# 浏览器 EventLoop
 
 ## 宏任务
 
@@ -31,7 +31,7 @@
 
 ### setTimeout
 
-setTimeout返回一个id，而**clearTimeout 函数**  接受需要取消的定时器的 ID
+setTimeout 返回一个 id，而**clearTimeout 函数** 接受需要取消的定时器的 ID
 
 #### 注意事项
 
@@ -95,14 +95,12 @@ MutationObserver 采用了“**异步 + 微任务**”的策略。
 
 为了兼容一些 promise 库,Promise 采用了一种鸭子模型（**如果它看起来像只鸭子,叫起来 像只鸭子,那它一定就是只鸭子**）来判断这个函数是不是一个 promise 函数,也就是判断.then()方法是否注册了 "`fullfillment`" 和 / 或 "`rejection`" 事件.
 
-代码跳跃则是通过事件穿透解决的，**但是也没有那么黑魔法，只不过是then默认参数就是把值往后传或者抛**
+代码跳跃则是通过事件穿透解决的，**但是也没有那么黑魔法，只不过是 then 默认参数就是把值往后传或者抛**
 
-```js
+```JavaScript
 onResolved = typeof onResolved === 'function' ? onResolved : function(value) {return value}
 onRejected = typeof onRejected === 'function' ? onRejected : function(reason) {throw reason}
 ```
-
-
 
 #### promise 方法
 
@@ -112,7 +110,7 @@ finally 方法用于指定不管 Promise 对象最后状态如何,都会执行�
 
 相当于
 
-```js
+```JavaScript
 Promise.prototype.finally = function (callback) {
   let P = this.constructor;
   return this.then(
@@ -137,7 +135,7 @@ Promise.all()方法用于将多个 Promise 实例,包装成一个新的 Promise 
 
 ##### 3.Promise.race()
 
-```js
+```JavaScript
 const p = Promise.race([p1, p2, p3]);
 ```
 
@@ -145,7 +143,7 @@ const p = Promise.race([p1, p2, p3]);
 
 下面是一个例子,如果指定时间内没有获得结果,就将 Promise 的状态变为 reject,否则变为 resolve。
 
-```js
+```JavaScript
 const p = Promise.race([
   fetch("/resource-that-may-take-a-while"),
   new Promise(function (resolve, reject) {
@@ -176,7 +174,7 @@ p.then(console.log).catch(console.error);
 
 有时需要将现有对象转为 `Promise` 对象,**Promise.resolve()** 方法就起到这个作用。
 
-```js
+```JavaScript
 Promise.resolve()等价于下面的写法
 Promise.resolve('foo') // 等价于 new Promise(resolve => resolve('foo'))
 ```
@@ -187,7 +185,7 @@ Promise.resolve 方法的参数分成四种情况:
 （2）参数是一个 thenable 对象
 thenable 对象指的是具有 then 方法的对象,比如下面这个对象。
 
-```js
+```JavaScript
 let thenable = {
   then: function (resolve, reject) {
     resolve(42);
@@ -212,7 +210,7 @@ let thenable = {
 
 #### 简易实现
 
-```js
+```JavaScript
 function Promise(excutro) {
   let self = this;
   self.onResolved = [];
@@ -240,7 +238,7 @@ function Promise(excutro) {
 
 #### then
 
-```js
+```JavaScript
 Promise.prototype.then = function (resolved, rejected) {
   let self = this;
   let promise2;
@@ -279,7 +277,7 @@ Promise.prototype.then = function (resolved, rejected) {
 
 #### all
 
-```js
+```JavaScript
 Promise.prototype.all = function (promiseArr) {
   let index = 0;
   let result = [];
@@ -305,7 +303,7 @@ Promise.prototype.all = function (promiseArr) {
 
 #### race
 
-```js
+```JavaScript
 Promise.prototype.race = function (promiseArr) {
   return new MyPromise((resolve, reject) => {
     //同时执行Promise,如果有一个Promise的状态发生改变,就变更新MyPromise的状态
@@ -326,7 +324,7 @@ Promise.prototype.race = function (promiseArr) {
 
 #### stop
 
-```js
+```JavaScript
 Promise.cancel = Promise.stop = function () {
   return new Promise(function () {});
 };
@@ -334,7 +332,7 @@ Promise.cancel = Promise.stop = function () {
 
 #### done
 
-```js
+```JavaScript
 Promise.prototype.done = function () {
   return this.catch(function (e) {
     // 此处一定要确保这个函数不能再出错
@@ -359,7 +357,7 @@ async 函数是什么？一句话,它就是 Generator 函数的语法糖。
 
 Generator 函数,依次读取两个文件。
 
-```js
+```JavaScript
 const fs = require("fs");
 
 const readFile = function (fileName) {
@@ -381,7 +379,7 @@ const gen = function* () {
 
 async 函数
 
-```js
+```JavaScript
 const asyncReadFile = async function () {
   const f1 = await readFile("/etc/fstab");
   const f2 = await readFile("/etc/shells");
@@ -402,7 +400,7 @@ async 函数对 Generator 函数的改进,体现在以下四点
 
 async 函数的实现原理,就是将 Generator 函数和自动执行器,包装在一个函数里。
 
-```js
+```JavaScript
 async function fn(args) {
   // ...
 }
@@ -418,7 +416,7 @@ function fn(args) {
 
 spawn
 
-```js
+```JavaScript
 function spawn(genF) {
   return new Promise(function (resolve, reject) {
     const gen = genF();
@@ -452,20 +450,18 @@ function spawn(genF) {
 }
 ```
 
-## 与Node环境的EventLoop区别
+## 与 Node 环境的 EventLoop 区别
 
->  *在 node 11 版本中，node 下 Event Loop 已经与浏览器趋于相同*
+> _在 node 11 版本中，node 下 Event Loop 已经与浏览器趋于相同_
 
 ### 循环阶段
 
-1. timers：执行满足条件的setTimeout、setInterval回调。
-2. I/O callbacks：是否有已完成的I/O操作的回调函数，来自上一轮的poll残留。
+1. timers：执行满足条件的 setTimeout、setInterval 回调。
+2. I/O callbacks：是否有已完成的 I/O 操作的回调函数，来自上一轮的 poll 残留。
 3. idle，prepare：可忽略
-4. poll：等待还没完成的I/O事件，会因timers和超时时间等结束等待。
-5. check：执行setImmediate的回调。
-6. close callbacks：关闭所有的closing handles，一些onclose事件。
-
-
+4. poll：等待还没完成的 I/O 事件，会因 timers 和超时时间等结束等待。
+5. check：执行 setImmediate 的回调。
+6. close callbacks：关闭所有的 closing handles，一些 onclose 事件。
 
 ```ruby
    ┌───────────────────────┐
@@ -478,16 +474,16 @@ function spawn(genF) {
 |             |<-- 执行所有 Next Tick Queue 以及 MicroTask Queue 的回调
 │  ┌──────────┴────────────┐
 │  │     idle, prepare     │<————— 内部调用（可忽略）
-│  └──────────┬────────────┘     
+│  └──────────┬────────────┘
 |             |<-- 执行所有 Next Tick Queue 以及 MicroTask Queue 的回调
 |             |                   ┌───────────────┐
 │  ┌──────────┴────────────┐      │   incoming:   │ - (执行几乎所有的回调，除了 close callbacks 以及 timers 调度的                                                    回调和 setImmediate() 调度的回调，在恰当的时机将会阻塞在此阶段)
-│  │         poll          │<─────┤  connections, │ 
-│  └──────────┬────────────┘      │   data, etc.  │ 
-│             |                   |               | 
+│  │         poll          │<─────┤  connections, │
+│  └──────────┬────────────┘      │   data, etc.  │
+│             |                   |               |
 |             |                   └───────────────┘
 |             |<-- 执行所有 Next Tick Queue 以及 MicroTask Queue 的回调
-|  ┌──────────┴────────────┐      
+|  ┌──────────┴────────────┐
 │  │        check          │<————— setImmediate() 的回调将会在这个阶段执行
 │  └──────────┬────────────┘
 |             |<-- 执行所有 Next Tick Queue 以及 MicroTask Queue 的回调
@@ -499,4 +495,3 @@ function spawn(genF) {
 ### setTimeout 与 setImmediate 的顺序
 
 Node 并不能保证 timers 在预设时间到了就会立即执行，因为 Node 对 timers 的过期检查不一定靠谱，它会受机器上其它运行程序影响，或者那个时间点主线程不空闲。比如下面的代码，setTimeout() 和 setImmediate() 都写在 Main 进程中，但它们的执行顺序是不确定的：
-

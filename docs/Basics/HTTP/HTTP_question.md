@@ -4,8 +4,7 @@
 
 ## TCP/IP 网络分层模型是怎样分层的？
 
-
-<img src="./images/Hierarchy.png" alt="分层信息">
+<img src="/Volumes/study/blog/docs/Basics/HTTP/images/Hierarchy.png" alt="分层信息">
 
 TCP/IP  四层网络分层，自下往上分别是**链路层，网络互联层，传输层，应用层**
 另外值得一提的是，七层网络分层，**物理层**，数据链路层，网络互联层，传输层，**会话层**，**表示层**和应用层
@@ -16,7 +15,7 @@ HTTP 协议就是应用层的一个协议，其他常见的还有 FTP,SMTP 等�
 ## TCP 的三次握手和四次挥手简单说一下
 
 
-<img src="./images/the_bag.png" alt="抓包信息">
+<img src="/Volumes/study/blog/docs/Basics/HTTP/images/the_bag.png" alt="抓包信息">
 
 这是一次请求的抓包信息，可以清晰的看出流程
 三次握手流程：  Client -> SYN -> Server Server -> SYN/ACK -> Client Client -> ACK -> Server  后确认建立连接 数据传输完毕开始

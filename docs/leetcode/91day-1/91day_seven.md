@@ -1,8 +1,6 @@
-# 【Day 7】  反转链表
+# 【Day 7】 反转链表
 
 [206. 反转链表]()(https://leetcode-cn.com/problems/reverse-linked-list)
-
-
 
 ## 题目描述
 
@@ -27,7 +25,7 @@
 
 #### 自迭代
 
-```js
+```JavaScript
       var reverseList = function (head) {
         let [prev, curr] = [null, head];
         while (curr) {
@@ -40,14 +38,14 @@
       };
 ```
 
-
-
 ## 参考回答
 
-###  题目地址
+### 题目地址
+
 https://leetcode.com/problems/reverse-linked-list/description/
 
-###  题目描述
+### 题目描述
+
 Reverse a singly linked list.
 
 Example:
@@ -58,23 +56,25 @@ Follow up:
 
 A linked list can be reversed either iteratively or recursively. Could you implement both?
 
-###  思路
+### 思路
+
 这个就是常规操作了，使用一个变量记录前驱 pre，一个变量记录后继 next.
 
 不断更新`current.next = pre` 就好了
-###  关键点解析
+
+### 关键点解析
 
 - 链表的基本操作（交换）
 - 虚拟节点 dummy 简化操作
 - 注意更新 current 和 pre 的位置， 否则有可能出现溢出
 
-###  代码
+### 代码
 
 语言支持：JS, C++, Python,Java
 
 JavaScript Code：
 
-```js
+```JavaScript
 /**
  * Definition for singly-linked list.
  * function ListNode(val) {
@@ -181,16 +181,18 @@ class Solution {
 ## 拓展
 
 通过单链表的定义可以得知，单链表也是递归结构，因此，也可以使用递归的方式来进行 reverse 操作。
+
 > 由于单链表是线性的，使用递归方式将导致栈的使用也是线性的，当链表长度达到一定程度时，递归会导致爆栈，因此，现实中并不推荐使用递归方式来操作链表。
 
-####  描述
+#### 描述
 
 1. 除第一个节点外，递归将链表 reverse
 2. 将第一个节点添加到已 reverse 的链表之后
 
 > 这里需要注意的是，每次需要保存已经 reverse 的链表的头节点和尾节点
 
-####   C++实现
+#### C++实现
+
 ```c++
 // 普通递归
 class Solution {
@@ -238,28 +240,30 @@ public:
 };
 ```
 
-####  JavaScript 实现
+#### JavaScript 实现
+
 ```javascript
 var reverseList = function(head) {
   // 递归结束条件
   if (head === null || head.next === null) {
-    return head
+    return head;
   }
 
   // 递归反转 子链表
-  let newReverseList = reverseList(head.next)
+  let newReverseList = reverseList(head.next);
   // 获取原来链表的第 2 个节点 newReverseListTail
-  let newReverseListTail = head.next
+  let newReverseListTail = head.next;
   // 调整原来头结点和第 2 个节点的指向
-  newReverseListTail.next = head
-  head.next = null
+  newReverseListTail.next = head;
+  head.next = null;
 
   // 将调整后的链表返回
-  return newReverseList
-}
+  return newReverseList;
+};
 ```
 
-####  Python 实现
+#### Python 实现
+
 ```python
 class Solution:
     def reverseList(self, head: ListNode) -> ListNode:

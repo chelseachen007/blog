@@ -35,7 +35,7 @@
 
 时间复杂度 `O(n)`,空间复杂度 `O(n)`
 
-```js
+```JavaScript
 var sortColors = function(nums) {
   let twoNums = 0;
   let newArray = [];
@@ -55,7 +55,7 @@ var sortColors = function(nums) {
 
 时间复杂度 `O(nlogn)`,空间复杂度 `O(n)`
 
-```js
+```JavaScript
 let sortColors = function(ary, left = 0, right = ary.length - 1) {
   if (left >= right) {
     return ary;
@@ -102,7 +102,7 @@ let sortColors = function(ary, left = 0, right = ary.length - 1) {
 
 时间复杂度`O(n)`,空间复杂度 `O(1)`
 
-```js
+```JavaScript
 var sortColors = function(nums) {
   let one = 0, //，用来遍历数组
     zero = 0, //始终指向第一个非0元素

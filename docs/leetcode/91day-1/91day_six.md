@@ -40,29 +40,28 @@ randomSet.getRandom();
 ```
 
 ## 我的回答
+
 https://github.com/leetcode-pp/91alg-1/issues/23#issuecomment-639949391
 
 ### 解法一
 
-使用`Map`记录每个`val`对应地址，`push `的时候直接记录长度就可以，
+使用`Map`记录每个`val`对应地址，`push`的时候直接记录长度就可以，
 
-当`remove`的时候开始使用`splice`发现保存的地址会混乱，然后就想到将最后一个`val`保存到`remove`的val地址中就可以了。
+当`remove`的时候开始使用`splice`发现保存的地址会混乱，然后就想到将最后一个`val`保存到`remove`的 val 地址中就可以了。
 
-`getRandom`的话直接使用JS自带的`random`是伪随机，不能保证每个元素有相同的概率被返回。
+`getRandom`的话直接使用 JS 自带的`random`是伪随机，不能保证每个元素有相同的概率被返回。
 
 #### 时间复杂度
 
 insert O(1)
 
-remove  O(1)
+remove O(1)
 
 getRandom O(1)
 
-空间复杂度O(n)
+空间复杂度 O(n)
 
-
-
-```js
+```JavaScript
 /**
  * Initialize your data structure here.
  */
@@ -72,7 +71,7 @@ var RandomizedSet = function () {
 };
 
 /**
- * Inserts a value to the set. Returns true if the set did not already contain the specified element. 
+ * Inserts a value to the set. Returns true if the set did not already contain the specified element.
  * @param {number} val
  * @return {boolean}
  */
@@ -84,7 +83,7 @@ RandomizedSet.prototype.insert = function (val) {
 };
 
 /**
- * Removes a value from the set. Returns true if the set contained the specified element. 
+ * Removes a value from the set. Returns true if the set contained the specified element.
  * @param {number} val
  * @return {boolean}
  */
@@ -121,7 +120,5 @@ RandomizedSet.prototype.getRandom = function () {
  * var param_3 = obj.getRandom()
  */
 ```
-
-
 
 ## 参考回答

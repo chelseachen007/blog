@@ -1,6 +1,6 @@
 # V8
 
-![img](./images/8a34ae8c1a7a0f87e19b1384a025e354.jpg)
+![img](https://i.loli.net/2021/03/02/FgODzcwWX8dYr1f.jpg)
 
 ## 函数即对象
 
@@ -26,11 +26,11 @@
 
 如果一个对象的属性过多时，V8 就会采取另外一种存储策略，那就是“**慢属性**”策略，但慢属性的对象内部会有独立的非线性数据结构 (词典) 作为属性存储容器。所有的属性元信息不再是线性存储的，而是**直接保存在属性字典**中。
 
-![img](./images/e8ce990dce53295a414ce79e38149917.jpg)
+![img](https://i.loli.net/2021/03/02/LAtHREnFWKIx8pm.jpg)
 
 #### 内存查看
 
-```js
+```JavaScript
 function Foo(property_num, element_num) {
   //添加可索引属性
   for (let i = 0; i < element_num; i++) {
@@ -49,15 +49,15 @@ Chrome 开发者工具切换到 Memory 标签，然后点击左侧的小圆圈�
 
 // todo:和老师讲的有点不一样
 
-### V8是怎么实现数组的
+### V8 是怎么实现数组的
 
-[从V8引擎来看JS中这个"假数组"](https://juejin.cn/post/6847902222009925640#heading-7)
+[从 V8 引擎来看 JS 中这个"假数组"](https://juejin.cn/post/6847902222009925640#heading-7)
 
 数组是什么？ 数组的两个关键字是**相同类型**、**连续内存** !
 
-所以 Js的数组根本不算一个真数组，那么他是怎么实现的呢
+所以 Js 的数组根本不算一个真数组，那么他是怎么实现的呢
 
-没错就是 对象， 
+没错就是 对象，
 
 #### 快数组
 
@@ -77,7 +77,7 @@ V8 会先编译顶层代码，在编译过程中会将顶层定义的变量和�
 
 变量：对全局作用域的值进行赋值，
 
-函数的时候，同样需要经历两个阶段：编译和执行。在编译阶段，V8 会为 bar 函数创建函数作用域，执行阶段简单的执行code
+函数的时候，同样需要经历两个阶段：编译和执行。在编译阶段，V8 会为 bar 函数创建函数作用域，执行阶段简单的执行 code
 
 **因为词法作用域是根据函数在代码中的位置来确定的，作用域是在声明函数时就确定好的了，所以我们也将词法作用域称为静态作用域。**
 
@@ -121,7 +121,7 @@ V8 会先编译顶层代码，在编译过程中会将顶层定义的变量和�
 
 - 如果 vauleOf 和 toString 两个方法都不返回基本类型值，便会触发一个 TypeError 的错误。
 
-  ![img](./images/d150309b74f2c06e66011cf3e177dbaa.jpg)
+  ![img](https://i.loli.net/2021/03/02/9gCByA8PpFZ6YkJ.jpg)
 
 在执行加法操作的时候，V8 会通过 ToPrimitve 方法将对象类型转换为原生类型，最后就是两个原生类型相加，
 
@@ -135,18 +135,16 @@ V8 会先编译顶层代码，在编译过程中会将顶层定义的变量和�
 
 **而由解释型语言编写的程序，在每次运行时都需要通过解释器对程序进行动态解释和执行**。比如 Python、JavaScript 等都属于解释型语言。
 
-![image-20200914110124952](./images/image-20200914110124952.png)
+![image-20200914110124952](https://i.loli.net/2021/03/02/GaYuB9c24drM73g.png)
 
 ### V8 执行 JavaScript 代码
 
 #### 总结
 
-1. 预编译阶段  变量提升 并且赋值undefined
+1. 预编译阶段 变量提升 并且赋值 undefined
 
-2. 编译阶段 生成两部分代码 **执行上下文（Execution context）\**和\**可执行代码**。
+2. 编译阶段 生成两部分代码 **执行上下文（Execution context）\*\*和\*\*可执行代码**。
 3. 执行阶段
-
-
 
 **其实在执行 JavaScript 代码之前，V8 就已经准备好了代码的运行时环境，这个环境包括了堆空间和栈空间、全局执行上下文、全局作用域、内置的内建函数、宿主环境提供的扩展函数和对象，还有消息循环系统。**
 
@@ -156,7 +154,7 @@ V8 会先编译顶层代码，在编译过程中会将顶层定义的变量和�
 
 1. **分词（tokenize），又称为词法分析**，其作用是将一行行的源码拆解成一个个 token。
 
-```js
+```JavaScript
 var myName = "xiaopang";
 // token : var 、 myName 、= 、 'xiaopang'
 ```
@@ -165,7 +163,7 @@ var myName = "xiaopang";
 
 #### 生成字节码
 
-![image-20200914110829819](./images/image-20200914110829819.png)
+![image-20200914110829819](https://i.loli.net/2021/03/02/nlpZNkxIDQzXgMs.png)
 
 由于执行机器码的效率是非常高效的，所以早期 chorme 直接将 AST 转化成机器码进行保存。
 
@@ -195,7 +193,7 @@ MutationObserver 和 IntersectionObserver 两个性质应该差不多。我这�
 
 #### bug 优化
 
-```js
+```JavaScript
 const p = Promise.resolve();
 
 (async () => {
@@ -210,7 +208,7 @@ p.then(() => console.log("tick:a")).then(() => console.log("tick:b"));
 
 #### 去除了 throwaway
 
-![image-20200928100913316](./images/image-20200928100913316.png)
+![image-20200928100913316](https://i.loli.net/2021/03/02/E8yvK1mQD4z2nHJ.png)
 
 [「译」更快的 async 函数和 promises](https://mp.weixin.qq.com/s?__biz=MzUzNjk5MTE1OQ==&mid=2247488356&idx=1&sn=2f17461b11dcf6a8365a2488d7e25945&chksm=faec97bccd9b1eaa108a03c3bfde45944a3b6b766154bc1f2b67706decfbcc7300b03eb54d46&mpshare=1&scene=1&srcid=09285usyMosTYJPNjtBC8aBC&sharer_sharetime=1601257327974&sharer_shareid=12302458a55e6884c1bb1c47ff44880d&key=a5121dd1fbb299a4574b60008a7892715083167693e8e0e07a0ea940e7a39419e895c9b1b0ebc446a53ca95dcaf5eab4b6a36628ad873096de1719747022b983bf12d8b2773a40f206a5271e184c1cd0cf893260303fd38da8e48d9e6ac7b8f577ddd2ec049a147d51b1de5beafec1a50a681a0466cebea7415e7d883c9fef58&ascene=1&uin=MTIwOTc2NTAyMQ%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=AXMYmDf2JEdNIm7d3TuwrRs%3D&pass_ticket=f%2BX7SDG7or8VWYKhna8jJ88M0v3Zv9Whtox6Rc4ZhhErghEtyOr5KNMpaF%2BaWmW3&wx_header=0)
 
@@ -241,7 +239,7 @@ Javascript 引擎基础 GC 方案是：标记清除
 
 ### 调用栈中的数据回收
 
-```js
+```JavaScript
 function foo() {
   var a = 1;
   var b = { name: " 测试 " };
@@ -318,7 +316,7 @@ js 引擎 将 showName 函数 的执行上下文 压入 调用栈的同时，还
 
 所谓并行回收，是指垃圾回收器在主线程上执行的过程中，还会开启多个协助线程，同时执行同样的回收工作，其工作模式如下图所示：
 
-![img](./images/00537bdadac433a57c77c56c5cc33c1f.jpg)
+![img](https://i.loli.net/2021/03/02/EWIV4hRkatxwATn.jpg)
 
 #### 增量回收
 
@@ -326,7 +324,7 @@ javascript 的 GC 策略无法避免一个问题： **GC 时，停止响应其�
 
 为了降低老生代的垃圾回收而造成的卡顿，V8 将标记过程分为一个个的子标记过程，同时让垃圾回收标记和 JavaScript 应用逻辑交替进行，直到标记阶段完成，我们把这个算法称为**增量标记（Incremental Marking）算法**。
 
-![image-20200911171612153](./images/image-20200911171612153.png)
+![image-20200911171612153](https://i.loli.net/2021/03/02/EqRYruTZxG81Wgn.png)
 
 使用增量标记算法，可以把一个完整的垃圾回收任务拆分为很多小的任务，这些小的任务执行时间比较短，可以穿插在其他的 JavaScript 任务中间执行，这样当执行上述动画效果时，就不会让用户因为垃圾回收任务而感受到页面的卡顿了。
 
@@ -351,7 +349,7 @@ javascript 的 GC 策略无法避免一个问题： **GC 时，停止响应其�
 
 #### 并发回收机制
 
-所谓并发回收，是指**主线程在执行 JavaScript 的过程中，辅助线程能够在后台完成执行垃圾回收的操作**。并发标记的流程大致如下图所示：![img](./images/157052aa087c840f5f58a7708f30bdc2.jpg)
+所谓并发回收，是指**主线程在执行 JavaScript 的过程中，辅助线程能够在后台完成执行垃圾回收的操作**。并发标记的流程大致如下图所示：![img](https://i.loli.net/2021/03/02/JZ1vhami72buLQH.jpg)
 
 并发回收是这三种技术中最难的一种，这主要由以下两个原因导致的：
 
@@ -373,7 +371,7 @@ javascript 的 GC 策略无法避免一个问题： **GC 时，停止响应其�
 
 #### 合理应用闭包
 
-```js
+```JavaScript
 function foo() {
   var temp_object = new Object();
   temp_object.x = 1;

@@ -6,14 +6,14 @@
 
 解题
 
-```js
+```JavaScript
 var invertTree = function (root) {
   if (!root) return root
-    
+
   const temp = root.left
   root.left = root.right
   root.right = temp
-    
+
   invertTree(root.left)
   invertTree(root.right)
   return root
@@ -22,7 +22,7 @@ var invertTree = function (root) {
 
 提取模板，前中后序遍历的模板都差不多 遍历顺序有点不同
 
-```js
+```JavaScript
 function preorder(root) {
 	if (!root) return root
 	doSomething(root)
@@ -33,7 +33,7 @@ function preorder(root) {
 
 ### 后序遍历
 
-```js
+```JavaScript
 function inorder(root) {
 	if (!root) return root
 	inorder(root.left)
@@ -44,7 +44,7 @@ function inorder(root) {
 
 ### 中序遍历
 
-```js
+```JavaScript
 function postorder(root) {
 	if (!root) return root
 	postorder(root.left)
@@ -55,21 +55,21 @@ function postorder(root) {
 
 ### 层序遍历
 
-```js
+```JavaScript
 var invertTree = function (root) {
   if (!root) return root
   let queue = []
   queue.push(root)
   while (queue.length) {
     // 当前层的节点个数
-    const levelSize = queue.length;          
+    const levelSize = queue.length;
     // 逐个让当前层的节点出列
-    for (let i = 0; i < levelSize; i++) {    
+    for (let i = 0; i < levelSize; i++) {
       // 当前出列的节点
-      const cur = queue.shift();            
+      const cur = queue.shift();
       // 左右子节点入列
       if (cur.left) queue.push(cur.left);
-      if (cur.right) queue.push(cur.right); 
+      if (cur.right) queue.push(cur.right);
     }
    // dosmoething
   }
@@ -78,20 +78,20 @@ var invertTree = function (root) {
 
 ```
 
-每层的数量即是queen.length
+每层的数量即是 queen.length
 
 #### 提取模板
 
-```js
+```JavaScript
 var invertTree = function (root) {
   if (!root) return root
   let queue = []
   queue.push(root)
   while (queue.length) {
     let curLevel = queue.shift()
-    
+
     dosomething() // 就这不一样
-    
+
     if (curLevel.left) queue.push(curLevel.left)
     if (curLevel.right) queue.push(curLevel.right)
   }
@@ -108,8 +108,6 @@ var invertTree = function (root) {
 1. 确定根节点
 2. 确定其左子树
 3. 确定其右子树
-
-
 
 - 前序遍历的顺序是 `root->left->right`，也就是说在前序遍历的结果中，**第一个节点就是 `root`**，它的后边紧跟着左子树和右子树的前序遍历结果。
 - 中序遍历的顺序是 `left->root->right`，也就是说在中序遍历的结果数组中，**`root` 的左边是它左子树的中序遍历结果，它的右边是右子树的中序遍历结果。**

@@ -1,4 +1,4 @@
-# Brew安装
+# Brew 安装
 
 ### vim
 
@@ -9,13 +9,11 @@ cd.. // 返回上一级
 
 ```
 
-
-
 ### uninstall
 
 https://raw.githubusercontent.com/Homebrew/install/master/uninstall
 
-```js
+```JavaScript
 #!/usr/bin/ruby
 
 STDERR.print <<EOS
@@ -28,7 +26,7 @@ EOS
 Kernel.exec "/bin/bash", "-c", '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
 ```
 
-然后将网页上的内容保存下来，存储为uninstall的文件名后
+然后将网页上的内容保存下来，存储为 uninstall 的文件名后
 
 chmod 755 uninstall
 
@@ -36,11 +34,11 @@ chmod 755 uninstall
 
 之后输入密码，卸载完成。
 
-###  install
+### install
 
-https://raw.githubusercontent.com/Homebrew/install/master/install 
+https://raw.githubusercontent.com/Homebrew/install/master/install
 
-```js
+```JavaScript
 #!/usr/bin/ruby
 
 STDERR.print <<EOS
@@ -53,7 +51,7 @@ EOS
 Kernel.exec "/bin/bash", "-c", '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
 ```
 
-还是把网页内容保存下来，命名为brew_install文件名
+还是把网页内容保存下来，命名为 brew_install 文件名
 
 chmod 755 brew_install
 

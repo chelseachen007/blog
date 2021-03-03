@@ -59,7 +59,7 @@ https://github.com/leetcode-pp/91alg-1/issues/18#issuecomment-637899087
 
 O(n)
 
-```js
+```JavaScript
 /**
  * @param {number} maxSize
  */
@@ -101,7 +101,7 @@ CustomStack.prototype.increment = function(k, val) {
 
 #### 优化
 
-```js
+```JavaScript
 //使用另外一个数组来记录increment，Lazy increment，只有在数被pop的时候才去increment 数组里找到该数所需要加上的数，实现O(1)
 CustomStack.prototype.increment = function(k, val) {
   let i = Math.min(k, this.s.length) - 1;

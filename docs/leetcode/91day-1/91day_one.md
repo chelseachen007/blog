@@ -29,14 +29,13 @@
 
 ## 我的回答
 
-
 ### 思路
 
 小学数学末尾不是 9 正常+1，是 9 的话重置为 0，向前进一
 
 ### 代码
 
-```js
+```JavaScript
  * @lc app=leetcode.cn id=66 lang=javascript
  *
  * [66] 加一
@@ -111,7 +110,7 @@ for(int i = n - 1; i > - 1; i --) {
 
 第三种其实和第二种是一样的操作，只是由于我们知道数组的长度是固定的，所以当我们遇到情况三的时候需要扩大数组的长度。我们只需要在结果数组前多加上一位就好了。
 
-```js
+```JavaScript
 // 首先我们要从数组的最后一位开始我们的计算得出我们新的sum
 sum = arr[arr.length - 1] + 1
 
@@ -137,7 +136,7 @@ result[1] ...... result[result.length - 1]  = 0 //
 
 ### 代码
 
-```js
+```JavaScript
 /**
  * @param {number[]} digits
  * @return {number[]}

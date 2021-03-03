@@ -6,7 +6,7 @@
 
 #### 最简单的情况就是有序数组中不存在重复元素，
 
-```js
+```JavaScript
 let easyArr = [1, 2, 5, 6, 7, 9, 15, 17, 25];
 function easyCode(arr, value) {
   let low = 0;
@@ -31,11 +31,9 @@ function easyCode(arr, value) {
 console.log(easyCode(easyArr, 15));
 ```
 
-
-
 #### 变体一：查找第一个值等于给定值的元素
 
-```js
+```JavaScript
 let newArr = [8, 8, 8, 11, 15, 16];
 // 变体一：查找第一个值等于给定值的元素
 function findFirst(arr, value) {
@@ -59,11 +57,9 @@ function findFirst(arr, value) {
 console.log(findFirst(newArr, 8));
 ```
 
-
-
 #### 变体二：查找最后一个值等于给定值的元素
 
-```js
+```JavaScript
 let endArr = [1, 3, 4, 5, 6, 8, 8, 8];
 // 变体一：查找第一个值等于给定值的元素
 function findEnd(arr, value) {
@@ -87,7 +83,7 @@ console.log(findEnd(endArr, 8));
 
 #### 变体三：查找第一个大于等于给定值的元素
 
-```js
+```JavaScript
 let FirstThanArr = [1, 3, 4, 5, 6, 8, 8, 8];
 
 //变体三：查找第一个大于等于给定值的元素
@@ -112,11 +108,9 @@ function findFirstThan(arr, value) {
 console.log(findFirstThan(endArr, 8));
 ```
 
-
-
 #### 变体四：查找最后一个小于等于给定值的元素
 
-```js
+```JavaScript
 let EndThanArr = [1, 3, 4, 5, 6, 8, 8, 8, 9];
 
 // 变体四：查找最后一个小于等于给定值的元素
@@ -143,7 +137,7 @@ console.log(findEndThan(EndThanArr, 8));
 
 ## 单调栈
 
-```js
+```JavaScript
 // 每日温度 适合做单调栈模板
 var dailyTemperatures = function (T) {
     const stack = []
@@ -151,7 +145,7 @@ var dailyTemperatures = function (T) {
         while (stack.length && T[stack[stack.length - 1]] < T[i]) {
             let peek = stack.pop()
         }
-        stack.push(i)	
+        stack.push(i)
     }
 };
 ```
@@ -167,7 +161,7 @@ var dailyTemperatures = function (T) {
 
 https://leetcode-cn.com/problems/reverse-linked-list/
 
-```js
+```JavaScript
 // 迭代模板
 var reverseList = function (head) {
     let [prev, curr] = [null, head]

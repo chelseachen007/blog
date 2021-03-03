@@ -20,7 +20,7 @@ cookie 的产生是为了解决 http 传输无状态问题
 
 #### 基本操作
 
-```js
+```JavaScript
 //通过 key=value 形式增加  同名视作更新
 // expires= 过期时间
 // domain= cookie 所属的域（默认为当前域）：
@@ -32,7 +32,7 @@ document.cookie = "logcookie=3qjj; expires=Wed, 13-Mar-2019 12:08:53 GMT; Max-Ag
 
 #### 读取具有特定名称的 Cookie
 
-```js
+```JavaScript
 export function getCookie(name) {
   var arr,
     reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
@@ -43,7 +43,7 @@ export function getCookie(name) {
 
 #### 删除具有特定名称的 Cookie
 
-```js
+```JavaScript
 export function delCookie(name) {
   var exp = new Date()
   exp.setTime(exp.getTime() - 1)
@@ -81,7 +81,7 @@ export function delCookie(name) {
 
 #### 基本语法
 
-```js
+```JavaScript
 // 使用方法存储数据
 localStorage.setItem('name', 'Srtian')
 // 使用属性存储数据
@@ -108,7 +108,7 @@ localStorage.removeItem('name')
 
 ### 使用
 
-```js
+```JavaScript
 const request = indexedDB.open('myDatabase', 1)
 
 request.addEventListener('success', (e) => {

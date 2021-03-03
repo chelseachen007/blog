@@ -1,7 +1,5 @@
 # 【Day 8】 扁平化多级双向链表
 
-
-
 ## 题目描述
 
 ```markdown
@@ -16,11 +14,11 @@
 解释：
 
 输入的多级列表如下图所示：
- ![image](https://user-images.githubusercontent.com/38604634/83972169-3a8bcc80-a911-11ea-86b5-7584e8063e50.png)
+![image](https://user-images.githubusercontent.com/38604634/83972169-3a8bcc80-a911-11ea-86b5-7584e8063e50.png)
 
 扁平化后的链表如下图：
 
- ![image](https://user-images.githubusercontent.com/38604634/83972184-52635080-a911-11ea-893a-ecb84ef56072.png)
+![image](https://user-images.githubusercontent.com/38604634/83972184-52635080-a911-11ea-893a-ecb84ef56072.png)
 
 示例 2：
 
@@ -37,7 +35,6 @@
 
 输入：head = []
 输出：[]
- 
 
 如何表示测试用例中的多级链表？
 
@@ -50,18 +47,15 @@
 11--12--NULL
 序列化其中的每一级之后：
 
-[1,2,3,4,5,6,null]
-[7,8,9,10,null]
+[1,2,3,4,5,6,null][7,8,9,10,null]
 [11,12,null]
 为了将每一级都序列化到一起，我们需要每一级中添加值为 null 的元素，以表示没有节点连接到上一级的上级节点。
 
-[1,2,3,4,5,6,null]
-[null,null,7,8,9,10,null]
+[1,2,3,4,5,6,null][null,null,7,8,9,10,null]
 [null,11,12,null]
 合并所有序列化结果，并去除末尾的 null 。
 
 [1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
- 
 
 提示：
 
@@ -79,7 +73,7 @@
 
 https://github.com/leetcode-pp/91alg-1/issues/25#issuecomment-641661703
 
-```js
+```JavaScript
 const flatten = (head, next) => {
     let curr = head
     while (curr && (curr.next || curr.child)) {
@@ -98,7 +92,5 @@ const flatten = (head, next) => {
     return head
 }
 ```
-
-
 
 ## 参考回答

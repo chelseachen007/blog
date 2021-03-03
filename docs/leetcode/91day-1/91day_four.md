@@ -53,7 +53,7 @@ https://github.com/leetcode-pp/91alg-1/issues/20#issuecomment-638623652
 
 #### 解法一
 
-```js
+```JavaScript
 var isValid = function(s) {
   let length = s.length;
   if (length % 2) return false;
@@ -83,7 +83,7 @@ var isValid = function(s) {
 
 解法一的判断明显过多
 
-```js
+```JavaScript
 var isValid = function(s) {
   let length = s.length;
   if (length % 2) return false;
@@ -133,7 +133,7 @@ var isValid = function(s) {
 
 ##### 代码
 
-```js
+```JavaScript
 var decodeString = function(s) {
   let numStack = [];
   let outerStack = [];
@@ -165,7 +165,7 @@ var decodeString = function(s) {
 
 只用一个`栈` ，将空间复杂度降低到 O(n+2)
 
-```js
+```JavaScript
 var decodeString = function(s) {
   let Stack = [];
   let string = "";
@@ -271,7 +271,7 @@ s = "2[abc]3[cd]ef", 返回 "abcabccdcdcdef".
 
 JavaScript：
 
-```js
+```JavaScript
 /**
 
 * @param {string} s

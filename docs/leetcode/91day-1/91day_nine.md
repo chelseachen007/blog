@@ -15,9 +15,10 @@
 
       0
      / \
-   -3   9
-   /   /
- -10  5   
+
+-3 9
+/ /
+-10 5  
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
@@ -29,11 +30,9 @@
 
 #### 时空复杂度
 
-```js
+```JavaScript
 
 ```
-
-
 
 ## 参考回答
 
@@ -47,10 +46,10 @@
 > 中点左边的值都小于它,可以构造左子树,
 > 同理构造右子树
 > 循环第一步
-> 因为链表访问中点的时间复杂度为O(n),
+> 因为链表访问中点的时间复杂度为 O(n),
 > 所以可以使用数组将链表的值存储,以空间换时间
 >
->```js
+> ```JavaScript
 > var sortedListToBST = function(head) {
 >     let res = []
 >     while(head){
@@ -69,7 +68,8 @@
 >     root.right = mid >= res.length - 1 ? null : run(res.slice(mid + 1))
 >     return root
 > }
->```
+> ```
+>
 > 作者：ZStar01
 > 链接：https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree/solution/di-gui-yi-ba-suo-by-zstar01/
 > 来源：力扣（LeetCode）

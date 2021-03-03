@@ -12,7 +12,7 @@
 
 ### 反转整个链表
 
-```js
+```JavaScript
 var reverseList = function(head) {
   let [curr, pre] = [head, null];
   while (curr) {
@@ -36,7 +36,7 @@ var reverseList = function(head) {
 
 ### 反转前 N 个链表
 
-```js
+```JavaScript
 // 反转以 head 为起点的 n 个节点，返回新的头结点
 function reverseN(head, n) {
     if (n == 1) {
@@ -56,7 +56,7 @@ function reverseN(head, n) {
 
 ### 反转 M-N 之间的链表
 
-```js
+```JavaScript
 var reverseBetween = function(head, m, n) {
   if (m == 1) {
     return reverseN(head, n);

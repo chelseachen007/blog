@@ -21,7 +21,7 @@
 
 ### 简单防抖
 
-```js
+```JavaScript
 // 第一版
 function debounce(func, wait) {
   var timeout;
@@ -40,7 +40,7 @@ function debounce(func, wait) {
 
 另外事件传入我们也没有接受到,所以还要将参数传入
 
-```js
+```JavaScript
 function debouce(func, wait) {
   var timeout, result;
   return function () {
@@ -63,7 +63,7 @@ function debouce(func, wait) {
 
 我们通过传入一个`immediate`来控制函数是否立即执行,
 
-```js
+```JavaScript
 function debouce(func, wait, immediate = false) {
   var timeout, result;
 
@@ -90,7 +90,7 @@ function debouce(func, wait, immediate = false) {
 
 ### 考虑一下取消
 
-```js
+```JavaScript
 debounced.cancel = function () {
   clearTimeout(timeout);
   timeout = null;
@@ -105,7 +105,7 @@ debounced.cancel = function () {
 
 时间戳版本原理：第一次拿到当前时间的时间戳并保存在闭包里,拿到下次执行的时间戳比较,如果大于等待时间就执行,并将时间更新。那么我们开始写代码。
 
-```js
+```JavaScript
 function throttle(func, wait) {
   var context, args;
   var previous = 0;
@@ -126,7 +126,7 @@ function throttle(func, wait) {
 
 定时器版本原理:和上面基本一致,就是变成通过一个标记`timeout`来记录是否有一个定时器在执行了,如果没有就执行一个新的定时器
 
-```js
+```JavaScript
 function throttle(func, wait) {
   var context, args;
   js;
@@ -155,7 +155,7 @@ function throttle(func, wait) {
 
 拥有执行和停止触发后还会执行 一次的特性
 
-```js
+```JavaScript
 function throttle(func, wait) {
   var context, args, timeout;
   var previous = 0;

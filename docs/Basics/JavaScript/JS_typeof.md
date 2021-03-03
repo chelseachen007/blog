@@ -74,7 +74,7 @@ instanceof 检测一个对象 A 是不是另一个对象 B 的实例的原理是
 查看 对象 B 的 `prototype` 指向的对象是否在 对象 A 的 [[prototype]] 链上。
 如果在，则返回 `true`, 如果不在则返回 `false`。
 
-```Js
+```JavaScript
 let myinstanceof = function(left, right) {
   let target = left.prototype;
   while (target) {

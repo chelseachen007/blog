@@ -45,7 +45,7 @@ https://github.com/leetcode-pp/91alg-1/issues/28#issuecomment-641730514
 
 #### 时空复杂度 O(2n)
 
-```js
+```JavaScript
 var getIntersectionNode = function (headA, headB) {
   while (headA) {
     headA.flag = true;
@@ -65,7 +65,7 @@ var getIntersectionNode = function (headA, headB) {
 
 这个解法看题解理解的，把两个链表连接起来，会得到两条数量相同，但是连接地址不同的链表，如果有相交节点就最后几位就会完全相同。
 
-```js
+```JavaScript
 var getIntersectionNode = function (headA, headB) {
   let A = headA;
   B = headB;
@@ -86,18 +86,20 @@ var getIntersectionNode = function (headA, headB) {
 > 遍历 B 链表,检查节点是否在哈希表中,
 > 第一个存在的就是相交节点
 > 时间复杂度 O(N), 空间复杂度 O(N)
-> ``` js
-> let data = new Set()
-> while(A !== null){
-> data.add(A)
-> A = A.next
+>
+> ```js
+> let data = new Set();
+> while (A !== null) {
+>   data.add(A);
+>   A = A.next;
 > }
-> while(B !== null){
-> if(data.has(B)) return B
-> B = B.next
+> while (B !== null) {
+>   if (data.has(B)) return B;
+>   B = B.next;
 > }
-> return null
+> return null;
 > ```
+>
 > 双指针:
 > 使用 a, b 两个指针分别指向 A, B 这两条链表, 两个指针相同的速度向后移动,
 > 当 a 到达链表的尾部时,重定位到链表 B 的头结点
@@ -113,17 +115,19 @@ var getIntersectionNode = function (headA, headB) {
 > a 指针遍历的距离为 a + c + b，
 > 同理 b 指针遍历的距离为 b + c + a。
 > 时间复杂度 O(N), 空间复杂度 O(1)
->```js
+>
+> ```JavaScript
 > let a = headA, b = headB
 > while(a != b){
 > a = a ? a.next : null
 > b = b ? b.next : null
 > if(a == null && b == null) return null
 > if(a == null) a = headB
-> if(b == null) b = headA  
+> if(b == null) b = headA
 > }
 > return a
->```
+> ```
+>
 > 作者：ZStar01
 > 链接：https://leetcode-cn.com/problems/intersection-of-two-linked-lists/solution/shuang-zhi-zhen-ha-xi-by-zstar01/
 > 来源：力扣（LeetCode）

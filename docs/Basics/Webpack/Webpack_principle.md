@@ -20,7 +20,7 @@ Hook 的使用分为四步：
 3. 生成插件实例，运行 apply 方法。
 4. 在运行到对应生命周期节点时调用 Hook，执行注册过的插件的回调函数。如下面的代码所示：
 
-```js
+```JavaScript
 lib/Compiler.js
 this.hooks = {
   ...
@@ -75,7 +75,7 @@ new CommonJsPlugin(options.module).apply(compiler);
 
 优化阶段在 seal 函数中共有 12 个主要的处理过程，如下图所示：
 
-![image (4).png](./images/Ciqc1F9bGtqAJo4uAABnYGwsyYs218.png)
+![image (4).png](https://i.loli.net/2021/03/03/JyxCMHmq247XNU9.png)
 
 每个过程都暴露了相应的 Hooks，分别如下:
 

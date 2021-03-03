@@ -2,10 +2,10 @@
 
 ## 栈
 
-```js
+```JavaScript
 class Stack {
     constructor() {
-        this.dataStore = []; 
+        this.dataStore = [];
         this.top = 0;
     }
     //Stack方法
@@ -33,7 +33,7 @@ class Stack {
 
 ### 双向链表
 
-```js
+```JavaScript
 class DoubleLinkedListNode {
     constructor(key, value) {
         this.key = key;
@@ -44,17 +44,15 @@ class DoubleLinkedListNode {
 }
 ```
 
-
-
 ### 链表操作
 
-```js
+```JavaScript
 
 ```
 
 ## 堆
 
-```js
+```JavaScript
 class Heap {
     constructor(list = [], comparator) {
         this.list = list;
@@ -144,4 +142,3 @@ class MinHeap extends Heap {
     }
 }
 ```
-

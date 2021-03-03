@@ -1,20 +1,20 @@
 # Docker
 
-## Docker简介
+## Docker 简介
 
 ### **Docker 镜像**
 
-是一种UnionFS（联合文件系统），是一种分层、轻量级并且高性能的文件系统，它支持对文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系统下.
+是一种 UnionFS（联合文件系统），是一种分层、轻量级并且高性能的文件系统，它支持对文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系统下.
 
-镜像同时也很小，因为我们pull的镜像剔除了无用的东西，只是一个精简功能版的镜像
+镜像同时也很小，因为我们 pull 的镜像剔除了无用的东西，只是一个精简功能版的镜像
 
 下载是一层一层下载，这样便于共享资源。
 
 ### **Docker 容器数据卷**
 
-卷就是目录或文件，存在于一个或多个容器中，由docker挂载到容器，但不属于联合文件系统，因此能够绕过Union File System提供一些用于持续存储或共享数据的特性，卷的设计目的就是数据的持久化，完全独立于容器的生存周期，因此Docker不会在容器删除时删除其挂载的数据卷。
+卷就是目录或文件，存在于一个或多个容器中，由 docker 挂载到容器，但不属于联合文件系统，因此能够绕过 Union File System 提供一些用于持续存储或共享数据的特性，卷的设计目的就是数据的持久化，完全独立于容器的生存周期，因此 Docker 不会在容器删除时删除其挂载的数据卷。
 
-dockerfile也就是添加 容器数据卷的一种方式
+dockerfile 也就是添加 容器数据卷的一种方式
 
 ### dockerfile
 
@@ -73,33 +73,33 @@ docker stop ff6
 
 ## Docker 安装
 
-```js
-# apt升级 
-sudo apt-get update 
+```JavaScript
+# apt升级
+sudo apt-get update
 
 # 添加相关软件包
 apt-get install apt-transport-https
 apt-get install ca-certificates curl software-properties-common
 
 # 下载软件包的合法性，需要添加软件源的 GPG 密钥
-curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/gpg | sudo apt-key add 
+curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/gpg | sudo apt-key add
 
-# source.list 中添加 Docker 软件源 
-sudo add-apt-repository 
-"deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu   
-$(lsb_release -cs)    
-stable" 
+# source.list 中添加 Docker 软件源
+sudo add-apt-repository
+"deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu  
+$(lsb_release -cs)   
+stable"
 
 # 安装 Docker CE
-sudo apt-get update 
+sudo apt-get update
 sudo apt-get install docker-ce
 
-# Helloworld测试 
+# Helloworld测试
 docker run hello-world
 
 ```
 
-### 安装node
+### 安装 node
 
 ```cmd
 # 安装nvm
@@ -117,7 +117,7 @@ nvm install node
 npm i pm2 -g
 ```
 
-### 自动化部署CI/CD
+### 自动化部署 CI/CD
 
 ```dockerfile
 # dockerfile
@@ -138,14 +138,14 @@ CMD ["nginx", "-g", "daemon off;"]
 
 逐行解析配置：
 
-- FROM node:lts-alpine as build-stage：基于 node  `lts-alpine` 版本镜像，并通过构建阶段命名，将有 node 环境的阶段命名为 `build-stage`（包含 alpine 的镜像版本相比于 latest 版本更加小巧，更适合作为 docker 镜像使用）
+- FROM node:lts-alpine as build-stage：基于 node `lts-alpine` 版本镜像，并通过构建阶段命名，将有 node 环境的阶段命名为 `build-stage`（包含 alpine 的镜像版本相比于 latest 版本更加小巧，更适合作为 docker 镜像使用）
 - WORKDIR /app：将工作区设为 /app，和其他系统文件隔离
-- COPY package*.json ./：拷贝 package.json/package-lock.json 到容器的 /app 目录
+- COPY package\*.json ./：拷贝 package.json/package-lock.json 到容器的 /app 目录
 - RUN npm install：运行 `npm install` 在容器中安装依赖
 - COPY . .：拷贝其他文件到容器 /app 目录，分两次拷贝是因为保持 node_modules 一致
 - RUN npm run build：运行 `npm run build` 在容器中构建
 
-## docker优化
+## docker 优化
 
 ### 利用镜像缓存
 
@@ -176,11 +176,11 @@ npm config set registry https://registry-npm.shanyue.tech/
 
 ```yaml
 install:
-- npm ci
+  - npm ci
 # keep the npm cache around to speed up installs
 cache:
   directories:
-  - "$HOME/.npm"
+    - "$HOME/.npm"
 ```
 
 5. 使用 `npm ci` 代替 `npm i`，既提升速度又保障应用安全性
@@ -188,8 +188,6 @@ cache:
 ```bash
 npm ci
 ```
-
-
 
 ### 多阶段构建
 
@@ -201,16 +199,14 @@ npm ci
 2. 把镜像推至镜像仓库服务器
 3. 在生产服务器拉取镜像，启动容器
 
-
-
 ## Docker Compose
 
-Docker Compose是 docker 提供的一个命令行工具，用来定义和运行由多个容器组成的应用。
+Docker Compose 是 docker 提供的一个命令行工具，用来定义和运行由多个容器组成的应用。
 
 使用 compose，我们可以通过 YAML 文件声明式的定义应用程序的各个服务，并由单个命令完成应用的创建和启动。
 
 ```yaml
-version: '3.1'
+version: "3.1"
 services:
   nginx:
     restart: always
@@ -229,8 +225,7 @@ services:
     #服务除了可以基于指定的镜像，还可以基于一份Dockerfile，在使用up启动时执行构建任务，构建标签是build，可以指定Dockerfile所在文件夹的路径。Compose将会利用Dockerfile自动构建镜像，然后使用镜像启动服务容器。
     build: ./backend
     ports:
-      - '3000:3000'
-
+      - "3000:3000"
 ```
 
 ### 启动
@@ -241,11 +236,9 @@ docker-compose up
 docker-compose up -d
 ```
 
-
-
 ## 配置镜像
 
-```json
+```JavaScripton
 {
   "registry-mirrors": [
 "https://registry.docker-cn.com",
@@ -258,9 +251,7 @@ docker-compose up -d
 }
 ```
 
-
-
-## docker常用命令
+## docker 常用命令
 
 ### 镜像命令
 
@@ -300,9 +291,7 @@ docker attach 容器ID                #重新进入Docker容器
 docker cp  容器ID:容器内路径 目的主机路径        #从容器内拷贝文件到主机上
 ```
 
-
-
-## docker命令帮助
+## docker 命令帮助
 
 ```cmd
 Commands:
@@ -315,17 +304,17 @@ Commands:
     diff      Inspect changes on a container's filesystem   # 查看 docker 容器变化
     events    Get real time events from the server          # 从 docker 服务获取容器实时事件
     exec      Run a command in an existing container        # 在已存在的容器上运行命令
-    export    Stream the contents of a container as a tar archive   
+    export    Stream the contents of a container as a tar archive
               # 导出容器的内容流作为一个 tar 归档文件[对应 import ]
     history   Show the history of an image                  # 展示一个镜像形成历史
     images    List images                                   # 列出系统当前镜像
-    import    Create a new filesystem image from the contents of a tarball  
+    import    Create a new filesystem image from the contents of a tarball
               # 从tar包中的内容创建一个新的文件系统映像[对应 export]
     info      Display system-wide information               # 显示系统相关信息
     inspect   Return low-level information on a container   # 查看容器详细信息
     kill      Kill a running container                      # kill 指定 docker 容器
     load      Load an image from a tar archive              # 从一个 tar 包中加载一个镜像[对应 save]
-    login     Register or Login to the docker registry server   
+    login     Register or Login to the docker registry server
               # 注册或者登陆一个 docker 源服务器
     logout    Log out from a Docker registry server         # 从当前 Docker registry 退出
     logs      Fetch the logs of a container                 # 输出当前容器日志信息
@@ -339,7 +328,7 @@ Commands:
               # 推送指定镜像或者库镜像至docker源服务器
     restart   Restart a running container                   # 重启运行的容器
     rm        Remove one or more containers                 # 移除一个或者多个容器
-    rmi       Remove one or more images                 
+    rmi       Remove one or more images
               # 移除一个或多个镜像[无容器使用该镜像才可删除，否则需删除相关容器才可继续或 -f 强制删除]
     run       Run a command in a new container
               # 创建一个新的容器并运行一个命令
@@ -351,7 +340,7 @@ Commands:
     top       Lookup the running processes of a container   # 查看容器中运行的进程信息
     unpause   Unpause a paused container                    # 取消暂停容器
     version   Show the docker version information           # 查看 docker 版本号
-    wait      Block until a container stops, then print its exit code   
+    wait      Block until a container stops, then print its exit code
               # 截取容器停止时的退出状态值
 Run 'docker COMMAND --help' for more information on a command.
 ```
@@ -386,7 +375,7 @@ Usage of docker:
   --mtu=0                                Set the containers network MTU                             # 设置网络 mtu
                                            if no value is provided: default to the default route MTU or 1500 if no default route is available
   -p, --pidfile="/var/run/docker.pid"    Path to use for daemon PID file                            # 指定 pid 文件位置
-  --registry-mirror=[]                   Specify a preferred Docker registry mirror                  
+  --registry-mirror=[]                   Specify a preferred Docker registry mirror
   -s, --storage-driver=""                Force the docker runtime to use a specific storage driver  # 强制 docker 运行时使用指定存储驱动
   --selinux-enabled=false                Enable selinux support                                     # 开启 selinux 支持
   --storage-opt=[]                       Set storage driver options                                 # 设置存储驱动选项
@@ -397,4 +386,3 @@ Usage of docker:
   --tlsverify=false                      Use TLS and verify the remote (daemon: verify client, client: verify daemon) # 使用 tls 并确认远程控制主机
   -v, --version=false                    Print version information and quit                         # 输出 docker 版本信息
 ```
-

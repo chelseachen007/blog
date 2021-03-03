@@ -8,11 +8,11 @@ yarn create vite-app <project-name>
 
 ## 初次启动
 
-![image-20200920203608846](./images/image-20200920203608846.png)
+![image-20200920203608846](https://i.loli.net/2021/03/02/BK5xIaVvTDnSUqc.png)
 
 ## main.js 路径改写
 
-```js
+```JavaScript
 import { createApp } from "/@modules/vue.js";
 import App from "/src/App.vue";
 import "/src/index.css?import";
@@ -32,7 +32,7 @@ vite 内部启动一个 koa 服务，而 ES Modules 是静态分析编译，无�
 
 ![image-20200920203853087](./images/image-20200920203853087.png)
 
-```js
+```JavaScript
 import { updateStyle } from "/vite/client";
 const css =
   "#app {\n  font-family: Avenir, Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n  margin-top: 60px;\n}\n";
@@ -63,7 +63,7 @@ vite 的热更新主要有四步：
 
 ## .vue 文件
 
-```js
+```JavaScript
 #HelloWorld.vue?type=template
 import { toDisplayString as _toDisplayString, createVNode as _createVNode, createTextVNode as _createTextVNode, Fragment as _Fragment, openBlock as _openBlock, createBlock as _createBlock } from "/@modules/vue.js"
 
@@ -84,7 +84,7 @@ export function render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 ```
 
-```js
+```JavaScript
 ### HelloWorld.vue
 import HelloWorld from '/src/components/HelloWorld.vue'
 

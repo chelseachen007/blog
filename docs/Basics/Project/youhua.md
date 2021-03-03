@@ -1,6 +1,6 @@
 # 优化
 
-![img](images/clipboard.png)
+![img](https://i.loli.net/2021/03/02/6QdOzHEApwYgjsu.png)
 
 ![image-20201227143655635](images/image-20201227143655635.png)
 

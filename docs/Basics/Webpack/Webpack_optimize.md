@@ -6,7 +6,7 @@
 
 #### 速度分析
 
-```js
+```JavaScript
 const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 const smp = new SpeedMeasurePlugin();
 
@@ -41,7 +41,7 @@ html-webpack-plugin took 0.021 secs
 
 #### 体积分析
 
-```js
+```JavaScript
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 
@@ -60,7 +60,7 @@ if (WATCH_ANALYZER) {
 
 `thread-loader` 会将你的 `loader` 放置在一个 `worker` 池里面运行，以达到多线程构建。
 
-```js
+```JavaScript
 rules: [
   {
     test: /\.js$/,
@@ -101,7 +101,7 @@ rules: [
 
 `vendor-manifest.json`文件就是一个第三方库的映射而已。
 
-```js
+```JavaScript
 //* webpack.dll.js
 
 const path = require("path");
@@ -125,7 +125,7 @@ module.exports = {
 };
 ```
 
-```js
+```JavaScript
 // webpack.config.base.js
 const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
 const webpack = require('webpack')
@@ -153,7 +153,7 @@ files.forEach((file) => {
 
 有的依赖包，除了项目所需的模块内容外，还会附带一些多余的模块。典型的例子是 moment 这个包，一般情况下在构建时会自动引入其 locale 目录下的多国语言包，
 
-```js
+```JavaScript
     new webpack.IgnorePlugin({
       resourceRegExp: /^\.\/locale$/,
       contextRegExp: /moment$/,
@@ -164,7 +164,7 @@ files.forEach((file) => {
 
 include 的用途是只对符合条件的模块使用指定 Loader 进行转换处理。而 exclude 则相反，不对特定条件的模块使用该 Loader（例如不使用 babel-loader 处理 node_modules 中的模块）。
 
-```js
+```JavaScript
 rules: [
       {
         test: /\.js$/,
@@ -183,7 +183,7 @@ Split Chunks 有诸多优点，例如有利于缓存命中、有利于运行时�
 
 大模块不提取，重复打包，影响较大
 
-```js
+```JavaScript
 optimization: {
   splitChunks: {
     // 自动提取所有公共模块到单独 bundle
@@ -196,7 +196,7 @@ optimization: {
 
 vue 配置
 
-```js
+```JavaScript
 optimization: {
     splitChunks: {
         cacheGroups: {
@@ -267,13 +267,11 @@ optimization: {
 },
 ```
 
-
-
 ### 代码压缩
 
 webpack4 已经默认支持 ES6 语法的压缩。所以不用 uglyjs 该用 webpack 官方的 terser-webpack-plugin
 
-```js
+```JavaScript
 // ./webpack.config.js
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCssAssetsWebpackPlugin = require("optimize-css-assets-webpack-plugin");
@@ -308,7 +306,7 @@ module.exports = {
 
 Webpack 4 内置了压缩插件 TerserWebpackPlugin，且默认开启了缓存参数。在初次构建的压缩代码过程中，就将这一阶段的结果写入了缓存目录（node_modules/.cache/terser-webpack-plugin/）中，当再次构建进行到压缩代码阶段时，即可对比读取已有缓存，
 
-```js
+```JavaScript
 terser-webpack-plugin/src/index.js:
 ...
 if (cache.isEnabled()) {
@@ -333,7 +331,7 @@ if (cache.isEnabled()) {
 
 #### babel-loader
 
-```js
+```JavaScript
  {
     test: /\.js$/,
     exclude: /node_modules/,
@@ -348,7 +346,7 @@ if (cache.isEnabled()) {
 
 #### cache-loader
 
-```js
+```JavaScript
         use: [
           'cache-loader',
           ...loaders
@@ -359,7 +357,7 @@ if (cache.isEnabled()) {
 
 #### hard-source-webpack-plugin
 
-```js
+```JavaScript
 // webpack.config.js
 var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
@@ -379,13 +377,13 @@ require.ensure（vue-router 配置路由，使用 webpack 的 require.ensure 技
 
 #### vue 异步组件技术
 
-```js
+```JavaScript
 component: (resolve) => require(["../components/PromiseDemo"], resolve);
 ```
 
 #### es 提案的 import()
 
-```js
+```JavaScript
 const Home = () =>
   import(/* webpackChunkName: 'ImportFuncDemo' */ "@/components/home");
 ```
@@ -398,7 +396,7 @@ const Home = () =>
 
 #### webpack
 
-```js
+```JavaScript
 component: (r) =>
   require.ensure([], () => r(require("@/components/home")), "demo");
 ```
@@ -488,7 +486,7 @@ Webpack 5 中增加了对一些 CommonJS 风格模块代码的静态分析功功
 
 ### Vite
 
-![Drawing 4.png](./images/Ciqc1F9yo_GAWATTAACYUvrJKL4148.png)
+![Drawing 4.png](https://i.loli.net/2021/03/03/iuYPg7qIBSf5wXp.png)
 
 详细运行查看[Vite](./Vue_vite.md)
 

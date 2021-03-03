@@ -32,7 +32,7 @@ loader 用于对模块的源代码进行转换。loader 可以使你在 `import`
 
 举一个 less-loader 使用例子
 
-```js
+```JavaScript
  rules: [
       {
         test: /\.less$/, //  匹配规则
@@ -50,7 +50,7 @@ loader 用于对模块的源代码进行转换。loader 可以使你在 `import`
 
 #### 自定义 loader
 
-```js
+```JavaScript
 // 函数 声明式函数 不可以是箭头函数
 // 函数 必须有返回值
 // 如何返回多值
@@ -72,7 +72,7 @@ module.exports = function(source) {
 
 #### 重命名自定义 loader
 
-```js
+```JavaScript
  resolveLoader: {
     modules: ["./node_modules", "./myLoaders"],
   },
@@ -90,7 +90,7 @@ module.exports = function(source) {
 
 使用相当简单，具体传入参数看文档就好
 
-```js
+```JavaScript
 const HtmlWebpakcPlugin = require("html-webpack-plugin");
 
 plugins: [new HtmlWebpakcPlugin(), new CleanWebpackPlugin(), new fileWebpackPlugin()],
@@ -98,7 +98,7 @@ plugins: [new HtmlWebpakcPlugin(), new CleanWebpackPlugin(), new fileWebpackPlug
 
 #### 自定义 Plugins
 
-```js
+```JavaScript
 class fileWebpackPlugin {
   //   constructor(options) {
   //     console.log(options);
@@ -133,7 +133,7 @@ module.exports = fileWebpackPlugin;
 
 #### 查看配置的 webpack 周期
 
-```js
+```JavaScript
 const compiler = webpack(config);
 Object.keys(compiler.hooks).forEach((hookName) => {
   compiler.hooks[hookName].tap("xxxx", () => {
@@ -179,7 +179,7 @@ development 采用 cheap-module-eval-source-map
 
 #### 开启
 
-```js
+```JavaScript
   devServer: {
     // 开启 HMR 特性，如果资源不支持 HMR 会 fallback 到 live reloading
     hot: true
@@ -197,7 +197,7 @@ development 采用 cheap-module-eval-source-map
 
 启动一个 websocket 监听文件 id 变化，执行除以 js，并重新执行
 
-```js
+```JavaScript
 if (module.hot) {
   module.hot.accept("./number", function() {
     document.body.removeChild(document.getElementById("number"));
@@ -218,7 +218,7 @@ if (module.hot) {
 
 ##### 未开启 HMR
 
-```js
+```JavaScript
 if (module.hot) {
   // 确保有 HMR API 对象
   module.hot.accept("./editor", () => {
@@ -237,14 +237,14 @@ if (module.hot) {
 
 默认的 Babel 只⽀持 let 等⼀些基础的特性转换，Promise 等⼀些还有转换过 来，这时候需要借助@babel/polyfill，把 es 的新特性都装进来，来弥补低版本浏览器中缺失的特性
 
-```js
+```JavaScript
 //index.js 顶部
 import "@babel/polyfill";
 ```
 
 #### 按需加载
 
-```js
+```JavaScript
 //.babelrc
 {
   "presets": [
@@ -288,7 +288,7 @@ options:{presets:[["es2015",{module:false}]]}
 
 ### 使用
 
-```js
+```JavaScript
 // ./webpack.config.js
 module.exports = {
   // ... 其他配置项
@@ -309,7 +309,7 @@ side effects 是指那些当 import 的时候会执行一些动作，但是不�
 
 tree-shaking 不能自动的识别那些代码属于 side effcets 所以，有些需要手动指定
 
-```json
+```JavaScripton
 ## pagejson
 {
     name:'tree-shaking',
@@ -328,7 +328,7 @@ Rollup 打包结果惊人的简洁，基本上就跟我们手写的代码一样�
 
 ### 输出格式
 
-```js
+```JavaScript
 // ./rollup.config.js
 // 所有 Rollup 支持的格式
 const formats = ["es", "amd", "cjs", "iife", "umd", "system"];
@@ -343,7 +343,7 @@ export default formats.map((format) => ({
 
 ### 使用插件
 
-```js
+```JavaScript
 // ./rollup.config.js
 import json from "@rollup/plugin-json";
 export default {
@@ -360,7 +360,7 @@ export default {
 
 Rollup 默认只能够按照文件路径的方式加载本地的模块文件，对于 node_modules 目录中的第三方模块，并不能像 Webpack 一样，直接通过模块名称直接导入。
 
-```js
+```JavaScript
 import resolve from '@rollup/plugin-node-resolve'
 export default {
   ...
@@ -374,7 +374,7 @@ export default {
 
 由于 Rollup 设计的是只处理 ES Modules 模块的打包，所以如果在代码中导入 CommonJS 模块，默认是不被支持的
 
-```js
+```JavaScript
 import commonjs from '@rollup/plugin-commonjs'
 export default {
   ...

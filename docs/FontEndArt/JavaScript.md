@@ -48,7 +48,7 @@ if (!Array.isArray) {
 
 产生原因：js 中的数字是采用双精度 64 位浮点数存储，计算使用二进制，呈现结果时才会转换成十进制，当十进制小数的二进制表示的有限数字超过 52 位时，在 JavaScript 里是不能精确存储的，这时候就存在舍入误差
 
-```js
+```JavaScript
 //0.1+0.2==0.3
 function FixAdd(nums1, nums2) {
   return (nums1 * 1000 + nums2 * 1000) / 1000;

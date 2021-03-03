@@ -1,12 +1,12 @@
-# Vue和React差异
+# Vue 和 React 差异
 
-## React 
+## React
 
 ### 编译时优化
 
-```js
+```JavaScript
 functinon react(){
-  return <div></div>   
+  return <div></div>
 }
 
 ===>
@@ -15,57 +15,53 @@ function react(){
 }
 ```
 
-因为js是一种运行时的动态语言，所以无法做编译时优化
+因为 js 是一种运行时的动态语言，所以无法做编译时优化
 
 ### 运行时优化
 
 触发渲染：this.setState,props,事件啊
 
-触发后进行全局DOM diff，所以将DOM树拆分成一个个fiber
+触发后进行全局 DOM diff，所以将 DOM 树拆分成一个个 fiber
 
 1. 调度 选择优先级比较高的任务, 顶堆
-2. 协调 计算要执行的任务 -> 执行任务  计算系统空闲时间是否足够
+2. 协调 计算要执行的任务 -> 执行任务 计算系统空闲时间是否足够
 3. 提交 根据提交的内容修改 => render
 
 ### React v17
 
 在 React V17 中， React 不会再将事件处理添加到 document 上，而是将事件处理添加到渲染 React 树的根 DOM 容器中.也就是事件委托
 
-
-
 ## Vue
 
-Vue是模板代码
+Vue 是模板代码
 
 运行时编译（runtime）
 
-Vue的template模板只有自己的编译器才能编译
+Vue 的 template 模板只有自己的编译器才能编译
 
 ### 编译时优化
 
-1. HTML转化成AST（抽象语法树）
+1. HTML 转化成 AST（抽象语法树）
 
-   使用了大量正则进行标签匹配，优化静态节点做上标记，提取if，@，v-等方法
+   使用了大量正则进行标签匹配，优化静态节点做上标记，提取 if，@，v-等方法
 
    通过一个栈，进行标签拼接
 
 2. options.optimize 进行静态节点优化
 
-   在静态节点标记	Ast static
+   在静态节点标记 Ast static
 
-   静态节点创建提升 VNode \__static__
+   静态节点创建提升 VNode \_\_static\_\_
 
-3. 优化后的AST转换成代码
-
-   
+3. 优化后的 AST 转换成代码
 
 ### 运行时优化
 
 vue 双向数据绑定
 
-vue1 每一个动态数据对应一个watcher 占用内存大
+vue1 每一个动态数据对应一个 watcher 占用内存大
 
-vue2  Watcher 是组件级的 => 所以需要 dom diff  也是组件级
+vue2 Watcher 是组件级的 => 所以需要 dom diff 也是组件级
 
 ## 更新性能
 

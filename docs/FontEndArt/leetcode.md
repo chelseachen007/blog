@@ -1,8 +1,8 @@
 # 编程题
 
-## 实现交通灯的逻辑：红灯亮5s,绿灯亮10s,黄灯亮3s,红灯亮5s...不停循环执行，亮的动作可以用一个伪函数来表示。
+## 实现交通灯的逻辑：红灯亮 5s,绿灯亮 10s,黄灯亮 3s,红灯亮 5s...不停循环执行，亮的动作可以用一个伪函数来表示。
 
-```js
+```JavaScript
       function sleep(wait) {
         return new Promise((reslove) => {
           setTimeout(reslove, wait);
@@ -22,9 +22,9 @@
       }
 ```
 
-## 要求设计LazyMan类，实现以下功能
+## 要求设计 LazyMan 类，实现以下功能
 
-```js
+```JavaScript
 
 LazyMan('Tony');
 // Hi I am Tony
@@ -51,7 +51,7 @@ LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk foo
 
 代码
 
-```js
+```JavaScript
       class LazyMans {
         constructor(name) {
           this.name = name;
@@ -96,11 +96,11 @@ LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk foo
 
 要求：
 
-1. 批量请求函数，最大并发数maxNum
+1. 批量请求函数，最大并发数 maxNum
 2. 每当有一个请求返回，就留下一个空位，可以增加新的请求
-3. 所有请求完成后，结果按照urls里面的顺序依次发出。
+3. 所有请求完成后，结果按照 urls 里面的顺序依次发出。
 
-```js
+```JavaScript
 function handleFetchQueue(func, urls, max, callback) {
   const urlCount = urls.length;
   const requestsQueue = [];
@@ -138,15 +138,11 @@ function handleFetchQueue(func, urls, max, callback) {
 }
 ```
 
+## 实现 36 进制加法，不得直接使用 parselnt 转化十进制进行计算，如‘1b'+'0a'=57
 
+## 实现 sortByDept()函数，被依赖最深的元素，输出到最前
 
-## 实现36进制加法，不得直接使用parselnt转化十进制进行计算，如‘1b'+'0a'=57
-
-
-
-## 实现sortByDept()函数，被依赖最深的元素，输出到最前
-
-```js
+```JavaScript
 sortByDept([
     {name:'a',requires:['b','c']},
     {name:'b',requires:['c']},
@@ -162,7 +158,7 @@ sortByDept([
 
 ## Promise
 
-```js
+```JavaScript
 async function async1 () {
   console.log('async1 start');
   setTimeout(() => {
@@ -195,7 +191,7 @@ console.log('start');
 
 解：
 
-```js
+```JavaScript
 async1 start
 async2
 start
@@ -209,7 +205,7 @@ timer2
 
 ## 简单说一下 MVC/MVVM/Flux 的区别。用 JS 实现一个 MVC
 
-```js
+```JavaScript
 
 /* 1. App 出始化时渲染出如下的用户列表 2. 并实现点击每个用户他对应的 priority 就自增
 <ul id="userlist">
@@ -285,19 +281,19 @@ const app = new UserController(new UserModel(), new UserView())
 app.init();
 ```
 
-[ github地址 ](https://github.com/chelseachen007/writeCode/tree/master/MVC)
+[ github 地址 ](https://github.com/chelseachen007/writeCode/tree/master/MVC)
 
 ## 字符串的规则解析：
 
-例子：a(b)<2>c 输出：abbc，a(b(c)<3>de)<2>f 输出abcccdebcccdef；()代表重复内容，<>代表重复的次数
+例子：a(b)<2>c 输出：abbc，a(b(c)<3>de)<2>f 输出 abcccdebcccdef；()代表重复内容，<>代表重复的次数
 
-```js
+```JavaScript
 
 ```
 
 ## 实现一个函数将对象结构转成在树形结构
 
-```js
+```JavaScript
 // 原始 list 如下
 let list =[
     {id:1,name:'部门A',parentId:0},
@@ -314,7 +310,7 @@ const result = convert(list, ...);
 
 解：
 
-```js
+```JavaScript
 function convert () {
     let res = []
     let temp = {}
@@ -339,7 +335,7 @@ function convert () {
 
 ## 实现超大整数相加
 
-```js
+```JavaScript
 function bigNumAdd (num1, num2) {
     let res = '', carry = 0
     num1 = `${num1}`.split('')
@@ -355,7 +351,7 @@ function bigNumAdd (num1, num2) {
 
 ## 将如下对象输出成指定数组
 
-```js
+```JavaScript
 var obj = {
     a: {
         b: {
@@ -375,7 +371,7 @@ var obj = {
 
 解：用层序遍历的思想
 
-```js
+```JavaScript
 function Format (obj) {
     if (!obj) return []
     let res = []
@@ -397,4 +393,3 @@ function Format (obj) {
     return res
 }
 ```
-

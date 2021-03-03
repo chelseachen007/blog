@@ -2,7 +2,7 @@
 
 ## 思维脑图
 
-<img src="./images/CICD.png" alt="自动化部署">
+<img src="https://i.loli.net/2021/03/02/F3EMbUWqfYiSIuX.png" alt="自动化部署">
 
 前端部署一般流程：获取代码 ==> 安装依赖 ==> 源码构建 ==> 产物打包  ==> 推送代码 ==> 重启服务
 

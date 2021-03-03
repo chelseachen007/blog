@@ -4,19 +4,17 @@
 
 一遍编程题引发的思考
 
-#### 实现sum函数使得下面输出结果一致
+#### 实现 sum 函数使得下面输出结果一致
 
-```js
+```JavaScript
 sum(1,2,3).sumOf()
 sum(2,3)(1).sumOf()
 sum(2)(1)(3).sumOf()
 ```
 
-
-
 第一反应是柯里化
 
-```js
+```JavaScript
 function add(a, b) {
   return a + b;
 }
@@ -39,7 +37,7 @@ console.log(sum(1, 2, 3)()); // 6
 console.log(sum(2, 3)(1)()); //12
 ```
 
-显然 这一没有sumof实现 也完全复用了
+显然 这一没有 sumof 实现 也完全复用了
 
 ## 防抖和节流
 
@@ -50,11 +48,11 @@ console.log(sum(2, 3)(1)()); //12
 
 ## 函数拦截器
 
-对废弃API进行提示增加
+对废弃 API 进行提示增加
 
 一个小细节，定义`notice = once(console.warn)`，用`notice`输出，这样的话，调用相同的函数只会在控制台显示一遍警告，就避免了输出太多重复的信息。
 
-```js
+```JavaScript
 function deprecate(fn, oldApi, newApi) {
   const message = `The ${oldApi} is deprecated.
 Please use the ${newApi} instead.`;
@@ -67,9 +65,9 @@ Please use the ${newApi} instead.`;
 }
 ```
 
-## WEB拦截器
+## WEB 拦截器
 
-```js
+```JavaScript
 function intercept(fn, {beforeCall = null, afterCall = null}) {
   return function (...args) {
     if(!beforeCall || beforeCall.call(this, args) !== false) {
@@ -86,7 +84,7 @@ axios 请求队列拦截器的实现
 
 ## 高阶函数的范式
 
-```js
+```JavaScript
 function HOF0(fn) {
   return function(...args) {
     return fn.apply(this, args);
@@ -100,11 +98,11 @@ function HOF0(fn) {
 
 **高阶函数可以任意组合**，形成更强大的功能。
 
-另外，像这样`fn1(fn2(fn3(args...)))`嵌套的写法，我们也可以用高阶函数改变成更加友好的形式： 也就是compose
+另外，像这样`fn1(fn2(fn3(args...)))`嵌套的写法，我们也可以用高阶函数改变成更加友好的形式： 也就是 compose
 
-### redux版本(同步函数)
+### redux 版本(同步函数)
 
-```js
+```JavaScript
 function f1(arg) {
   console.log("f1", arg);
   return arg;
@@ -128,7 +126,7 @@ console.log("res", res); //sy-log
 
 优化写法
 
-```js
+```JavaScript
 function compose(...funcs) {
   if (!funcs.length) {
     return (arg) => arg;
@@ -142,16 +140,14 @@ compose(f1, f2, f3)("omg");
 // f1 omg
 ```
 
-
-
-### koa版本(异步中间件)
+### koa 版本(异步中间件)
 
 例子
 
-```js
+```JavaScript
 function compose(middlewares){
      return () = >{
-         
+
      }
 }
 
@@ -186,16 +182,14 @@ const finalFn = compose(middlewares);
 finalFn();
 ```
 
-
-
-#### compose实现
+#### compose 实现
 
 - compose 接受一个 函数数组
-- 返回一个 具有一个 next函数参数的 函数
-- 用Promise包装，
-- 考虑边界条件 
+- 返回一个 具有一个 next 函数参数的 函数
+- 用 Promise 包装，
+- 考虑边界条件
 
-```js
+```JavaScript
 function compose(middlewares){
      return () = >{
          dispatch(0)
@@ -208,4 +202,3 @@ function compose(middlewares){
 
 }
 ```
-

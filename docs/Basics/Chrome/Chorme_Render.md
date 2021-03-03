@@ -1,6 +1,6 @@
 # 关键渲染路径
 
-![image-20200908170237110](./images/image-20200908170237110.png)
+![image-20210302185317878](https://i.loli.net/2021/03/02/dIoPjWhSNEYqgyQ.png)
 
 关键渲染路径就是将 HTML, CSS, JavaScript 文件转化成漂亮页面的过程
 
@@ -10,7 +10,7 @@
 
 浏览器会遵守一套定义完善的步骤来处理 HTML 并构建 DOM：
 
-![image-20200909143341459](./images/image-20200909143341459.png)
+![image-20200909143341459](https://i.loli.net/2021/03/02/7tm5aBJyuHzRDEd.png)
 
 ### 第一步：转换
 
@@ -47,7 +47,7 @@
 
 因为 HTML 标记定义的就是不同标签之间的关系，这个关系就像是一个树形结构一样
 
-![img](./images/1460000013662139.png)
+![img](https://i.loli.net/2021/03/02/EZoqPri8lXKTaW1.png)
 
 ## 样式计算
 
@@ -67,13 +67,13 @@ CSS 样式来源主要有三种：
 
 只需要在控制台中输入 document.styleSheets，然后就看到如下图所示的结构：
 
-![image-20200908170738879](./images/image-20200908170738879.png)
+![image-20200908170738879](https://i.loli.net/2021/03/02/xnpJgkRecOhLI12.png)
 
 ### 2. 转换样式表中的属性值，使其标准化
 
 **需要将所有值转换为渲染引擎容易理解的、标准化的计算值**，这 个过程就是属性值标准化。
 
-![image-20200908170841875](./images/image-20200908170841875.png)
+![image-20200908170841875](https://i.loli.net/2021/03/02/x7Sh9FYtGXncZRk.png)
 
 ### 3. 计算出 DOM 树中每个节点的具体样式
 
@@ -134,7 +134,7 @@ CSS 样式来源主要有三种：
 
 ###### **第二点，需要剪裁（clip）的地方也会被创建为图层。**
 
-```js
+```JavaScript
       div {
           width: 200;
           height: 200;
@@ -173,7 +173,7 @@ GPU 操作是运行在 GPU 进程中，如果栅格化操作使用了 GPU，那�
 
 浏览器进程里面有一个叫 viz 的组件，用来接收合成线程发过来的 DrawQuad 命令，然后根据 DrawQuad 命令，将其页面内容绘制到内存中，最后再将内存显示在屏幕上。
 
-![image-20200909104016011](./images/image-20200909104016011.png)
+![image-20200909104016011](https://i.loli.net/2021/03/02/zdX3Oat1lDM75u6.png)
 
 综合上图，我们总结下渲染进程的流程：
 
@@ -321,7 +321,7 @@ JS 脚本资源的处理有几个特点：
 </html>
 ```
 
-![image-20200909153229328](./images/image-20200909153229328-1599721498641.png)
+![image-20200909153229328](https://i.loli.net/2021/03/02/oGDFPymQebtVHju.png)
 
 //TODO: Performance 性能可视化
 
@@ -337,7 +337,7 @@ CSSOM 会阻塞渲染，只有当 CSSOM 构建完毕后才会进入下一个阶�
 
 首先打开无痕模式
 
-![image-20200910153802551](./images/image-20200910153802551.png)
+![image-20200910153802551](https://i.loli.net/2021/03/02/FhwTLkW6NB3GHeX.png)
 
 除了上面标注的要学会看
 
@@ -352,9 +352,7 @@ CSSOM 会阻塞渲染，只有当 CSSOM 构建完毕后才会进入下一个阶�
 
 ### performance 对象
 
-![image-20200910155220279](./images/image-20200910155220279.png)
-
-![img](./images/640.png)
+![image-20200910155220279](https://i.loli.net/2021/03/02/j3AsZiBtD1VJNxK.png)
 
 然后剩下的就要具体分析了。
 

@@ -2,11 +2,11 @@
 
 ## 准备工作
 
-vue中使用的类型检查工具是 Flow.js 有点类似TypeScript 。
+vue 中使用的类型检查工具是 Flow.js 有点类似 TypeScript 。
 
 ### 目录
 
-```js
+```JavaScript
 src
 ├── compiler # 编译相关 包括把模板解析成 ast 语法树，ast 语法树优化，代码⽣成等功能。
 ├── core # 核⼼代码  包括内置组件、全局 API 封装，Vue 实例化、观察者、虚拟 DOM、⼯具函数等等。
@@ -24,7 +24,7 @@ src
 
 - Runtime+Compiler
 
-```js
+```JavaScript
 // 需要编译器的版本
 new Vue({
 template: '<div>{{ hi }}</div>'
@@ -34,9 +34,9 @@ template: '<div>{{ hi }}</div>'
 
 ## 从入口开始
 
-初始化全局api
+初始化全局 api
 
-```js
+```JavaScript
 initGlobalAPI(Vue)
 
 //
@@ -63,9 +63,9 @@ export function initGlobalAPI (Vue: GlobalAPI) {
 
 ```
 
-传入的Vue 将生命周期等混入
+传入的 Vue 将生命周期等混入
 
-```js
+```JavaScript
 //src\core\instance\index.js
 function Vue (options) {
     if (process.env.NODE_ENV !== 'production' &&
@@ -80,16 +80,16 @@ initMixin(Vue)
 stateMixin(Vue)
 eventsMixin(Vue)
 lifecycleMixin(Vue)
-renderMixin(Vue) 
+renderMixin(Vue)
 
 export default Vue
 ```
 
-**所以Vue本质上就是⼀个用 Function 实现的 Class，然后它的原型 prototype 以及它本⾝都扩展了⼀系列的 方法和属性，**
+**所以 Vue 本质上就是⼀个用 Function 实现的 Class，然后它的原型 prototype 以及它本⾝都扩展了⼀系列的 方法和属性，**
 
 ### init
 
-```js
+```JavaScript
 // src/core/instance/init.js
 export function initMixin (Vue: Class<Component>) {
   Vue.prototype._init = function (options?: Object) {
@@ -124,9 +124,9 @@ export function initMixin (Vue: Class<Component>) {
 
 Vue 初始化主要就干了几件事情，合并配置，初始化生命周期，初始化事件中心，初始化渲染，初始 化 data、props、computed、watcher 等等。
 
-### $mount
+### \$mount
 
-```js
+```JavaScript
 const mount = Vue.prototype.$mount
 Vue.prototype.$mount = function (
   el?: string | Element,
@@ -176,8 +176,8 @@ Vue.prototype.$mount = function (
 
 #### mountComponent
 
-```js
-// src/core/instance/lifecycle.js 
+```JavaScript
+// src/core/instance/lifecycle.js
 export function mountComponent (
   vm: Component,
   el: ?Element,
@@ -227,19 +227,17 @@ export function mountComponent (
 }
 ```
 
-从上⾯的代码可以看到， mountComponent 核⼼就是先调用 vm._render 方法先⽣成虚拟 Node，再实例化⼀个渲染 Watcher ，在它的回调函数中会调用 updateComponent 方法，最终调用 vm._update 更新 DOM。 
+从上⾯的代码可以看到， mountComponent 核⼼就是先调用 vm.\_render 方法先⽣成虚拟 Node，再实例化⼀个渲染 Watcher ，在它的回调函数中会调用 updateComponent 方法，最终调用 vm.\_update 更新 DOM。
 
 Watcher 在这里起到两个作用，⼀个是初始化的时候会执行回调函数，另⼀个是当 vm 实例中的监测 的数据发⽣变化的时候执行回调函数。
 
-函数最后判断为根节点的时候设置 vm._isMounted 为 true ， 表示这个实例已经挂载了，同时执行 mounted 钩子函数。 这里注意 vm.$vnode 表示 Vue 实例的父虚拟 Node，所以它为 Null 则表示 当前是根 Vue 的实例。
-
-
+函数最后判断为根节点的时候设置 vm.\_isMounted 为 true ， 表示这个实例已经挂载了，同时执行 mounted 钩子函数。 这里注意 vm.\$vnode 表示 Vue 实例的父虚拟 Node，所以它为 Null 则表示 当前是根 Vue 的实例。
 
 #### render
 
-Vue 的 _render 方法是实例的⼀个私有方法，它用来把实例渲染成⼀个虚拟 Node。
+Vue 的 \_render 方法是实例的⼀个私有方法，它用来把实例渲染成⼀个虚拟 Node。
 
-```js
+```JavaScript
 <div id="app">
 {{ message }}
 </div>
@@ -247,7 +245,7 @@ Vue 的 _render 方法是实例的⼀个私有方法，它用来把实例渲染�
 
 转化成
 
-```js
+```JavaScript
 render: function (createElement) {
     return createElement('div', {
         attrs: {
@@ -261,7 +259,7 @@ render: function (createElement) {
 
 Virtual DOM 就是用⼀个原⽣的 JS 对象去描述⼀个 DOM 节点，所以它比创建⼀个 DOM 的代价要 ⼩很多。
 
-```js
+```JavaScript
 export default class VNode {
   tag: string | void; // 标签
   data: VNodeData | void; // 数据
@@ -316,10 +314,10 @@ export default class VNode {
 
 #### update
 
-Vue 的 _update 是实例的⼀个私有方法，**它被调用的时机有 2 个，⼀个是首次渲染，⼀个是数据更新的时候；**
+Vue 的 \_update 是实例的⼀个私有方法，**它被调用的时机有 2 个，⼀个是首次渲染，⼀个是数据更新的时候；**
 
-```js
-//src/core/instance/lifecycle.js 
+```JavaScript
+//src/core/instance/lifecycle.js
 Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
     const prevEl = vm.$el
@@ -354,37 +352,35 @@ Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
 
 这里逻辑不用看，下面会详细说，我们知道最后会进入`__patch__` 即可
 
-核心方法`__patch__`  区分服务端渲染
+核心方法`__patch__` 区分服务端渲染
 
-```js
-// src/platforms/web/runtime/index.js 
+```JavaScript
+// src/platforms/web/runtime/index.js
 Vue.prototype.__patch__ = inBrowser ? patch : noop
 // src\platforms\web\runtime\patch.js
 //每个平台都有各⾃的 nodeOps 和 modules
 export const patch: Function = createPatchFunction({ nodeOps, modules })
 ```
 
-VDom 进行diff 的地方 ，后面再来分析
+VDom 进行 diff 的地方 ，后面再来分析
 
 // TODO:diff
 
-```js
+```JavaScript
 // src/core/vdom/patch.js
 
 ```
 
-
-
 ### 总结
 
-- 首先new Vue() 
-- => init() 进行全局属性和生命周期等注入 
+- 首先 new Vue()
+- => init() 进行全局属性和生命周期等注入
   - beforeMount
-- => 将$mount 挂载 
-- => `_render` 函数将temlate转化成Vdom 
-- =>  `_patch`将Vdom转化成真实DOM
-  - 初次渲染，不用diff
-  - Dom变化，diff算法后 异步更新
+- => 将\$mount 挂载
+- => `_render` 函数将 temlate 转化成 Vdom
+- => `_patch`将 Vdom 转化成真实 DOM
+  - 初次渲染，不用 diff
+  - Dom 变化，diff 算法后 异步更新
 - 渲染完成，等待更新
   - Mounted
 
@@ -394,11 +390,11 @@ VDom 进行diff 的地方 ，后面再来分析
 
 createElement 有三个分支逻辑
 
-1. 假如是普通的html标签，渲染一个VNode
-2. 假如是componen且options中注册了 ，就进入createComponent 逻辑
-3. 不命名tag，也创建一个VNode
+1. 假如是普通的 html 标签，渲染一个 VNode
+2. 假如是 componen 且 options 中注册了 ，就进入 createComponent 逻辑
+3. 不命名 tag，也创建一个 VNode
 
-```js
+```JavaScript
 //src\core\vdom\create-element.js  function _createElement
 if (typeof tag === 'string') {
     let Ctor
@@ -429,7 +425,7 @@ if (typeof tag === 'string') {
 
 ### createComponent
 
-```js
+```JavaScript
 export function createComponent (
   Ctor: Class<Component> | Function | Object | void,
   data: ?VNodeData,
@@ -437,7 +433,7 @@ export function createComponent (
   children: ?Array<VNode>,
   tag?: string
 ): VNode | Array<VNode> | void {
-    
+
   // plain options object: turn it into a constructor
   if (isObject(Ctor)) {
     Ctor = baseCtor.extend(Ctor)
@@ -515,7 +511,7 @@ export function createComponent (
 
 #### 构造子类构造函数
 
-```js
+```JavaScript
 export default {
     name: 'app',
     components: {
@@ -526,13 +522,13 @@ export default {
   if (isObject(Ctor)) {
     Ctor = baseCtor.extend(Ctor)
   }
-//src/core/global-api/extend.js 
+//src/core/global-api/extend.js
 
 ```
 
 Vue.extend 的作用就是构造⼀个 Vue 的子类，它使用⼀种非常经典的原型继承的方式把⼀个纯对 象转换⼀个继承于 Vue 的构造器 Sub 并返回，然后对 Sub 这个对象本⾝扩展了⼀些属性，如扩 展 options 、添加全局 API 等；并且对配置中的 props 和 computed 做了初始化⼯作；最后对于 这个 Sub 构造函数做了缓存，避免多次执行 Vue.extend 的时候对同⼀个子组件重复构造。
 
-```js
+```JavaScript
 Vue.extend = function (extendOptions: Object): Function {
     extendOptions = extendOptions || {}
     const Super = this
@@ -597,13 +593,11 @@ Vue.extend = function (extendOptions: Object): Function {
   }
 ```
 
-
-
 #### 安装组件钩子函数
 
-整个 **installComponentHooks** 的过程就是把 componentVNodeHooks 的钩子函数合并到 **data.hook** 中，在 VNode 执行 patch 的过程中执行相关的钩子函数,但他的Marge不是覆盖，而是按顺序执行。
+整个 **installComponentHooks** 的过程就是把 componentVNodeHooks 的钩子函数合并到 **data.hook** 中，在 VNode 执行 patch 的过程中执行相关的钩子函数,但他的 Marge 不是覆盖，而是按顺序执行。
 
-#### 实例化VNode
+#### 实例化 VNode
 
 最后⼀步非常简单，通过 new VNode 实例化⼀个 vnode 并返回。需要注意的是和普通元素节点的 vnode 不同，组件的 vnode 是没有 children 的，这点很关键。
 
@@ -611,8 +605,8 @@ Vue.extend = function (extendOptions: Object): Function {
 
 **执行 vm.patch 去把 VNode 转换成真正的 DOM 节点。**
 
-```js
-//src/core/vdom/patch.js 
+```JavaScript
+//src/core/vdom/patch.js
 function createElm (
     vnode,
     insertedVnodeQueue,
@@ -632,7 +626,7 @@ function createElm (
 
 #### createComponent
 
-```js
+```JavaScript
 	function createComponent (vnode, insertedVnodeQueue, parentElm, refElm) {
 		let i = vnode.data
 		if (isDef(i)) {
@@ -660,13 +654,13 @@ function createElm (
 
 如果 vnode 是⼀个组件 VNode，那么条件会满⾜，并且得到 i 就是 init 钩子函数，执行`_init`
 
-子组件的实例化实际上就是在这个时机执行的，并且它会执行实例的 _init 方法，
+子组件的实例化实际上就是在这个时机执行的，并且它会执行实例的 \_init 方法，
 
-#### _render()
+#### \_render()
 
-然后进行_render()
+然后进行\_render()
 
-```js
+```JavaScript
 // src/core/instance/render.js
   Vue.prototype._render = function (): VNode {
     const vm: Component = this
@@ -685,7 +679,7 @@ function createElm (
     try {
       currentRenderingInstance = vm
       vnode = render.call(vm._renderProxy, vm.$createElement)
-    } 
+    }
     // 如果返回的数组只包含一个节点，则允许它
     if (Array.isArray(vnode) && vnode.length === 1) {
       vnode = vnode[0]
@@ -699,12 +693,12 @@ function createElm (
   }
 ```
 
-我们只保留关键部分的代码，这里的 _parentVnode 就是当前组件的父 VNode，⽽ render 函数⽣ 成的 vnode 当前组件的渲染 vnode ， vnode 的 parent 指向了 _parentVnode ，也就是 vm.$vnode ，它们是⼀种父子的关系。
+我们只保留关键部分的代码，这里的 \_parentVnode 就是当前组件的父 VNode，⽽ render 函数⽣ 成的 vnode 当前组件的渲染 vnode ， vnode 的 parent 指向了 \_parentVnode ，也就是 vm.\$vnode ，它们是⼀种父子的关系。
 
-#### _update
+#### \_update
 
-```js
-//src/core/instance/lifecycle.js 
+```JavaScript
+//src/core/instance/lifecycle.js
 Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
     const prevEl = vm.$el
@@ -738,15 +732,15 @@ Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
   }
 ```
 
-这里要理清，vm._vnode 和 vm.$vnode 的关系就是⼀种父子关系，用代码表示就是   **vm.`vnode.parent `=== vm.$vnode**
+这里要理清，vm.\_vnode 和 vm.$vnode 的关系就是⼀种父子关系，用代码表示就是   **vm.`vnode.parent `=== vm.$vnode\*\*
 
-restoreActiveInstance是用来保持递归过程中记录当前vm的parent，当⼀个 vm 实例完成它的所有子树的 patch 或者 update 过程后，
+restoreActiveInstance 是用来保持递归过程中记录当前 vm 的 parent，当⼀个 vm 实例完成它的所有子树的 patch 或者 update 过程后，
 
-restoreActiveInstance回到他的父实例后，传入的Vue实例和vm.$parent 依然能保留
+restoreActiveInstance 回到他的父实例后，传入的 Vue 实例和 vm.\$parent 依然能保留
 
 #### `__patch_`
 
-```js
+```JavaScript
 vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
 
 function patch (oldVnode, vnode, hydrating, removeOnly) {
@@ -767,7 +761,7 @@ function patch (oldVnode, vnode, hydrating, removeOnly) {
 
 ##### createElm
 
-```js
+```JavaScript
 	function createElm (
 		vnode,
 		insertedVnodeQueue,
@@ -854,13 +848,13 @@ function patch (oldVnode, vnode, hydrating, removeOnly) {
 	}
 ```
 
-又回到了这里，当遇到普通的VNode createComponent就会返回false，然后重新上面创建父占位符，并遍历所有子VNode调用**createElm** 当遇到组件VNode则进行深入的递归
+又回到了这里，当遇到普通的 VNode createComponent 就会返回 false，然后重新上面创建父占位符，并遍历所有子 VNode 调用**createElm** 当遇到组件 VNode 则进行深入的递归
 
-在完成组件的整个 patch 过程后，最后执行 **insert(parentElm, vnode.elm, refElm)** 完成组件的 DOM 插入，**如果组件 patch 过程中又创建了子组件，那么DOM 的插入顺序是先子后父。**
+在完成组件的整个 patch 过程后，最后执行 **insert(parentElm, vnode.elm, refElm)** 完成组件的 DOM 插入，**如果组件 patch 过程中又创建了子组件，那么 DOM 的插入顺序是先子后父。**
 
 ### 总结
 
-第一次渲染，没有oldVodeTree，就是创建占位符 => 遍历子VNode => 遇到组件VNode => 向下递归 然后开始DOM操作 直到回到占位符的位置。
+第一次渲染，没有 oldVodeTree，就是创建占位符 => 遍历子 VNode => 遇到组件 VNode => 向下递归 然后开始 DOM 操作 直到回到占位符的位置。
 
 这一圈下来，基本的执行流程和代码都有了眼缘了，我们开始深入一些细节进行学习。
 
@@ -872,7 +866,7 @@ Vue 的数据驱动除了数据渲染 DOM 之外，还有⼀个很重要的体�
 
 过 Vue.js 实现响应式的核⼼是利用了 ES5 的 **Object.defineProperty** ， 这也是为什么 Vue.js 不能兼容 IE8 及以下浏览器的原因。
 
-```js
+```JavaScript
 //src\core\instance\state.js
 export function initState (vm: Component) {
   vm._watchers = []
@@ -891,11 +885,11 @@ export function initState (vm: Component) {
 }
 ```
 
- 其他暂且不管，我们先看到有data情况下的 initData 做了什么
+其他暂且不管，我们先看到有 data 情况下的 initData 做了什么
 
 值得注意的是初始化顺序是 prop => methods => data => computed => watch
 
-```js
+```JavaScript
 function initData (vm: Component) {
   let data = vm.$options.data
   data = vm._data = typeof data === 'function'
@@ -939,17 +933,17 @@ function initData (vm: Component) {
 }
 ```
 
-1. 首先是推荐了function写法，object虽然支持但是会给个warn
-2. 将每一个data 都从vm._data.xxx 代理到 vm.xxx 上 
-3. 另外一个就是我们熟悉的 将遍历每个key 转变成响应式
+1. 首先是推荐了 function 写法，object 虽然支持但是会给个 warn
+2. 将每一个 data 都从 vm.\_data.xxx 代理到 vm.xxx 上
+3. 另外一个就是我们熟悉的 将遍历每个 key 转变成响应式
 
-proxy的实现 是通过 defineProperty 将 vm._data 的 get和 set 改成 null，同时将 vm.xxx 的读取都绑定到  vm._data  详细代码就不贴了
+proxy 的实现 是通过 defineProperty 将 vm.\_data 的 get 和 set 改成 null，同时将 vm.xxx 的读取都绑定到 vm.\_data 详细代码就不贴了
 
-我们接下来看看下核心observe的实现
+我们接下来看看下核心 observe 的实现
 
 #### observe
 
-```js
+```JavaScript
 export function observe (value: any, asRootData: ?boolean): Observer | void {
   if (!isObject(value) || value instanceof VNode) {
     return
@@ -973,11 +967,11 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
 }
 ```
 
-这段很无趣，就是判断VNode上是否已有，没有就绑上个new Observer(value) ，
+这段很无趣，就是判断 VNode 上是否已有，没有就绑上个 new Observer(value) ，
 
 #### Observer
 
-```js
+```JavaScript
 export class Observer {
   value: any;
   dep: Dep;
@@ -1020,13 +1014,13 @@ export class Observer {
 }
 ```
 
-Observer 的构造函数逻辑很简单，首先**实例化 Dep 对象**，接着通过执行 def 函数把⾃⾝实例添加到数据对象 value 的 __ob__ 属性上，后面就是对对象和数组区分遍历，进行对每个key值的响应式转化。
+Observer 的构造函数逻辑很简单，首先**实例化 Dep 对象**，接着通过执行 def 函数把⾃⾝实例添加到数据对象 value 的 **ob** 属性上，后面就是对对象和数组区分遍历，进行对每个 key 值的响应式转化。
 
 #### defineReactive
 
 defineReactive 函数最开始初始化 Dep 对象的实例，接着拿到 obj 的属性描述符，然后对子对 象递归调用 observe 方法，这样就保证了无论 obj 的结构多复杂，它的所有子属性也能变成响应式的对象，这样我们访问或修改 obj 中⼀个嵌套较深的属性，也能触发 getter 和 setter。
 
-```js
+```JavaScript
 export function defineReactive (
   obj: Object,
   key: string,
@@ -1091,7 +1085,7 @@ export function defineReactive (
 
 #### 依赖收集
 
-```js
+```JavaScript
 let uid = 0
 
 export default class Dep {
@@ -1138,11 +1132,11 @@ Dep 是⼀个 Class，它定义了⼀些属性和方法，这里需要特别注�
 
 Vue 的 mount 过程是通过 mountComponent 函数，其中有⼀段比较重要的逻辑，大致如下
 
-```js
+```JavaScript
   updateComponent = () => {
       vm._update(vm._render(), hydrating)
   }
- 
+
   new Watcher(vm, updateComponent, noop, {
     before () {
       if (vm._isMounted && !vm._isDestroyed) {
@@ -1152,11 +1146,11 @@ Vue 的 mount 过程是通过 mountComponent 函数，其中有⼀段比较重�
   }, true /* isRenderWatcher */)
 ```
 
-**每一个组件都会生成一个Watcher 里面生成一个Dep(),里面每个对象值都持有一个dep，当render时，会触发所有数据的getter 进行 dep.append() 方法（这里会做逻辑判断，防止同样的数据重复添加）。就完成了依赖收集，**
+**每一个组件都会生成一个 Watcher 里面生成一个 Dep(),里面每个对象值都持有一个 dep，当 render 时，会触发所有数据的 getter 进行 dep.append() 方法（这里会做逻辑判断，防止同样的数据重复添加）。就完成了依赖收集，**
 
-接下来因为Vue 是数据驱动的，所以每次数据变化都会重新 render，那么 vm._render() 方法又会再次执行，并再次触发数据的 getters，**所以 Wathcer 在构造函数中会初始化 2 个 Dep 实例数组， newDeps 表示新添加的 Dep 实例数组，而 deps 表示上⼀次添加的 Dep 实例数组。** 在执行 cleanupDeps 函数的时候，会首先遍历 deps ，移除对 dep 的订阅，然后把 newDepIds 和 depIds 交换， newDeps 和 deps 交换，并把 newDepIds 和 newDeps 清空。
+接下来因为 Vue 是数据驱动的，所以每次数据变化都会重新 render，那么 vm.\_render() 方法又会再次执行，并再次触发数据的 getters，**所以 Wathcer 在构造函数中会初始化 2 个 Dep 实例数组， newDeps 表示新添加的 Dep 实例数组，而 deps 表示上⼀次添加的 Dep 实例数组。** 在执行 cleanupDeps 函数的时候，会首先遍历 deps ，移除对 dep 的订阅，然后把 newDepIds 和 depIds 交换， newDeps 和 deps 交换，并把 newDepIds 和 newDeps 清空。
 
-```js
+```JavaScript
 //src\core\observer\watcher.js
 let uid = 0
 
@@ -1385,8 +1379,6 @@ export default class Watcher {
 }
 ```
 
-
-
 #### 派发更新
 
 setter 的逻辑有 2 个关键的点，⼀个是 **childOb = !shallow && observe(newVal)** ，如果 shallow 为 false 的情况，会对新设置的值变成⼀个响应式对象；另⼀个是 dep.notify() ，通知所有的订阅者.
@@ -1395,18 +1387,18 @@ setter 的逻辑有 2 个关键的点，⼀个是 **childOb = !shallow && observ
 
 ### nextTick
 
-```js
+```JavaScript
  //src/core/util/next-tick.js
 // 代码在上面，就是浏览器兼容性从微任务降级到宏任务的过程
 ```
 
 ### 特殊情况
 
-#### $set	
+#### \$set
 
-Vue考虑到初始化时未声明情况，提供了$set 方法
+Vue 考虑到初始化时未声明情况，提供了\$set 方法
 
-```js
+```JavaScript
 export function set (target: Array<any> | Object, key: any, val: any): any {
   if (process.env.NODE_ENV !== 'production' &&
     (isUndef(target) || isPrimitive(target))
@@ -1440,11 +1432,11 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
 }
 ```
 
-`set `方法接收 3个参数， target 可能是数组或者是普通对象， key 代表的是数组的下标或者是对象的键值， val 代表添加的值。
+`set`方法接收 3 个参数， target 可能是数组或者是普通对象， key 代表的是数组的下标或者是对象的键值， val 代表添加的值。
 
 #### Array
 
-```js
+```JavaScript
 //src\core\observer\array.js
 methodsToPatch.forEach(function (method) {
   // cache original method
@@ -1470,16 +1462,16 @@ methodsToPatch.forEach(function (method) {
 })
 ```
 
-数组通过原生方法增加的Key 都是没有经过响应式转换的，所以Vue把push，unshift，splice方法重新劫持了，当调用这些方法时，会重新遍历转化一遍。
+数组通过原生方法增加的 Key 都是没有经过响应式转换的，所以 Vue 把 push，unshift，splice 方法重新劫持了，当调用这些方法时，会重新遍历转化一遍。
 
 ### 计算属性 VS 侦听属性
 
-#### initComputed 
+#### initComputed
 
-我们在initComputed 中找到了这串代码
+我们在 initComputed 中找到了这串代码
 
-```js
-//src/core/instance/state.js 
+```JavaScript
+//src/core/instance/state.js
 function createComputedGetter (key) {
   return function computedGetter () {
     const watcher = this._computedWatchers && this._computedWatchers[key]
@@ -1496,18 +1488,14 @@ function createComputedGetter (key) {
 }
 ```
 
-
-
-
-
-```js
+```JavaScript
   evaluate () {
     this.value = this.get()
     this.dirty = false
   }
 ```
 
-计算属性本质上就是⼀个` computed watcher` ，也了解了它的创建过程和 被访问触发 getter 以及依赖更新的过程，其实这是最新的计算属性的实现，之所以这么设计是因为 Vue 想确保不仅仅是计算属性依赖的值发⽣变化，而是**当计算属性最终计算的值发生变化才会触发**渲染 watcher 重新渲染，本质上是⼀种优化。
+计算属性本质上就是⼀个`computed watcher` ，也了解了它的创建过程和 被访问触发 getter 以及依赖更新的过程，其实这是最新的计算属性的实现，之所以这么设计是因为 Vue 想确保不仅仅是计算属性依赖的值发⽣变化，而是**当计算属性最终计算的值发生变化才会触发**渲染 watcher 重新渲染，本质上是⼀种优化。
 
 #### initWatch
 
@@ -1515,14 +1503,14 @@ function createComputedGetter (key) {
 
 ##### deep
 
-普通的watch 值只会触发最外层对象的 getter，所以无法订阅其变化
+普通的 watch 值只会触发最外层对象的 getter，所以无法订阅其变化
 
-```js
+```JavaScript
 //
 if (this.deep) {
   traverse(value)
 }
-//src/core/observer/traverse.js 
+//src/core/observer/traverse.js
 function _traverse (val: any, seen: SimpleSet) {
   let i, keys
   const isA = Array.isArray(val)
@@ -1555,9 +1543,9 @@ traverse 的逻辑也很简单，它实际上就是对⼀个对象做深层递�
 
 ### 组件更新
 
-这里和初次渲染走了不同的patch方式
+这里和初次渲染走了不同的 patch 方式
 
-```js
+```JavaScript
 //src\core\instance\lifecycle.js
 if (!prevVnode) {
     // initial render
@@ -1570,7 +1558,7 @@ if (!prevVnode) {
 
 这里执行 patch 的逻辑和首次渲染是不⼀样的，因为 oldVnode 不为空，并且它和 vnode 都是 VNode 类型，接下来会通过 **sameVNode(oldVnode, vnode)** 判断它们是否是相同的 VNode 来决定⾛ 不同的更新逻辑：
 
-```js
+```JavaScript
    return function patch (oldVnode, vnode, hydrating, removeOnly) {
         if (isUndef(vnode)) {
             if (isDef(oldVnode)) invokeDestroyHook(oldVnode)
@@ -1672,21 +1660,21 @@ if (!prevVnode) {
         }
 ```
 
-patchVnode的规则是这样的：
+patchVnode 的规则是这样的：
 
-1.如果新旧VNode都是静态的，同时它们的key相同（代表同一节点），并且新的VNode是clone或者是标记了once（标记v-once属性，只渲染一次），那么只需要替换elm以及componentInstance即可。
+1.如果新旧 VNode 都是静态的，同时它们的 key 相同（代表同一节点），并且新的 VNode 是 clone 或者是标记了 once（标记 v-once 属性，只渲染一次），那么只需要替换 elm 以及 componentInstance 即可。
 
-2.新老节点均有children子节点，则对子节点进行diff操作，调用updateChildren，这个updateChildren也是diff的核心。
+2.新老节点均有 children 子节点，则对子节点进行 diff 操作，调用 updateChildren，这个 updateChildren 也是 diff 的核心。
 
-3.如果老节点没有子节点而新节点存在子节点，先清空老节点DOM的文本内容，然后为当前DOM节点加入子节点。
+3.如果老节点没有子节点而新节点存在子节点，先清空老节点 DOM 的文本内容，然后为当前 DOM 节点加入子节点。
 
-4.当新节点没有子节点而老节点有子节点的时候，则移除该DOM节点的所有子节点。
+4.当新节点没有子节点而老节点有子节点的时候，则移除该 DOM 节点的所有子节点。
 
 5.当新老节点都无子节点的时候，只是文本的替换。
 
 #### samenode
 
-```js
+```JavaScript
 function sameVnode (a, b) {
     return (
         a.key === b.key && (
@@ -1709,7 +1697,7 @@ sameVnode 的逻辑非常简单，如果两个 vnode 的 key 不相等，则是�
 
 #### updateChildren
 
-```js
+```JavaScript
  function updateChildren (parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly) {
     let oldStartIdx = 0
     let newStartIdx = 0
@@ -1753,7 +1741,7 @@ sameVnode 的逻辑非常简单，如果两个 vnode 的 key 不相等，则是�
       } else {
         /*
           生成一个key与旧VNode的key对应的哈希表（只有第一次进来undefined的时候会生成，也为后面检测重复的key值做铺垫）
-          比如childre是这样的 [{xx: xx, key: 'key0'}, {xx: xx, key: 'key1'}, {xx: xx, key: 'key2'}]  beginIdx = 0   endIdx = 2  
+          比如childre是这样的 [{xx: xx, key: 'key0'}, {xx: xx, key: 'key1'}, {xx: xx, key: 'key2'}]  beginIdx = 0   endIdx = 2
           结果生成{key0: 0, key1: 1, key2: 2}
         */
         if (isUndef(oldKeyToIdx)) oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx)
@@ -1803,9 +1791,9 @@ sameVnode 的逻辑非常简单，如果两个 vnode 的 key 不相等，则是�
   }
 ```
 
-#### 手写简单diff
+#### 手写简单 diff
 
-```js
+```JavaScript
 function patchNode (oldNode, newNode) {
     const oldChildren = oldNode.children
     const newChildren = newNode.children
@@ -1815,7 +1803,7 @@ function patchNode (oldNode, newNode) {
     }
     // 老的没有子节点，新的有 就 清空老节点并将新节点加入到DOM下
     else if (oldChildren.length && !newChildren.length) {
-        // oldChildren =null 
+        // oldChildren =null
         // Dom.append(newChildren)
     }
     // 都没有 就只做文本的替换
@@ -1839,12 +1827,12 @@ function update (oldNode, newNode) {
     let newEnd
     while (oldStart <= oldEnd && newStart <= newEnd) {
         // someNode 判断后 都进入 patchVnode
-        //新头和旧头 
+        //新头和旧头
         if (newStart === oldStart) {
             newStart++
             oldStart++
         }
-        //旧尾和新尾  
+        //旧尾和新尾
         else if (oldEnd === newEnd) {
             oldEnd--
             newEnd--
@@ -1876,13 +1864,11 @@ function update (oldNode, newNode) {
 }
 ```
 
-
-
 ## 编译
 
 编译就是把模板 template 编译⽣成 render 以及 staticRenderFns ，
 
-```js
+```JavaScript
 export const createCompiler = createCompilerCreator(function baseCompile (
 template: string,
 options: CompilerOptions
@@ -1900,13 +1886,13 @@ staticRenderFns: code.staticRenderFns
 
 ### parse
 
-这一块就是类似html的解析，通过一个栈 每一次出栈都是一个标签的开闭结束，最后会生成一个AST抽象语法树。
+这一块就是类似 html 的解析，通过一个栈 每一次出栈都是一个标签的开闭结束，最后会生成一个 AST 抽象语法树。
 
 ![image-20201206131358064](images/image-20201206131358064.png)
 
 ### optimization
 
-```js
+```JavaScript
 const genStaticKeysCached = cached(genStaticKeys)
 // 遍历AST树找到永远不会改变的静态节点
 //1.将它们提升为常量，这样我们就不再需要在每次重新渲染时为它们创建新节点；
@@ -1939,7 +1925,7 @@ isStatic 是对⼀个 AST 元素节点是否是静态的判断，如果是表达
 
 #### generate
 
-```js
+```JavaScript
 export function generate (
   ast: ASTElement | void,
   options: CompilerOptions
@@ -1955,7 +1941,7 @@ export function generate (
 
 遇到不同的指令如何去生成
 
-```js
+```JavaScript
 export function genElement (el: ASTElement, state: CodegenState): string {
   if (el.parent) {
     el.pre = el.pre || el.parent.pre
@@ -2004,7 +1990,7 @@ export function genElement (el: ASTElement, state: CodegenState): string {
 
 ### event
 
-```js
+```JavaScript
 //src/compiler/parser/index.js
 export const onRE = /^@|^v-on:/
 export const dirRE = /^v-|^@|^:/
@@ -2026,11 +2012,9 @@ function processAtts(){
 
 在遇到上面几个正则后，会进行名字的 addListener 监听事件
 
-
-
 ### 自定义事件
 
-```js
+```JavaScript
 export function eventsMixin (Vue: Class<Component>) {
   const hookRE = /^hook:/
   Vue.prototype.$on = function (event: string | Array<string>, fn: Function): Component {
@@ -2125,27 +2109,25 @@ export function eventsMixin (Vue: Class<Component>) {
 }
 ```
 
-在实例vm上注册了事件中心 `_events` ,标准的发布订阅模式
+在实例 vm 上注册了事件中心 `_events` ,标准的发布订阅模式
 
 ### V-model
 
-事实上只是一种语法糖，对于input来说 就是@input 和:bind:value 的语法糖，当你使用组件，仍想使用V-model也可以这么使用，另外Vue也提供了 model对象进行这两个属性更改别名的方式
+事实上只是一种语法糖，对于 input 来说 就是@input 和:bind:value 的语法糖，当你使用组件，仍想使用 V-model 也可以这么使用，另外 Vue 也提供了 model 对象进行这两个属性更改别名的方式
 
 ### Slot
 
-当遇到 slot 标签的时候会给对应的 AST 元素节点添加 slotName 属性，然后在 codegen 阶段， 会判断如果当前 AST 元素节点是 slot 标签，则执行genSlot 函数
+当遇到 slot 标签的时候会给对应的 AST 元素节点添加 slotName 属性，然后在 codegen 阶段， 会判断如果当前 AST 元素节点是 slot 标签，则执行 genSlot 函数
 
-```js
+```JavaScript
 const slotName = el.slotName || '"default"'
 const children = genChildren(el, state)
 let res = `_t(${slotName}${children ? `,${children}` : ''}`
 ```
 
+vm.\$slots 是通过执行 resolveSlots(options.\_renderChildren, renderContext) 返回的，
 
-
-vm.$slots 是通过执行 resolveSlots(options._renderChildren, renderContext) 返回的，
-
-```js
+```JavaScript
 export function resolveSlots (
   children: ?Array<VNode>,
   context: ?Component
@@ -2191,7 +2173,7 @@ resolveSlots 函数的逻辑就是遍历 chilren ，拿到每⼀个 child 的 da
 
 ### keep-alive
 
-```js
+```JavaScript
 /* @flow */
 
 import { isRegExp, remove } from 'shared/util'
@@ -2321,21 +2303,21 @@ export default {
 
 注意它有⼀个属性 abstract 为 true，是⼀个抽象组件，Vue 的⽂档没有提这个概念，实际上它在组件实例建立父子关系的时候会被忽略，
 
-include 和 exclude 可以传入动态值是因为在watch中监听变化
+include 和 exclude 可以传入动态值是因为在 watch 中监听变化
 
- **在 created 钩子里定义了 this.cache 和 this.keys ，本质上它就是去缓存已经创建过的 vnode 。**
+**在 created 钩子里定义了 this.cache 和 this.keys ，本质上它就是去缓存已经创建过的 vnode 。**
 
-```js
+```JavaScript
 const slot = this.$slots.default
 const vnode: VNode = getFirstComponentChild(slot)
 ```
 
-**keep-alive  只缓存第一个子元素！**所以⼀般和它搭配使用的有 component 动态组件或者是 router-view 
+**keep-alive 只缓存第一个子元素！**所以⼀般和它搭配使用的有 component 动态组件或者是 router-view
 
-当再次来到creteEle的时候 isReactivated 为 true，**并且在执行 init 钩子函数的时候不会执行组件的 mount 过程了**
+当再次来到 creteEle 的时候 isReactivated 为 true，**并且在执行 init 钩子函数的时候不会执行组件的 mount 过程了**
 
-```js
-//src/core/vdom/create-component.js 
+```JavaScript
+//src/core/vdom/create-component.js
 init (vnode: VNodeWithData, hydrating: boolean): ?boolean {
     if (
       vnode.componentInstance &&
@@ -2364,19 +2346,19 @@ init (vnode: VNodeWithData, hydrating: boolean): ?boolean {
 - 动态组件
 - 组件根节点
 
-在 vnode patch 的过程中，对于过渡的实现，**它只接收了 create 和 activate 2 个钩子函数**，我们知道 create 钩子函数只有当节点的创建过程才会执行，而 remove 会在节点销毁的时候执行，这也就印证了  必须要满⾜ v-if 、动态组件、组件根节点条件之⼀了，
+在 vnode patch 的过程中，对于过渡的实现，**它只接收了 create 和 activate 2 个钩子函数**，我们知道 create 钩子函数只有当节点的创建过程才会执行，而 remove 会在节点销毁的时候执行，这也就印证了 必须要满⾜ v-if 、动态组件、组件根节点条件之⼀了，
 
-总结起来，Vue 的过渡实现分为以下几个步骤： 
+总结起来，Vue 的过渡实现分为以下几个步骤：
 
 1. ⾃动嗅探目标元素是否应用了 CSS 过渡或动画，如果是，在恰当的时机添加/删除 CSS 类名。
-2.  如果过渡组件提供了 JavaScript 钩子函数，这些钩子函数将在恰当的时机被调用。 
+2. 如果过渡组件提供了 JavaScript 钩子函数，这些钩子函数将在恰当的时机被调用。
 3. 如果没有找到 JavaScript 钩子并且也没有检测到 CSS 过渡/动画，DOM 操作 (插入/删除) 在下⼀帧 中立即执行。
 
 ## Vue-Route
 
 ### Vue.use
 
-```js
+```JavaScript
 
 export function initUse (Vue: GlobalAPI) {
   Vue.use = function (plugin: Function | Object) {
@@ -2401,11 +2383,11 @@ export function initUse (Vue: GlobalAPI) {
 
 ## Vuex
 
-注册插件和route一样，就不谈了
+注册插件和 route 一样，就不谈了
 
 ### 构造函数
 
-```js
+```JavaScript
 constructor (options = {}) {
     // Auto install if it is not done yet and `window` has `Vue`.
     // To allow users to avoid auto-installation in some cases,
@@ -2495,9 +2477,9 @@ constructor (options = {}) {
   }
 ```
 
-Store的构造类除了初始化一些内部变量以外，主要执行了installModule（初始化module）以及resetStoreVM（通过VM使store“响应式”）。
+Store 的构造类除了初始化一些内部变量以外，主要执行了 installModule（初始化 module）以及 resetStoreVM（通过 VM 使 store“响应式”）。
 
-```js
+```JavaScript
 forEachValue(wrappedGetters, (fn, key) => {
   // use computed to leverage its lazy-caching mechanism
   computed[key] = () => fn(store)
@@ -2508,9 +2490,9 @@ forEachValue(wrappedGetters, (fn, key) => {
 })
 ```
 
-resetStoreVM首先会遍历wrappedGetters，使用Object.defineProperty方法为每一个getter绑定上get方法，这样我们就可以在组件里访问this.$store.getters.test就等同于访问store._vm.test。
+resetStoreVM 首先会遍历 wrappedGetters，使用 Object.defineProperty 方法为每一个 getter 绑定上 get 方法，这样我们就可以在组件里访问 this.\$store.getters.test 就等同于访问 store.\_vm.test。
 
-```js
+```JavaScript
 store._vm = new Vue({
   data: {
     $$state: state
@@ -2519,44 +2501,41 @@ store._vm = new Vue({
 })
 ```
 
-之后Vuex采用了new一个Vue对象来实现数据的“响应式化”，运用Vue.js内部提供的数据双向绑定功能来实现store的数据与视图的同步更新。
+之后 Vuex 采用了 new 一个 Vue 对象来实现数据的“响应式化”，运用 Vue.js 内部提供的数据双向绑定功能来实现 store 的数据与视图的同步更新。
 
 ## 总结
 
-Vue 是一个通过响应式对象 实现的一个MVVM框架，他的渲染流程是这样的，他首先其实就是一个构造函数，在初始化的过程中，他把像extend、use等等方法挂载到原型链上，然后等待New 一个新的实例出来， init中，我们可以分为数据注入和$mount 两个时期
+Vue 是一个通过响应式对象 实现的一个 MVVM 框架，他的渲染流程是这样的，他首先其实就是一个构造函数，在初始化的过程中，他把像 extend、use 等等方法挂载到原型链上，然后等待 New 一个新的实例出来， init 中，我们可以分为数据注入和\$mount 两个时期
 
- 数据注入是按照 
+数据注入是按照
 
 - initLifecycle(vm) // $parent,$root,$children,$refs
 - initEvents(vm) // 处理父组件传递的事件和回调
-- initRender(vm) // $slots,$scopedSlots,_c,$createElement
+- initRender(vm) // $slots,$scopedSlots,\_c,\$createElement
 - **callHook(vm, 'beforeCreate')**
 - initInjections(vm) // 获取注入数据
-- initState(vm) // 初始化props，methods，data，computed，watch
+- initState(vm) // 初始化 props，methods，data，computed，watch
 - initProvide(vm) // 提供数据注入
 - **callHook(vm, 'created')**
 
 这段时期，我们可以清晰的了解到 beforeCreate 和 Create 这两个生命周期可以获取到的数据。对数据的响应式声明也发生在这个阶段。
 
-然后就进入了$mount 阶段，这个阶段也叫挂载，
+然后就进入了\$mount 阶段，这个阶段也叫挂载，
 
-首先 会调用 `_render` 将 模板转化成 AST、staticRenderFns、render函数，我们将这个阶段称之为编译阶段
+首先 会调用 `_render` 将 模板转化成 AST、staticRenderFns、render 函数，我们将这个阶段称之为编译阶段
 
-转化成AST 这个阶段的过程，有点类似于HTML的模板转化， 通过一个栈 进行标签的闭合匹配，通过大量正则进行事件和指令等操作的匹配，最后生成一棵AST  树，AST 元素节点总共有 3 种类型， type 为 1 表示是普通元素，为 2 表示是表达式，为 3 表示是纯文本。
+转化成 AST 这个阶段的过程，有点类似于 HTML 的模板转化， 通过一个栈 进行标签的闭合匹配，通过大量正则进行事件和指令等操作的匹配，最后生成一棵 AST 树，AST 元素节点总共有 3 种类型， type 为 1 表示是普通元素，为 2 表示是表达式，为 3 表示是纯文本。
 
-**--- callHook(*vm*, 'beforeMount') ---** 
+**--- callHook(_vm_, 'beforeMount') ---**
 
-生成以后，要通过标记静态节点来优化这颗AST树，到这就要将AST树和options 传入 render 生成真正运行的code，其中涉及到vif，vfor等指令的具体执行
+生成以后，要通过标记静态节点来优化这颗 AST 树，到这就要将 AST 树和 options 传入 render 生成真正运行的 code，其中涉及到 vif，vfor 等指令的具体执行
 
-产生一个组件级别的Watcher，通过 `_update`将VNode更新成真实DOM时，触发了getter 进行依赖收集
+产生一个组件级别的 Watcher，通过 `_update`将 VNode 更新成真实 DOM 时，触发了 getter 进行依赖收集
 
-**--- callHook(*vm*, 'Mount') ---** 
+**--- callHook(_vm_, 'Mount') ---**
 
-响应式： 最开始init时已经对每个数据进行了响应式声明，在$mount阶段，将template 转化成 AST 树时，同时也会触发响应式对象的get 方法，将相应的watcher push 到 Dep的sub数组里，这里有一个细节，他在全局声明了一个Dep.target,保证同时只有一个watcher在执行，
+响应式： 最开始 init 时已经对每个数据进行了响应式声明，在\$mount 阶段，将 template 转化成 AST 树时，同时也会触发响应式对象的 get 方法，将相应的 watcher push 到 Dep 的 sub 数组里，这里有一个细节，他在全局声明了一个 Dep.target,保证同时只有一个 watcher 在执行，
 
 然后就是
 
-触发更新时，Dep接受到变化通知，通知内部的watcher进行视图更新，Watcher内部有新旧Dep两个数组，他会先去取消旧Watcher的订阅，然后执行watcher.run()会进入队列进行一波去重，然后异步去调用patch，patch这边也重新生成一个Vnode Tree 与旧tree 进行 diff 算法。
-
-
-
+触发更新时，Dep 接受到变化通知，通知内部的 watcher 进行视图更新，Watcher 内部有新旧 Dep 两个数组，他会先去取消旧 Watcher 的订阅，然后执行 watcher.run()会进入队列进行一波去重，然后异步去调用 patch，patch 这边也重新生成一个 Vnode Tree 与旧 tree 进行 diff 算法。

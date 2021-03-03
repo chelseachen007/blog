@@ -1,6 +1,6 @@
 # HTTP 报文
 
-<img src="./images/message.png" alt="请求报文">
+<img src="https://i.loli.net/2021/03/02/HQzlZyxStvAeKMj.png" alt="请求报文">
 
 ## 其他请求头
 

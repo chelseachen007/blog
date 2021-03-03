@@ -91,7 +91,7 @@
 
 CA 对公钥的签名认证也是有格式的，不是简单地把公钥绑定在持有者身份上就完事了，还要包含`序列号`、 `用途`、`颁发者`、`有效时间`等等，把这些打成一个包再签名，完整地证明公钥关联的各种信息，形成“**数字证书**”（Certificate）。
 
-<img src="./images/CA.png" alt="CA">
+<img src="https://i.loli.net/2021/03/02/1J3lEYdtGFgjuAq.png" alt="CA">
 
 小一点的 CA 可以让大 CA 签名认证，但链条的最后，也就是 **Root CA** ，就只能自己证明 自己了，这个就叫“**自签名证书** ”（Self-Signed Certificate）或者“**根证书** ”（Root Certificate）。你必须相信，否则整个证书信任链就走不下去了。
 
@@ -116,7 +116,7 @@ server suite 意思是：“**握手时使用 `ECDHE 算法`进行密钥交换�
 
 ## 连接过程解析
 
-![image-20200918173057621](./images/image-20200918173057621.png)
+![image-20200918173057621](https://i.loli.net/2021/03/02/4hwLVxiHpsQ2YZC.png)
 
 ### TSL1.2
 
@@ -154,7 +154,7 @@ pre-master 是经过公钥加密之后传输的，所以黑客无法获取到 pr
 
 - 服务器收到后，使用私钥解密并验证合法性，至此，两边就都可以通过 **cilent-random** 和 **server-random** 、 **Pre-master** 三个共同随机数生成**对称秘钥**(**Master Secret**)进行加密传输了
 
-```js
+```JavaScript
 master_secret = PRF(
   pre_master_secret,
   "master	secret",
@@ -162,7 +162,7 @@ master_secret = PRF(
 );
 ```
 
- 这里的“PRF”就是伪随机数函数，它基于密码套件里的最后一个参数，
+这里的“PRF”就是伪随机数函数，它基于密码套件里的最后一个参数，
 
 ## 双向认证
 

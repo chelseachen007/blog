@@ -8,7 +8,7 @@
 
 ## H5 history API
 
-```js
+```JavaScript
 // 在history中向后跳转
 window.history.back();
 window.history.go(-1);
@@ -24,4 +24,3 @@ window.history.go(0);
 var stateObj = { foo: 'bar' };
 window.history.pushState(stateObj, 'page 2', 'bar.html');
 ```
-

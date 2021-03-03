@@ -2,7 +2,7 @@
 
 先对整体流程梳理一下，然后再进行详细分解
 
-![image-20200817143402217](./images/image-20200817143402217.png)
+![image-20200817143402217](https://i.loli.net/2021/03/02/8NKxJbSpwQjY7u9.png)
 
 ### window.requestIdleCallback()
 
@@ -12,7 +12,7 @@
 
 你可以在空闲回调函数中调用 **`requestIdleCallback()`**，以便在下一次通过事件循环之前调度另一个回调。
 
-```js
+```JavaScript
 var handle = window.requestIdleCallback(callback[, options])
 ```
 
@@ -22,7 +22,7 @@ react 主要把到期时间分为两种：**异步任务到期时间**与**交�
 
 `src\react\packages\react-reconciler\src\ReactFiberExpirationTime.old.js`
 
-```js
+```JavaScript
 //整型最大数值，是V8中针对32位系统所设置的最大值
 export const MAX_SIGNED_31_BIT_INT = 1073741823;
 //1073741822
@@ -54,14 +54,14 @@ function computeExpirationBucket(
 
 #### 低优先级
 
-```js
+```JavaScript
 export const LOW_PRIORITY_EXPIRATION = 5000;
 export const LOW_PRIORITY_BATCH_SIZE = 250;
 ```
 
 #### 高优先级
 
-```js
+```JavaScript
 export const HIGH_PRIORITY_EXPIRATION = __DEV__ ? 500 : 150;
 export const HIGH_PRIORITY_BATCH_SIZE = 100;
 ```
@@ -72,7 +72,7 @@ react 低优先级 update 的 expirationTime 间隔是**25ms**，(同理高优�
 
 `\react\packages\react-reconciler\src\ReactFiberWorkLoop.old.js`
 
-```js
+```JavaScript
 //为fiber对象计算expirationTime
 export function computeExpirationForFiber(
   currentTime: ExpirationTime,
@@ -123,7 +123,7 @@ priorityLevel 则来自用户的 UI 操作，不同的事件，带来三种不�
 
 不断检查主线程是否有空闲，并开始下个任务的构建执行，然后进行提交 更新 DOM
 
-```js
+```JavaScript
 function workLoop(deadline) {
   // deadline.timeRemaining() > 1 是暂时写死的，详细的空闲情况参照上面的 ExpirationTime 分析
   // !shouldYield()
@@ -141,7 +141,7 @@ function workLoop(deadline) {
 
 进行递归 fiber 协调，更新 fiber 结构
 
-```js
+```JavaScript
 function performUnitOfWork(fiber) {
   // 1.执行当前任务
   const { type } = fiber;
@@ -173,7 +173,7 @@ function performUnitOfWork(fiber) {
 
 对不同形式的组件分别处理，以下是类组件协调代码，核心是 **reconcileChildren**
 
-```js
+```JavaScript
 function updateClassComponent(fiber) {
   const { type, props } = fiber;
   let cmp = new type(props);
@@ -187,7 +187,7 @@ function updateClassComponent(fiber) {
 
 #### Fiber
 
-```js
+```JavaScript
 /**
  * fiber架构
  * type: 标记类型
@@ -210,7 +210,7 @@ child :第一个子元素的 fiber，支持向下递归
 
 return： 父 fiber，
 
-![20180428113734143](./images/20180428113734143.png)
+![20180428113734143](https://i.loli.net/2021/03/02/OvTceYi45lyZNuR.png)
 
 类似于这也一个个小的 Fiber，相互链接构成了一棵完整的 fiber Tree
 
@@ -230,9 +230,7 @@ return： 父 fiber，
 
 ### 生命周期
 
-![img](./images/5287253-315eac1c26082f08.png)
-
-### V17.0 的启发式算法
+### ![preview](https://i.loli.net/2021/03/03/KxvsCbYX5zrV2Bd.jpg)V17.0 的启发式算法
 
 ### 总结
 

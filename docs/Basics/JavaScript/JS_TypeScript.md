@@ -4,21 +4,21 @@
 
 ```TS
 // 常见原始类型: string,number,boolean,undefined,null,symbol
-let var1: string; // 类型注解 
+let var1: string; // 类型注解
 
-// 编译器类型推断可省略这个语法 
+// 编译器类型推断可省略这个语法
 let var2 = true;
 
-// 类型数组 
+// 类型数组
 let arr: string[];
 
 // 函数中的类型约束
-// 函数中的类型约束 
+// 函数中的类型约束
 function greet(person: string): string {
-    return 'hello, ' + person; 
+    return 'hello, ' + person;
 }
 
-// void类型，常用于没有返回值的函数 
+// void类型，常用于没有返回值的函数
 function warn(): void {}
 ```
 
@@ -30,113 +30,97 @@ let strLength: number = (someValue as string).length;
 //上面两种都是类型断言写法
 ```
 
-
-
 #### 非空断言
 
 ```ts
-function addFeatur(e:KeyboardEvent ){
-    const inp = e.taget as HTMLInputElement 
-    const inp = e.taget !
+function addFeatur(e: KeyboardEvent) {
+  const inp = e.taget as HTMLInputElement;
+  const inp = e.taget!;
 }
 ```
-
-
 
 #### 类型别名
 
 ```ts
-// 可以用下面这样方式定义对象类型 
-const objType: { foo: string, bar: string } 
+// 可以用下面这样方式定义对象类型
+const objType: { foo: string; bar: string };
 
-// 使用type定义类型别名，使用更便捷，还能复用 
-type Foobar = { foo: string, bar: string }
+// 使用type定义类型别名，使用更便捷，还能复用
+type Foobar = { foo: string; bar: string };
 ```
-
-
 
 #### 联合类型
 
 ```ts
-let features:Features[] | null 
+let features: Features[] | null;
 ```
 
 #### 交叉类型
 
 ```ts
-type First = {first:number}
-type Secord = {secord:string }
-type third = First &  Secord
+type First = { first: number };
+type Secord = { secord: string };
+type third = First & Secord;
 ```
 
 为了分离类型，比如前端类型和后端返回的类型应该分开定义后合并
 
-##### 合起来，如果有同key，类型不一样，怎么处理的?
-
-
+##### 合起来，如果有同 key，类型不一样，怎么处理的?
 
 #### 重载
 
 以函数参数数量或者类型，或者返回值的类型区分多个同名函数
 
-``` ts
+```ts
 // 重载：以函数参数数量或者类型，或者返回值的类型区分多个同名函数
 // 先声明，再实现
 // 重载1
-function watch(cb1: () => void): void
+function watch(cb1: () => void): void;
 // 重载2
-function watch(cb1: () => void, cb2: (v1: any, v2: any) => void): void
+function watch(cb1: () => void, cb2: (v1: any, v2: any) => void): void;
 // 实现
 function watch(cb1: () => void, cb2?: (v1: any, v2: any) => void) {
   if (cb2) {
-    console.log('执行重载2');
-    
+    console.log("执行重载2");
   } else {
-    console.log('执行重载1');
-    
+    console.log("执行重载1");
   }
 }
 
- watch() 
+watch();
 ```
-
-
-
-
 
 #### 声明文件
 
 ```TS
-// shims-vue.d.ts 
-import Vue from "vue"; 
-import { AxiosInstance } from "axios"; 
-declare module "vue/types/vue" { 
-    interface Vue { 
-        $axios: AxiosInstance; 
-    } 
+// shims-vue.d.ts
+import Vue from "vue";
+import { AxiosInstance } from "axios";
+declare module "vue/types/vue" {
+    interface Vue {
+        $axios: AxiosInstance;
+    }
 }
 ```
-
-
 
 #### Class
 
 ```ts
-// 03-class.ts 
-class Parent { 
-    private _foo = "foo"; // 私有属性，不能在类的外部访问 
-    protected bar = "bar"; // 保护属性，可以在子类中访问
-    // 参数属性：构造函数参数加修饰符，能够定义为成员属性 
-    constructor(public tua = "tua") {} 
-    // 方法也有修饰符 
-    private someMethod() {} 
-    // 存取器：属性方式访问，可添加额外逻辑，控制读写性
-    get foo() { 
-        return this._foo;
-    }
-    set foo(val) { 
-        this._foo = val; 
-    } 
+// 03-class.ts
+class Parent {
+  private _foo = "foo"; // 私有属性，不能在类的外部访问
+  protected bar = "bar"; // 保护属性，可以在子类中访问
+  // 参数属性：构造函数参数加修饰符，能够定义为成员属性
+  constructor(public tua = "tua") {}
+  // 方法也有修饰符
+  private someMethod() {}
+  // 存取器：属性方式访问，可添加额外逻辑，控制读写性
+  get foo() {
+    return this._foo;
+  }
+  set foo(val) {
+    this._foo = val;
+  }
 }
 ```
 
@@ -172,13 +156,13 @@ getResult<string>("1");
 
 ```ts
 interface Person {
-    name: string;
-    age: number;
+  name: string;
+  age: number;
 }
 
 type K1 = keyof Person; // "name" | "age"
-type K2 = keyof Person[]; // "length" | "toString" | "pop" | "push" | "concat" | "join" 
-type K3 = keyof { [x: string]: Person };  // string | number
+type K2 = keyof Person[]; // "length" | "toString" | "pop" | "push" | "concat" | "join"
+type K3 = keyof { [x: string]: Person }; // string | number
 ```
 
 #### in
@@ -193,7 +177,7 @@ type Obj =  {
 } // -> { a: any, b: any, c: any }
 ```
 
-#### **TS 泛型工具** (目前16种)
+#### **TS 泛型工具** (目前 16 种)
 
 [点击查看官方实现](https://github.com/microsoft/TypeScript/blob/master/src/lib/es5.d.ts#L1431)
 
@@ -233,8 +217,6 @@ type ReturnType<T extends (...args: any[]) => any> = T extends (
   : any;
 ```
 
-
-
 - [InstanceType](https://www.typescriptlang.org/docs/handbook/utility-types.html#instancetypetype)
 - [Required](https://www.typescriptlang.org/docs/handbook/utility-types.html#requiredtype)
 
@@ -247,8 +229,6 @@ type Required<T> = { [P in keyof T]-?: T[P] };
 - [ThisParameterType](https://www.typescriptlang.org/docs/handbook/utility-types.html#thisparametertypetype)
 - [OmitThisParameter](https://www.typescriptlang.org/docs/handbook/utility-types.html#omitthisparametertype)
 - [ThisType](https://www.typescriptlang.org/docs/handbook/utility-types.html#thistypetype)
-
-
 
 ## TypeScript 装饰器
 
@@ -268,7 +248,7 @@ type Required<T> = { [P in keyof T]-?: T[P] };
 
 **tsconfig.json**:
 
-```json
+```JavaScripton
 {
   "compilerOptions": {
      "target": "ES5",
@@ -283,8 +263,8 @@ type Required<T> = { [P in keyof T]-?: T[P] };
 
 ```ts
 function Greeter(greeting: string) {
-  return function (target: Function) {
-    target.prototype.greet = function (): void {
+  return function(target: Function) {
+    target.prototype.greet = function(): void {
       console.log(greeting);
     };
   };
@@ -311,7 +291,7 @@ myGreeting.greet(); // console output: 'Hello TS!';
 
 ## compilerOptions 选项
 
-```json
+```JavaScripton
 {
   "compilerOptions": {
 
@@ -366,4 +346,3 @@ myGreeting.greet(); // console output: 'Hello TS!';
   }
 }
 ```
-

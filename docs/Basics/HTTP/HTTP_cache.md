@@ -94,7 +94,7 @@ ETag: W/"2a3b-1602480f459"
 
 ## 整体流程
 
-<img src="./images/clipboard.png" alt="缓存顺序">
+<img src="https://i.loli.net/2021/03/02/3kiNc4vJP1aTdmR.png" alt="缓存顺序">
 
 当浏览器再次访问一个已经访问过的资源时，它会这样做：
 

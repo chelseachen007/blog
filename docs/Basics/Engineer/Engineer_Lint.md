@@ -1,28 +1,28 @@
 # 前端工程化
 
-Lint 工具相当于为js增加了编译过程，在代码部署运行前进行静态分析，找到出错的地方和不规范的代码。
+Lint 工具相当于为 js 增加了编译过程，在代码部署运行前进行静态分析，找到出错的地方和不规范的代码。
 
-**总结一下ESLint的作用及优势：**
+**总结一下 ESLint 的作用及优势：**
 
-- **检查语法错误，避免低级bug；**
+- **检查语法错误，避免低级 bug；**
 
-> 比如：api语法错误、使用了未定义的变量、修改const变量
+> 比如：api 语法错误、使用了未定义的变量、修改 const 变量
 
 - **统一团队代码风格**
 
-> 比如：使用tab还是空格，使用单引号还是双引号等
+> 比如：使用 tab 还是空格，使用单引号还是双引号等
 
 - **确保代码遵循最佳实践**
 
 ## commitlint
 
-```js
+```JavaScript
 npm install -g commitizen
 ```
 
 ### cz-conventional-changelog
 
-```js
+```JavaScript
 commitizen init cz-conventional-changelog --save --save-exact
 
 "devDependencies": {
@@ -35,11 +35,9 @@ commitizen init cz-conventional-changelog --save --save-exact
 }
 ```
 
-
-
 ### cz-customizable
 
-```js
+```JavaScript
 npm install cz-customizable --save-dev
 "devDependencies": {
   "cz-customizable": "^5.3.0"
@@ -54,7 +52,7 @@ npm install cz-customizable --save-dev
 
 ### .cz-config.js
 
-```js
+```JavaScript
 
 'use strict';
 
@@ -114,11 +112,11 @@ module.exports = {
 
 ```
 
-### Commitizen校验
+### Commitizen 校验
 
-```js
+```JavaScript
 npm install --save-dev @commitlint/cli
-npm install --save-dev @commitlint/config-conventional 
+npm install --save-dev @commitlint/config-conventional
 
 // commitlint.config.js
 module.exports = {
@@ -133,13 +131,13 @@ npm install husky --save-dev
 "husky": {
   "hooks": {
     "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-  }  
+  }
 }
 ```
 
 ## ESLint
 
-```js
+```JavaScript
 npm i --save-dev eslint
 
 > eslint --init
@@ -163,12 +161,12 @@ npm i --save-dev eslint
 ? What quotes do you use for strings? Double
 // 操作系统
 ? What line endings do you use? Windows
-// 每行代码结尾是否校验加分号 
+// 每行代码结尾是否校验加分号
 ? Do you require semicolons? Yes
 // 以 .js 格式生成配置文件
 ? What format do you want your config file to be in? JavaScript
-// 因为要校验 Reac 语法，所以这里需要下载一个 React 语法规则的包  
-Installing eslint-plugin-react@latest  
+// 因为要校验 Reac 语法，所以这里需要下载一个 React 语法规则的包
+Installing eslint-plugin-react@latest
 ```
 
 off" 或 0 - 关闭规则
@@ -177,7 +175,7 @@ off" 或 0 - 关闭规则
 
 "error" 或 2 - 开启规则，使用错误级别的错误：error (当被触发的时候，程序会退出)
 
-```js
+```JavaScript
 // http://eslint.org/docs/user-guide/configuring
 // .eslintrc.js
 module.exports = {
@@ -263,15 +261,13 @@ module.exports = {
 }
 ```
 
-
-
 ## Prettier
 
-VS Code 的 [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) 
+VS Code 的 [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
 ### 常用配置
 
-```js
+```JavaScript
 {
     // tab缩进大小,默认为2
     "tabWidth": 4,
@@ -305,11 +301,9 @@ VS Code 的 [Prettier - Code formatter](https://marketplace.visualstudio.com/ite
 }
 ```
 
-
-
 ## lint-staged
 
-```js
+```JavaScript
 npx mrm lint-staged
 
 //package.json
@@ -328,7 +322,7 @@ npx mrm lint-staged
 
 ## workflow
 
-在.git/workflows文件夹创建一个xx.yml 文件
+在.git/workflows 文件夹创建一个 xx.yml 文件
 
 以我的博客自动部署为例
 
@@ -337,7 +331,7 @@ name: GitHub Actions Build and Deploy Demo
 on:
   push:  // 可以使用数组
     branches:
-      - master // 这部分代表监听每一次到 master 分支的 push ，有一次 push 就会执行一次 actions 。 
+      - master // 这部分代表监听每一次到 master 分支的 push ，有一次 push 就会执行一次 actions 。
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest //一个名为 build-and-deploy 的工作需要在 ubuntu-latest 环境中运行，这是因为后文 actions 脚本是在 ubuntu 编写的，所以要求环境使用 ubuntu 。
@@ -358,12 +352,10 @@ jobs:
 
 ## webhooks
 
-这是一种自己全量操作的服务器部署方法，在私有服务器上接收 github 传输过来的请求，并做出对应的docker 部署操作
+这是一种自己全量操作的服务器部署方法，在私有服务器上接收 github 传输过来的请求，并做出对应的 docker 部署操作
 
 具体操作看 [docker](./Engineer__Docker.md)
 
-
-
 ## 代码
 
-详细代码都在git文件，并且附有详细的webpack配置，为后续实现一个完整的脚手架做好准备 https://github.com/chelseachen007/engineer
+详细代码都在 git 文件，并且附有详细的 webpack 配置，为后续实现一个完整的脚手架做好准备 https://github.com/chelseachen007/engineer

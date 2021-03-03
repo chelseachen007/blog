@@ -17,13 +17,13 @@ commonJs**规范**通过简单的 API 声明服务器的模块，目标是让 Ja
 
 在每个模块代码执行之前，Node.js 都会将它包裹在这样一个函数里
 
-```js
+```JavaScript
 (function (exports, require, module, __filename, __dirname) {});
 ```
 
 #### JSON 文件
 
-- 通过  `fs.readFileSync()` 加载
+- 通过 `fs.readFileSync()` 加载
 - 通过 `JSON.parse()` 解析
 
 #### 加载大文件
@@ -38,7 +38,7 @@ commonJs**规范**通过简单的 API 声明服务器的模块，目标是让 Ja
 - `exports.xxx` 导出具有多个属性的对象
 - `module.exports = xxx` 导出一个对象
 
-```js
+```JavaScript
 // module-2.js
 exports.method = function() {
   return 'Hello';
@@ -54,13 +54,11 @@ console.log(module2.method()); // Hello
 console.log(module2.method2()); // Hello again
 ```
 
-
-
 ## AMD 和 require.js
 
 AMD 是为了弥补 commonjs 规范在浏览器中目前无法支持 ES6 的一种**异步解决方案**。异步模块定义规范（AMD）制定了定义模块的规则，这样模块和模块的依赖可以被异步加载。这和浏览器的异步加载模块的环境刚好适应（浏览器同步加载模块会导致性能、可用性、调试和跨域访问等问题）。
 
-```js
+```JavaScript
 define("alpha", ["require", "exports", "beta"], function (
   require,
   exports,
@@ -83,7 +81,7 @@ define("alpha", ["require", "exports", "beta"], function (
 
 CMD 是另一种 js 模块化方案，它与 AMD 很类似，不同点在于：**AMD 推崇依赖前置、提前执行**，**CMD 推崇依赖就近、延迟执行**。
 
-```js
+```JavaScript
 define(function (require, exports, module) {
   var a = require("./a"); //在需要时申明
   a.doSomething();
@@ -106,7 +104,7 @@ ES 模块的目标是创建一个同时兼容 `CommonJs` 和 `AMD` 的格式，�
 - 采用声明式语法：没有 require 关键字
 - 程序化加载 API：可以设置模块如何加载并按需加载
 
-ES6模块跟Common不一样，js对脚本进行静态分析的时候，只生成一个只读引用，等到脚本真正执行的时候才会通过引用模块中获取值，所以es6是动态引用，并不会缓存值
+ES6 模块跟 Common 不一样，js 对脚本进行静态分析的时候，只生成一个只读引用，等到脚本真正执行的时候才会通过引用模块中获取值，所以 es6 是动态引用，并不会缓存值
 
 关于循环引用：import 语句的静态加载语义意味着可以确保通过 import 相互依赖的 "foo" 和 "bar" 在其中任何一个运行之前，二者都会被加载、解析和编译。所以它们的环依赖是静态决议的.
 
