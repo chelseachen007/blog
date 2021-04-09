@@ -52,7 +52,7 @@
   );
   ```
 
-![img](images/2a46a43a3162dab877fd6e9b805632798b87a14d.png@1320w_658h.webp)
+![image-20210409171123181](https://i.loli.net/2021/04/09/hz9fq6HWCB1Lnyd.png)
 
 这是 AOP（面向切面编程）设计模式，当错误发生的时候，我们会在 catch 中重新 throw 一个错误出来，最后在将原生 addEventListener 抛出执行。
 
@@ -99,13 +99,13 @@ export default class ErrorBoundary extends React.Component {
 
 使用 **addEventListener** 全局监听点击事件，将用户行为（click、input）和 dom 元素名字收集。当错误发生将**错误**和**行为**一起上报。
 
-![img](images/621e3c0594522345d797d441b339a32cdafc8ab4.png@1320w_1006h.webp)
+![image-20210409171052161](https://i.loli.net/2021/04/09/gty8TVQ1HvCWqUP.png)
 
 #### 浏览器行为
 
 监听 XMLHttpRequest 对象的 onreadystatechange 回调函数，在回调函数执行时收集数据。
 
-![img](images/7ef9cf7aceaffbd4959104449c72e5e1ab8dc496.png@1320w_1252h.webp)
+![image-20210409171025283](https://i.loli.net/2021/04/09/COjrdQNflWUVxzP.png)
 
 监听 **window.onpopstate**，页面跳转的时会触发此方法，将信息收集。
 

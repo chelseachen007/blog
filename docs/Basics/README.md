@@ -9,7 +9,9 @@
 
 ## 主动学习和被动学习
 
-<img src="./images/ConeofLearning.jpg" alt="ConeofLearning">
+![image-20210409151004339](https://i.loli.net/2021/04/09/hi9szfqa3XPZIkC.png)
+
+
 
 人的学习分为「被动学习」和「主动学习」两个层次。
 

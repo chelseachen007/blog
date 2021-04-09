@@ -1,6 +1,6 @@
 # webpack
 
-<img src='./images/Webpack.png'>
+![image-20210409153220627](https://i.loli.net/2021/04/09/Ml1KsRYdg6QU8tJ.png)
 
 ## 基础概念
 
@@ -154,7 +154,7 @@ compiler.run();
 
 _验证 devtool 名称时， 我们期望使用某种模式， 注意不要混淆 devtool 字符串的顺序， 模式是：_ `[inline-|hidden-|eval-][nosources-][cheap-[module-]]source-map`_._
 
-![img](./images/clipboard.png)
+![image-20210409153245743](https://i.loli.net/2021/04/09/YPC2FdoWUsvEBZw.png)
 
 #### 特殊模式
 

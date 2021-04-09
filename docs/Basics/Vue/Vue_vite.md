@@ -30,7 +30,7 @@ vite 内部启动一个 koa 服务，而 ES Modules 是静态分析编译，无�
 
 ## css update 函数
 
-![image-20200920203853087](./images/image-20200920203853087.png)
+![image-20210409153144135](https://i.loli.net/2021/04/09/JaDPtNxuzfwpeST.png)
 
 ```JavaScript
 import { updateStyle } from "/vite/client";
