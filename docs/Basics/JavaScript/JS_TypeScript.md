@@ -1,4 +1,4 @@
-# TypeScript
+# tTypeScript
 
 #### 基础类型
 
@@ -21,6 +21,23 @@ function greet(person: string): string {
 // void类型，常用于没有返回值的函数
 function warn(): void {}
 ```
+
+#### 类型注释
+
+```typescript
+interface IProps {
+    /**
+     * logo的地址
+     */
+    logo?: string
+    className?: string
+    alt?: string
+}
+// 在使用这样的注释以后,同事在查询这个参数时就能看到这段注释
+
+```
+
+
 
 #### 类型断言
 
@@ -90,6 +107,10 @@ function watch(cb1: () => void, cb2?: (v1: any, v2: any) => void) {
 watch();
 ```
 
+`Redux` 的[compose](https://github.com/reduxjs/redux/blob/26f216e066a2a679d3cae4fb1a5c4e5d15e9fac6/src/compose.ts#L16)就是运用大量函数重载的典型案例
+
+![image-20210428110817173](https://i.loli.net/2021/04/28/qJKeZMywG7oNsaW.png)
+
 #### 声明文件
 
 ```TS
@@ -103,7 +124,7 @@ declare module "vue/types/vue" {
 }
 ```
 
-#### Class
+## Class
 
 ```ts
 // 03-class.ts
@@ -123,6 +144,55 @@ class Parent {
   }
 }
 ```
+
+## 枚举类型
+
+### 数字枚举
+
+当我们声明一个枚举类型是,虽然没有给它们赋值,但是它们的值其实是默认的数字类型,而且默认从0开始依次累加:
+
+```js
+enum Direction {
+    Up = 10,
+    Down,
+    Left,
+    Right
+}
+
+console.log(Direction.Up, Direction.Down, Direction.Left, Direction.Right); // 10 11 12 13
+```
+
+### 异构 | 字符串枚举
+
+```js
+enum BooleanLikeHeterogeneousEnum {
+    No = 0,
+    Yes = "YES",
+}
+```
+
+## 接口(interface)
+
+```typescript
+interface User {
+    name?: string // 可选属性
+    age: number  // 必填属性
+    readonly isMale: boolean  // 只读属性
+    say: (words: string) => string  // 函数类型
+    [propName: string]: ;  // 字符串索引
+}
+```
+
+### 继承
+
+```typescript
+// 可同时继承多个接口
+interface VIPUser extends User, SupperUser {
+    broadcast: () => void
+}
+```
+
+
 
 ## 泛型
 
@@ -230,6 +300,34 @@ type Required<T> = { [P in keyof T]-?: T[P] };
 - [OmitThisParameter](https://www.typescriptlang.org/docs/handbook/utility-types.html#omitthisparametertype)
 - [ThisType](https://www.typescriptlang.org/docs/handbook/utility-types.html#thistypetype)
 
+## 设计工具类型
+
+### diff
+
+Diff<T, U>,我们要找出T类型中U不包含的部分:
+
+```typescript
+type R = Diff<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
+type Diff<T, U> = T extends U ? never : T;
+```
+
+### Part
+
+现在需要编写一个工具类型将interface中**函数类型**的**名称**取出来,
+
+```typescript
+interface Part {
+    id: number;
+    name: string;
+    subparts: Part[];
+    updatePart(newName: string): void;
+}
+
+type R = FunctionPropertyNames<Part>; // "updatePart"
+```
+
+
+
 ## TypeScript 装饰器
 
 ### 装饰器是什么
@@ -288,6 +386,19 @@ myGreeting.greet(); // console output: 'Hello TS!';
 - target: Object - 被装饰的类
 - propertyKey: string | symbol - 方法名
 - descriptor: TypePropertyDescript - 属性描述符
+
+
+
+## React中的运用
+
+对于 `input` 组件 `onChange` 中的事件，我们一般是这样声明的:
+
+```typescript
+private updateValue(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ itemText: e.target.value })
+}
+// form表单 React.FormEvent<HTMLFormElement>
+```
 
 ## compilerOptions 选项
 
