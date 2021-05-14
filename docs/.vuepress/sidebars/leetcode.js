@@ -148,7 +148,7 @@ module.exports = [
 			"/leetcode/91day-2/57.md",
 			"/leetcode/91day-2/58.md",
 			"/leetcode/91day-2/59.md",
-			"/leetcode/91day-2/60.md",
+			// "/leetcode/91day-2/60.md",
 			// "/leetcode/91day-2/65.md",
 			// "/leetcode/91day-2/66.md",
 			// "/leetcode/91day-2/67.md",
